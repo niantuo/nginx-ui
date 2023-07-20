@@ -42,14 +42,13 @@ docker run -itd -v ./data/:/app/data -p8080:8080 --name tuonina/nginx-ui
 ```
 
 ## 截图
-- 实例列表
-  ![](./docs/images/list.png)
-- 实例信息
-  ![](./docs/images/dashboard.png)
-- 负载均衡
-  ![](./docs/images/upstream.png)
-- 虚拟主机
-  ![](./docs/images/server.png)
+  ![实例列表](./docs/images/list.png)
+
+  ![实例信息](./docs/images/dashboard.png)
+
+  ![负载均衡](./docs/images/upstream.png)
+
+  ![虚拟主机](./docs/images/server.png)
 
 ## 参考文档
 配置部分参考一下文档：
