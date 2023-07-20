@@ -11,6 +11,7 @@ export GOARCH=amd64
 go build -o ../local/server
 cd $CURRENT_DIR
 cp -rf ./dist/* ./local/static/web/
+rm -rf ./local/static/web/config.js
 chmod +x ./local/server
 
 tar -czf nginx-ui.tar.gz ./local
