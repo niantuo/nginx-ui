@@ -1,6 +1,7 @@
 #!/bin/bash
 CURRENT_DIR=$(cd $(dirname $0); pwd)
-mkdir ./local
+
+mkdir -p ./local
 mkdir -p ./local/data/db
 cp -rf ./server/conf ./local
 cp -rf ./server/static ./local
