@@ -1,0 +1,68 @@
+{
+  "nginxConf": {
+    "user": "nginx",
+    "worker_processes": "auto",
+    "error_log": "/var/log/nginx/error.log notice",
+    "pid": "/var/run/nginx.pid",
+    "events.worker_connections": 1024,
+    "http.include": "/etc/nginx/mime.types",
+    "http.default_type": "application/octet-stream",
+    "http.log_format": [
+      {
+        "key": "http.log_formatXK1BCq0XKQCMEuV",
+        "name": "main",
+        "content": "'$remote_addr - $remote_user [$time_local] \"$request\" '\n                      '$status $body_bytes_sent \"$http_referer\" '\n                      '\"$http_user_agent\" \"$http_x_forwarded_for\"'"
+      }
+    ],
+    "http.access_log": {
+      "key": "http.access_logqwY8npz3ypNjgIA",
+      "name": "main",
+      "path": "/var/log/nginx/access.log"
+    },
+    "http.sendfile": "off",
+    "http.tcp_nopush": "off",
+    "http.keepalive_timeout": 0,
+    "http.gzip": "off",
+    "stream": true,
+    "stream.log_format": [
+      {
+        "key": "stream.log_format8avSYRKrTjzgzcF",
+        "name": "tcp_format",
+        "content": "'$time_local|$remote_addr|$protocol|$status|$bytes_sent|$bytes_received|$session_time|$upstream_addr|$upstream_bytes_sent|$upstream_bytes_received|$upstream_connect_time'"
+      }
+    ],
+    "stream.access_log": {
+      "key": "stream.access_logpuBlWTJXD64QiOL",
+      "name": "tcp_format",
+      "path": "/var/log/nginx/access_stream.log"
+    },
+    "stream.error_log": "/var/log/nginx/error_stream.log"
+  },
+  "server": {
+    "port": 80,
+    "enable": true,
+    "ssl_session_timeout": "5m",
+    "ssl_ciphers": "ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4",
+    "ssl_protocols": ["TLSv1","TLSv1.1","TLSv1.2"],
+    "ssl_prefer_server_ciphers": "on",
+    "locations": [
+      {
+        "id": "default",
+        "name": "默认",
+        "match": {
+          "path": "/"
+        },
+        "root": "/data/www",
+        "proxy_type": "static",
+        "enable": true
+      }
+    ]
+  },
+  "location": {
+
+  },
+  "addNginx": {
+
+  },
+  "nginxSettings": {}
+}

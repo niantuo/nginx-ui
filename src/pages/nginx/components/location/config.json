@@ -1,0 +1,272 @@
+{
+  "form": [
+    {
+      "key": "name",
+      "type": "string",
+      "title": "名称",
+      "placeholder": "输入名称方便辨别",
+      "required": false
+    },
+    {
+      "key": "match",
+      "type": "object",
+      "title": "匹配路径",
+      "hideHeader": true,
+      "items": [
+        {
+          "type": "select",
+          "title": "匹配规则",
+          "option": [
+            {
+              "label": "精确匹配",
+              "value": "="
+            },
+            {
+              "label": "以字符开头",
+              "value": "^~"
+            },
+            {
+              "label": "正则(区分大小写)",
+              "value": "~"
+            },
+            {
+              "label": "正则(不区分大小写)",
+              "value": "~*"
+            },{
+              "label": "默认",
+              "value": ""
+            }
+          ],
+          "required": false,
+          "key": "regex",
+          "placeholder": "匹配规则，如=，~^",
+          "width": 180
+        },
+        {
+          "type": "string",
+          "title": "路径",
+          "key": "path",
+          "placeholder": "请输入路径",
+          "value": "/",
+          "width": 300
+        }
+      ],
+      "description": "优选级：精确匹配(=) > 完整路径 > 以字符开头(^~) > 正则顺序(~或者~*) > 部分起始路径(/xx/) > 默认路径(/);\n当有正则时，变量$1,$2为正则中匹配的()内的顺序内容，比如：~ \/(d+)\/([0-9]+),当访问/abc/123时,$1为abc,$2为123"
+    },
+    {
+      "key": "enable",
+      "title": "启用",
+      "type": "switch",
+      "description": "是否启用，如果不启用，将不会渲染该配置"
+    },
+    {
+      "key": "proxy_type",
+      "title": "代理类型",
+      "type": "select",
+      "option": [
+        {
+        "label": "反向代理",
+        "value": "proxy"
+      },{
+        "label": "静态资源",
+        "value": "static"
+      },{
+        "label": "其它",
+        "value": "other"
+      }],
+      "cascade": {
+        "proxy": [
+          {
+            "key": "proxy_pass",
+            "title": "代理地址",
+            "type": "proxy_pass"
+          },
+          {
+            "key": "proxy_settings",
+            "title": "更多代理设置",
+            "type": "proxy_settings",
+            "required": false,
+            "description": "更多代理设置"
+          }
+        ],
+        "static": [
+          {
+            "key": "index",
+            "title": "首页",
+            "required": false,
+            "type": "select",
+            "mode": "tags",
+            "option": ["index.html","index.php","index.htm"],
+            "description": "nginx静态资源默认的首页文件名，比如index.html index.php"
+          },
+          {
+            "key": "root",
+            "type": "string",
+            "title": "根路径",
+            "required": false,
+            "description": "静态资源的根路径，查找方式为直接拼接，比如：匹配路径为 /test/ ,root为/data/root,则查找资源的完整路径为：/data/root/test"
+          },
+          {
+            "key": "alias",
+            "type": "string",
+            "title": "路径别名",
+            "required": false,
+            "description": "alias和root二选一，注意与root的区别，比如：匹配路径为 /test/ ,alias为/data/root,则查找资源的完整路径为：/data/root/"
+          },
+          {
+            "key": "try_files",
+            "title": "try_files",
+            "type": "select",
+            "mode": "tags",
+            "option": ["$uri","$uri/","/index.html"],
+            "description": "",
+            "required": false,
+            "width": 450
+          }
+        ],
+        "other": [
+          {
+            "key": "return",
+            "title": "return",
+            "description": "直接返回固定内容",
+            "type": "object",
+            "hideHeader": true,
+            "required": false,
+            "items": [
+              {
+                "key": "code",
+                "type": "int",
+                "min": 200,
+                "max": 600,
+                "placeholder": "请输入http状态码",
+                "width": 180
+              },
+              {
+                "key": "content",
+                "type": "string",
+                "title": "内容",
+                "placeholder": "响应内容",
+                "width": 300
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "key": "cors_setting",
+      "title": "跨域配置",
+      "type": "cors",
+      "description": "跨域配置，可以通过该配置项解决前端跨域问题",
+      "required": false
+    },
+    {
+      "type": "auth",
+      "title": "鉴权",
+      "key": "auth_request",
+      "required": false,
+      "description": "ngx_http_auth_request_module:实现了基于一子请求的结果的客户端的授权。如果子请求返回2xx响应码，则允许访问。如果它返回401或403，则访问被拒绝并显示相应的错误代码。子请求返回的任何其他响应代码都被认为是错误的"
+    },
+    {
+      "type": "gzip",
+      "title": "压缩配置",
+      "key": "gzip",
+      "required": false,
+      "description": "gzip"
+    },
+    {
+      "key": "add_header",
+      "title": "添加响应头",
+      "type": "array",
+      "hideHeader": true,
+      "description": "添加http响应头",
+      "required": false,
+      "items": [
+        {
+          "key": "name",
+          "title": "header名称",
+          "type": "string",
+          "width": 180,
+          "placeholder": "header名称"
+        },
+        {
+          "key": "value",
+          "title": "header值",
+          "type": "string",
+          "placeholder": "header值",
+          "width": 300
+        }
+      ]
+    },
+    {
+      "key": "rewrite",
+      "type": "object",
+      "title": "rewrite",
+      "required": false,
+      "description": "rewrite:对访问路径进行,放在server{}, if{},location{}段中,rewrite < regex > < replacement > [flag], 必须填写正则表达式和跳转路径才能生效",
+      "items": [
+        {
+          "key": "regex",
+          "title": "正则表达式",
+          "type": "string",
+          "width": 180,
+          "description": "必须填写正则表达式和跳转路径才能生效"
+        },
+        {
+          "key": "replacement",
+          "title": "跳转路径",
+          "type": "string",
+          "placeholder": "跳转后的内容",
+          "width": 300
+        },
+        {
+          "width": 120,
+          "key": "flag",
+          "title": "flag",
+          "type": "select",
+          "option": ["last","break","redirect","permanent"],
+          "description": "last: 相当于Apache的【L】标记，表示完成rewrite;\nbreak:本条规则匹配完成即终止，不在匹配后面的任何规则;\nredirect: 返回302临时重定向，浏览器地址栏会显示跳转后的URL地址，爬虫不会更新url;\npermanent:返回301永久重定向，浏览器地址栏会显示跳转后的URL地址，爬虫更新url;"
+        }
+      ]
+    },
+    {
+      "key": "tmp_custom_config",
+      "title": "自定义配置",
+      "type": "textarea",
+      "hideHeader": true,
+      "description": "自定义配置，注意，每行结尾需要加“;”号，将会拼接在最后",
+      "required": false,
+      "trim": false
+    },
+    {
+      "key": "internal",
+      "title": "内部路由",
+      "type": "switch",
+      "description": "内部路由：nginx内部访问，一旦出了这个配置文件，则失效"
+    },
+    {
+      "key": "error_page",
+      "title": "错误页面",
+      "type": "error_page",
+      "required": false,
+      "description": "错误页面配置"
+    },
+    {
+      "key": "default_type",
+      "title": "默认内容类型",
+      "type": "string",
+      "required": false,
+      "description": "default_type eg. text/plain application/json"
+    },
+    {
+      "key": "remark",
+      "title": "备注信息",
+      "type": "textarea",
+      "rows": 3,
+      "placeholder": "输入备注信息",
+      "required": false,
+      "trim": false,
+      "width": 600
+    }
+  ]
+}

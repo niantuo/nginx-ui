@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  nginx-ui:
+    build:
+      context: ./
+      dockerfile: docker/Dockerfile
+    environment:
+      - DOCKER_BUILDKIT=1
+    image: tuonina/nginx-ui
+    restart: always
+    container_name: nginx-ui
+    ports:
+      - 8080:8080
+    volumes:
+      - ./data:/app/data

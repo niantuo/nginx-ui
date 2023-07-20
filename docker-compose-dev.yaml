@@ -1,0 +1,22 @@
+## 以nginx为基础镜像，方便调试，或者直接使用nginx容器
+
+version: "3"
+
+services:
+  nginx-with-ui:
+    build:
+      context: ./
+      dockerfile: docker/Dockerfile-with-nginx
+    environment:
+      - DOCKER_BUILDKIT=1
+    image: tuonina/nginx-with-ui
+    restart: always
+    container_name: nginx-with-ui
+    ports:
+      - 8081:8080
+      - 9090:9090
+      - 9080:80
+      - 9443:443
+#    network_mode: host
+    volumes:
+      - ./docker/data:/app/data

@@ -1,0 +1,699 @@
+{
+  "server": [
+    {
+      "key": "server_name",
+      "title": "域名",
+      "type": "string",
+      "ruleType": "reg",
+      "pattern": "^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)+[A-Za-z]{2,6}$",
+      "placeholder": "请填写域名",
+      "description": "eg. demo.domain.cn",
+      "width": 300
+    },
+    {
+      "key": "listen",
+      "type": "int",
+      "title": "监听",
+      "min": 0,
+      "max": 65535,
+      "width": 300
+    },
+    {
+      "key": "enable",
+      "title": "启用",
+      "type": "switch",
+      "description": "是否启用，如果不启用，将不会渲染该配置"
+    },
+    {
+      "key": "ssl",
+      "title": "https",
+      "type": "switch",
+      "cascade": {
+        "true": [
+          {
+            "key": "certName",
+            "type": "certs",
+            "placeholder": "选择SSL证书",
+            "title": "SSL证书",
+            "description": "选择SSL证书，如果没有，请填到“SSL证书”管理界面添加证书"
+          }
+        ]
+      }
+    },
+    {
+      "key": "http2",
+      "title": "http2",
+      "type": "switch",
+      "cascade": {
+        "true": [
+          {
+            "key": "http2_max_concurrent_streams",
+            "value": 1024,
+            "title": "最大并发流",
+            "type": "int",
+            "placeholder": "http2_max_concurrent_streams",
+            "description": "http2_max_concurrent_streams",
+            "width": 300
+          }
+        ]
+      }
+    },
+    {
+      "key": "proxy_settings",
+      "title": "更多代理设置",
+      "type": "proxy_settings",
+      "required": false,
+      "description": "更多代理设置"
+    },
+    {
+      "type": "locations",
+      "title": "代理/站点",
+      "key": "locations",
+      "required": false,
+      "description": "静态资源或者反向代理，路由规则"
+    },
+    {
+      "type": "gzip",
+      "title": "压缩配置",
+      "key": "gzip",
+      "required": false,
+      "description": "gzip"
+    },
+    {
+      "type": "auth",
+      "title": "鉴权",
+      "key": "auth_request",
+      "required": false,
+      "description": "ngx_http_auth_request_module:实现了基于一子请求的结果的客户端的授权。如果子请求返回2xx响应码，则允许访问。如果它返回401或403，则访问被拒绝并显示相应的错误代码。子请求返回的任何其他响应代码都被认为是错误的"
+    },
+    {
+      "key": "rewrite",
+      "type": "object",
+      "title": "rewrite",
+      "required": false,
+      "hideHeader": true,
+      "description": "格式：rewrite < regex > < replacement > [flag]",
+      "items": [
+        {
+          "key": "regex",
+          "title": "正则表达式",
+          "type": "string",
+          "width": 180,
+          "placeholder": "<regex> 正则匹配",
+          "required": false
+        },
+        {
+          "key": "replacement",
+          "title": "跳转路径",
+          "type": "string",
+          "placeholder": "<replacement> 跳转后的内容",
+          "width": 300,
+          "required": false
+        },
+        {
+          "key": "flag",
+          "title": "flag",
+          "type": "select",
+          "option": ["last","break","redirect","permanent"],
+          "width": 120,
+          "placeholder": "[flag] 标记",
+          "description": "last: 相当于Apache的【L】标记，表示完成rewrite;\nbreak:本条规则匹配完成即终止，不在匹配后面的任何规则;\nredirect: 返回302临时重定向，浏览器地址栏会显示跳转后的URL地址，爬虫不会更新url;\npermanent:返回301永久重定向，浏览器地址栏会显示跳转后的URL地址，爬虫更新url;"
+        }
+      ]
+    },
+    {
+      "key": "tmp_custom_config",
+      "title": "自定义配置",
+      "type": "textarea",
+      "hideHeader": true,
+      "description": "自定义配置，注意，每行结尾需要加“;”号，将会拼接在最后,不做任何修改，请注意格式",
+      "required": false,
+      "trim": false,
+      "width": 600
+    },
+    {
+      "type": "divider",
+      "key": "tmp_more_settings",
+      "collapsible": true,
+      "value": false,
+      "title": "更多设置",
+      "items": [
+        {
+          "key": "keepalive_timeout",
+          "type": "string",
+          "required": false,
+          "title": "keepalive_timeout",
+          "description": "eg. 10s",
+          "min": 0,
+          "ruleType": "reg",
+          "pattern": "(\\d)(s|m|h)$"
+        },
+        {
+          "key": "client_max_body_size",
+          "type": "string",
+          "placeholder": "请求体的最大大小",
+          "title": "最大请求体大小",
+          "description": "eg. 500m 20m",
+          "required": false,
+          "value": "10m"
+        },
+        {
+          "key": "access_log",
+          "type": "string",
+          "placeholder": "access日志文件路径",
+          "required": false,
+          "title": "Access日志"
+        },
+        {
+          "key": "charset",
+          "title": "编码",
+          "required": false,
+          "description": "charset"
+        },
+        {
+          "key": "ssl_session_timeout",
+          "type": "string",
+          "placeholder": "ssl_session_timeout",
+          "title": "ssl_session_timeout",
+          "description": "eg. 5m 60s",
+          "required": false
+        },
+        {
+          "key": "ssl_prefer_server_ciphers",
+          "type": "select",
+          "placeholder": "ssl_prefer_server_ciphers",
+          "title": "ssl_prefer_server_ciphers",
+          "option": ["on","off"],
+          "value": "on",
+          "required": false,
+          "width": 260
+        },
+        {
+          "key": "ssl_ciphers",
+          "type": "string",
+          "placeholder": "ssl_ciphers",
+          "title": "ssl_ciphers",
+          "description": "ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4",
+          "required": false,
+          "width": 450
+        },
+        {
+          "key": "ssl_protocols",
+          "type": "select",
+          "mode": "multiple",
+          "placeholder": "ssl_protocols",
+          "title": "SSL协议",
+          "option": ["TLSv1","TLSv1.1","TLSv1.2","TLSv2","TLSv3"],
+          "required": false,
+          "width": 450
+        }
+      ]
+    }
+  ],
+  "addNginx": [
+    {
+      "type": "string",
+      "key": "name",
+      "title": "名称"
+    },
+    {
+      "key": "isLocal",
+      "type": "switch",
+      "description": "本地实例，直接在服务器上运行名称，非本地实例，需要配置SSH连接信息，使用SSH执行相关命令",
+      "value": true,
+      "title": "本地实例",
+      "cascade": {
+        "false": [
+          {
+            "type": "string",
+            "key": "ipAddr",
+            "title": "IP地址"
+          },
+          {
+            "type": "int",
+            "key": "port",
+            "title": "端口"
+          },
+          {
+            "type": "string",
+            "key": "user",
+            "title": "用户名"
+          },
+          {
+            "type": "password",
+            "key": "password",
+            "title": "密码"
+          }
+        ]
+      }
+    }
+  ],
+  "nginxSettings": [
+    {
+      "key": "isServer",
+      "title": "服务方式运行",
+      "type": "switch",
+      "description": "以服务方式运行，则使用service nginx start|stop|reload 等命令，否则使用nginx -s reload|stop 等命令"
+    },
+    {
+      "key": "nginxPath",
+      "title": "nginx位置",
+      "type": "string",
+      "description": "nginx的文件所在的绝对路径，默认为:/usr/sbin/nginx,可使用nginx -V 查看参数--sbin-path；或者先填写，保存成功之后返回版本信息，可参考修正即可",
+      "value": "/usr/sbin/nginx"
+    },
+    {
+      "key": "nginxDir",
+      "title": "nginx配置目录",
+      "type": "string",
+      "description": "nginx的配置文件所在的目录，即nginx.conf所在的目录，一般为：/etc/nginx，可使用nginx -V 查看参数 --prefix",
+      "value": "/etc/nginx"
+    },
+    {
+      "key":"dataDir",
+      "type": "string",
+      "title": "数据目录",
+      "description": "nginx的自定义配置文件所在目录"
+    },
+    {
+      "key": "remark",
+      "title": "备注信息",
+      "placeholder": "输入备注",
+      "type": "textarea",
+      "required": false,
+      "trim": false
+    }
+  ],
+  "nginxConf": [
+    {
+      "key": "user",
+      "value": "nginx",
+      "title": "user",
+      "placeholder": "nginx user"
+    },
+    {
+      "key": "worker_processes",
+      "title": "工作进程数量",
+      "type": "string",
+      "ruleType": "reg",
+      "pattern": "^(auto|\\d+)$",
+      "description": "auto或者指定数量"
+    },
+    {
+      "key": "error_log",
+      "title": "错误日志路径",
+      "type": "string",
+      "value": "/var/log/nginx/error.log notice",
+      "description": "eg. /var/log/nginx/error.log notice"
+    },
+    {
+      "key": "pid",
+      "title": "pid位置",
+      "type": "string",
+      "value": "/var/run/nginx.pid",
+      "description": "eg. /var/run/nginx.pid"
+    },
+    {
+      "key": "temp.events",
+      "type": "divider",
+      "title": "events配置",
+      "description": "nginx events 模块主要是nginx 和用户交互网络连接优化的配置内容",
+      "items": [
+        {
+          "key": "events.accept_mutex",
+          "title": "accept_mutex",
+          "type": "switch",
+          "value": true,
+          "required": false,
+          "description": "这个配置主要可以用来解决常说的\"惊群\"问题。大致意思是在某一个时刻，客户端发来一个请求连接，Nginx后台是以多进程的工作模式，也就是说有多个worker进程会被同时唤醒，但是最终只会有一个进程可以获取到连接，如果每次唤醒的进程数目太多，就会影响Nginx的整体性能。如果将上述值设置为on(开启状态)，将会对多个Nginx进程接收连接进行序列号，一个个来唤醒接收，就防止了多个进程对连接的争抢"
+        },
+        {
+          "key": "events.worker_connections",
+          "type": "int",
+          "layout": "form",
+          "title": "最大连接数",
+          "description": "用来配置单个worker进程最大的连接数，nginx 默认连接数是1024",
+          "min": 0,
+          "max": 65536,
+          "value": 1024,
+          "required": false
+        },
+        {
+          "key": "events.multi_accept",
+          "title": "multi_accept",
+          "description": "用来设置是否允许同时接收多个网络连接",
+          "type": "switch",
+          "value": false,
+          "required": false
+        },
+        {
+          "key": "events.use",
+          "title": "网络驱动",
+          "description": "用来设置Nginx服务器选择哪种事件驱动来处理网络消息;另外这些值的选择，我们也可以在编译的时候使用：–with-select_module、–without-select_module、 --with-poll_module、–without-poll_module来设置是否需要将对应的事件驱动模块编译到Nginx的内核",
+          "type": "select",
+          "option": ["select","poll","epoll","kqueue"],
+          "required": false
+        }
+      ]
+    },
+    {
+      "key": "temp.http",
+      "title": "http配置",
+      "type": "divider",
+      "items": [
+        {
+          "key": "http.include",
+          "type": "string",
+          "value": "/etc/nginx/mime.types",
+          "title": "include"
+        },
+        {
+          "key": "http.default_type",
+          "type": "string",
+          "value": "application/octet-stream",
+          "title": "default_type"
+        },
+        {
+          "key": "http.log_format",
+          "title": "日志格式",
+          "type": "array",
+          "items": [
+            {
+              "type": "textarea",
+              "key": "name",
+              "value": "main",
+              "title": "格式名称",
+              "rows": 4,
+              "placeholder": "日志格式名称，eg. main compression",
+              "width": 200,
+              "description": "日志格式名称，eg. main compression log1 log2",
+              "trim": false
+            },
+            {
+              "type": "textarea",
+              "key": "content",
+              "value": "",
+              "title": "日志格式",
+              "rows": 4,
+              "width": 400,
+              "trim": false,
+              "placeholder": "'$remote_addr - $remote_user [$time_local] \"$request\" '\n                      '$status $body_bytes_sent \"$http_referer\" '\n                      '\"$http_user_agent\" \"$http_x_forwarded_for\"'",
+              "description": "参数                      说明                                         示例\n$remote_addr             客户端地址                                    211.28.65.253\n$remote_user             客户端用户名称                                --\n$time_local              访问时间和时区                                18/Jul/2012:17:00:01 +0800\n$request                 请求的URI和HTTP协议                           \"GET /article-10000.html HTTP/1.1\"\n$http_host               请求地址，即浏览器中你输入的地址（IP或域名）     www.wang.com 192.168.100.100\n$status                  HTTP请求状态                                  200\n$upstream_status         upstream状态                                  200\n$body_bytes_sent         发送给客户端文件内容大小                        1547\n$http_referer            url跳转来源                                   https://www.baidu.com/\n$http_user_agent         用户终端浏览器等信息                           \"Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; SV1; GTB7.0; .NET4.0C;\n$ssl_protocol            SSL协议版本                                   TLSv1\n$ssl_cipher              交换数据中的算法                               RC4-SHA\n$upstream_addr           后台upstream的地址，即真正提供服务的主机地址     10.10.10.100:80\n$request_time            整个请求的总时间                               0.205\n$upstream_response_time  请求过程中，upstream响应时间                    0.002\n"
+            }
+          ]
+        },
+        {
+          "key": "http.access_log",
+          "title": "访问日志",
+          "type": "object",
+          "value": "/var/log/nginx/access.log  main",
+          "items": [
+            {
+              "key": "name",
+              "type": "string",
+              "title": "格式标签",
+              "placeholder": "日志格式配置的格式名称",
+              "description": "输入日志格式配置的格式名称",
+              "width": 200
+            },
+            {
+              "key": "path",
+              "type": "string",
+              "title": "日志路径",
+              "width": 250
+            }
+          ]
+        },
+        {
+          "key": "http.sendfile",
+          "type": "select",
+          "required": false,
+          "option": ["on","off"],
+          "title": "sendfile"
+        },
+        {
+          "key": "http.tcp_nopush",
+          "type": "select",
+          "required": false,
+          "option": ["on","off"],
+          "title": "tcp_nopush"
+        },
+        {
+          "type": "gzip",
+          "title": "压缩配置",
+          "key": "http.gzip",
+          "required": false,
+          "description": "gzip"
+        },
+        {
+          "key": "http.keepalive_timeout",
+          "type": "int",
+          "required": false,
+          "title": "keepalive_timeout",
+          "description": "单位为秒(s), 0表示不限制",
+          "min": 0
+        },
+        {
+          "key": "http.proxy_settings",
+          "title": "代理设置",
+          "type": "proxy_settings",
+          "required": false
+        },
+        {
+          "key": "http.more",
+          "type": "textarea",
+          "required": false,
+          "title": "更多配置",
+          "description": "自定义配置，每行需要有分隔符号",
+          "trim": false
+        }
+      ]
+    },
+    {
+      "key": "stream",
+      "type": "divider",
+      "collapsible": true,
+      "title": "TCP/UDP配置",
+      "description": "stream配置，需要注意安装的nginx版本是否支持；默认情况下，没有构建此模块。 -必须使用-with stream配置参数启用",
+      "items": [
+        {
+          "key": "stream.log_format",
+          "title": "日志格式",
+          "type": "array",
+          "items": [
+            {
+              "type": "textarea",
+              "key": "name",
+              "value": "tcp_format",
+              "title": "格式名称",
+              "rows": 4,
+              "placeholder": "日志格式名称，eg. tcp_format",
+              "width": 200,
+              "description": "日志格式名称，eg. tcp_format",
+              "trim": false
+            },
+            {
+              "type": "textarea",
+              "key": "content",
+              "value": "",
+              "title": "日志格式",
+              "rows": 4,
+              "width": 400,
+              "trim": false,
+              "placeholder": "'$time_local|$remote_addr|$protocol|$status|$bytes_sent|$bytes_received|$session_time|$upstream_addr|$upstream_bytes_sent|$upstream_bytes_received|$upstream_connect_time'"
+            }
+          ]
+        },
+        {
+          "key": "stream.access_log",
+          "title": "访问日志",
+          "type": "object",
+          "value": {
+            "name": "tcp_format",
+            "path": "/var/log/nginx/access_stream.log"
+          },
+          "items": [
+            {
+              "key": "name",
+              "type": "string",
+              "title": "格式标签",
+              "placeholder": "日志格式配置的格式名称",
+              "description": "输入日志格式配置的格式名称",
+              "width": 200,
+              "value": "tcp_format"
+            },
+            {
+              "key": "path",
+              "type": "string",
+              "title": "日志路径",
+              "width": 250
+            }
+          ]
+        },
+        {
+          "key": "stream.error_log",
+          "title": "错误日志",
+          "type": "string",
+          "value": "/var/log/nginx/error_stream.log"
+        }
+      ]
+    }
+  ],
+  "upstream": [
+    {
+      "title": "名称",
+      "key": "name",
+      "width": 100,
+      "description": "名称相同则为同一组负载均衡,只支持英文字母",
+      "type": "string"
+    },
+    {
+      "title": "负载方式",
+      "key": "type",
+      "type": "select",
+      "option": ["ip_hash","weight"],
+      "width": 100,
+      "required": false,
+      "description": "ip_hash： 每个请求按访问ip的hash结果分配，这样每个访客固定访问一个后端服务器，可以解决session不能跨服务器的问题。如果后端服务器down掉，要手工down掉；weight：指定轮询几率，weight和访问比率成正比，如果后端服务器down掉，能自动剔除。"
+    },
+    {
+      "title": "是否启用",
+      "key": "enable",
+      "type": "switch",
+      "value": true
+    },
+    {
+      "title": "服务配置",
+      "type": "array",
+      "key": "servers",
+      "items": [
+        {
+          "title": "主机",
+          "type": "string",
+          "key": "host",
+          "description": "后端服务IP",
+          "width": 150
+        },
+        {
+          "title": "端口",
+          "type": "int",
+          "key": "port",
+          "description": "后端服务端口",
+          "width": 100
+        },
+        {
+          "title": "权重",
+          "type": "int",
+          "key": "weight",
+          "description": "权重，ip_hash模式下不生效，数字越大，越高,为0将剔除",
+          "width": 80,
+          "min": 0,
+          "value": 100
+        },
+        {
+          "title": "状态/角色",
+          "type": "select",
+          "key": "status",
+          "option": ["normal","down","backup"],
+          "description": "weight,backup 不能和 ip_hash 关键字一起使用;down：表示当前的server暂时不参与负载",
+          "width": 100,
+          "required": false
+        },
+        {
+          "title": "max_fails",
+          "type": "int",
+          "key": "max_fails",
+          "required": false,
+          "description": "最大失败次数，也就是最多进行 3 次尝试，默认为1",
+          "width": 100
+        },
+        {
+          "title": "超时时间",
+          "type": "int",
+          "key": "fail_timeout",
+          "required": false,
+          "description": "超时时间，单位秒，默认值是10s",
+          "width": 100
+        }
+      ]
+    }
+  ],
+  "stream": [
+    {
+      "key": "listen",
+      "type": "int",
+      "value": 3306,
+      "title": "端口",
+      "width": 100
+    },
+    {
+      "key": "proxy_pass",
+      "type": "stream_proxy_pass",
+      "title": "后端服务",
+      "description": "IP:PORT 或者upstream的名称",
+      "width": 200
+    },
+    {
+      "key": "enable",
+      "type": "switch",
+      "title": "启用",
+      "description": "如果不启用，不会渲染该组配置信息",
+      "required": false
+    },
+    {
+      "key": "proxy_connect_timeout",
+      "type": "int",
+      "value": 10,
+      "title": "connect_timeout",
+      "placeholder": "与被代理服务器建立连接的超时时间,单位为s",
+      "required": false
+    },
+    {
+      "key": "proxy_timeout",
+      "type": "int",
+      "value": 10,
+      "title": "超时时间",
+      "placeholder": "获取被代理服务器的响应最大超时时间,单位为s",
+      "required": false
+    },
+    {
+      "key": "proxy_next_upstream",
+      "type": "switch",
+      "value": true,
+      "title": "next_upstream",
+      "description": "当被代理的服务器返回错误或超时时，将未返回响应的客户端连接请求传递给upstream中的下一个服务器",
+      "required": false
+    },
+    {
+      "key": "proxy_next_upstream_tries",
+      "type": "int",
+      "value": 3,
+      "title": "最大错误次数",
+      "description": "转发尝试请求最多3次",
+      "required": false
+    },
+    {
+      "key": "proxy_next_upstream_timeout",
+      "type": "int",
+      "value": 10,
+      "title": "总尝试超时时间",
+      "description": "总尝试超时时间,单位为s",
+      "required": false
+    },
+    {
+      "key": "proxy_socket_keepalive",
+      "type": "switch",
+      "value": true,
+      "title": "心跳",
+      "description": "开启SO_KEEPALIVE选项进行心跳检测",
+      "required": false
+    },
+    {
+      "key": "remark",
+      "type": "string",
+      "placeholder": "备注信息",
+      "required": false,
+      "title": "备注"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+@import "planning";
+
+.page{
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  .ant-btn+.ant-btn{
+    margin-left: 10px;
+  }
+  .ant-alert{
+    margin: 10px;
+  }
+  .ant-tabs{
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    .ant-tabs-nav{
+      margin-bottom: 0;
+    }
+    .ant-tabs-content-holder{
+      flex: 1;
+      overflow: hidden;
+      .ant-tabs-content,.ant-tabs-tabpane{
+        height: 100%;
+        overflow: hidden;
+      }
+    }
+  }
+}
+.page-header{
+  border-bottom: solid 1px #efefef;
+  padding: 5px 10px;
+  font-size: 18px;
+  color: #333333;
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.page-title{
+  margin-bottom: 0;
+  margin-right: 10px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+
+
+.page-container{
+  flex: 1;
+  overflow: auto;
+  margin-bottom: 10px;
+  .auto-form{
+    height: auto;
+  }
+}
+
+.page-footer{
+
+}
+
+.page .page-footer{
+}
+
+.page .page-container .page-footer{
+  padding-left: 17%;
+}
+
+.page.error{
+  padding: 20px;
+}
