@@ -13,7 +13,7 @@ services:
     restart: always
     container_name: nginx-with-ui
     ports:
-      - 8081:8080
+      - 8080:8080
       - 9090:9090
       - 9080:80
       - 9443:443
