@@ -4,12 +4,17 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/mattn/go-sqlite3"
+	"os"
 	"server/models"
+	"server/utils"
 	"time"
 )
 
 func Init() {
 	dir := beego.AppConfig.String("dbdir")
+	if !utils.IsExist(dir) {
+		os.MkdirAll(dir, 0777)
+	}
 	orm.RegisterDriver("sqlite3", orm.DRSqlite)
 	orm.RegisterDataBase("default", "sqlite3", dir+"/sqlite.db")
 	orm.SetMaxIdleConns("default", 50)
