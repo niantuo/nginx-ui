@@ -30,3 +30,5 @@ docker/data
 
 server/out
 server/data/files
+
+nginx-ui.tar.gz

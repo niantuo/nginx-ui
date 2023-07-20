@@ -1,0 +1,16 @@
+#!/bin/bash
+CURRENT_DIR=$(cd $(dirname $0); pwd)
+mkdir ./local
+mkdir -p ./local/data/db
+cp -rf ./server/conf ./local
+cp -rf ./server/static ./local
+
+cd ./server
+export GOODS=linux
+export GOARCH=amd64
+go build -o ../local/server
+cd $CURRENT_DIR
+cp -rf ./dist/* ./local/static/web/
+chmod +x ./local/server
+
+tar -czf nginx-ui.tar.gz ./local
