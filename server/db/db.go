@@ -26,6 +26,7 @@ func Init() {
 	orm.RegisterModel(new(models.Nginx))
 	orm.RegisterModel(new(models.ServerHost))
 	orm.RegisterModel(new(models.NginxCerts))
+	orm.RegisterModel(new(models.User))
 
 	orm.RunSyncdb("default", false, true)
 

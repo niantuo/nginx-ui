@@ -2,12 +2,14 @@ package routers
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/logs"
 	"net/http"
 	config2 "server/config"
 	"server/controllers"
+	"server/middleware"
 	"strings"
 )
 
@@ -32,6 +34,8 @@ func init() {
 		beego.NSRouter("/file/deploy", &controllers.FileController{}, "post:Deploy"),
 	)
 	beego.AddNamespace(ns)
+
+	beego.InsertFilter(fmt.Sprintf("%s/**", config.BaseApi), beego.BeforeRouter, middleware.AuthFilter)
 
 	beego.Router("/nginx-ui/config.js", &controllers.ConfigController{})
 	// portal static assets

@@ -46,6 +46,7 @@ type ServerHost struct {
 	// is tcp or udp, default is false
 	IsStream bool   `json:"isStream"`
 	NginxId  int    `json:"nginxId"`
+	Uid      string `json:"uid"`
 	Name     string `json:"name"`
 	// 记录一下上一次刷新保存的名字
 	LastName string `json:"lastName"`
@@ -61,6 +62,7 @@ type ServerHost struct {
 type NginxCerts struct {
 	Id          int    `orm:"pk;auto" json:"id"`
 	ServiceName string `orm:"unique" json:"serviceName"`
+	Uid         string `json:"uid"`
 	Key         string `json:"key"`
 	Pem         string `json:"pem"`
 	NginxId     int    `json:"nginxId"`
