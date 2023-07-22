@@ -34,3 +34,4 @@ server/data/files
 nginx-ui.tar.gz
 
 server/conf/app.local.conf
+server/data/sessions
