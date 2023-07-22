@@ -61,6 +61,8 @@ docker run -itd -v ./data/:/app/data -p8080:8080 --name tuonina/nginx-ui
 ### 构建
  docker-compose build 或者执行脚本sh build.sh
 
+
+
 ## nginx-ui优化点
 - [x] nginx实例列表界面，添加完实例之后，弹窗没有关闭，且没有自动刷新当前界面
 - [x] server或者location的rewrite是否配置的判定问题

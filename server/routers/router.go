@@ -32,18 +32,21 @@ func init() {
 		// file upload download
 		beego.NSRouter("/file", &controllers.FileController{}),
 		beego.NSRouter("/file/deploy", &controllers.FileController{}, "post:Deploy"),
+
+		beego.NSRouter("/user/login", &controllers.UserController{}, "post:Login"),
+		beego.NSRouter("/user/register", &controllers.UserController{}, "post:Register"),
+		beego.NSRouter("/oauth2", &controllers.UserController{}),
+		beego.NSRouter("/oauth2/callback", &controllers.UserController{}, "post:Callback"),
 	)
 	beego.AddNamespace(ns)
 
 	beego.InsertFilter(fmt.Sprintf("%s/**", config.BaseApi), beego.BeforeRouter, middleware.AuthFilter)
 
-	beego.Router("/nginx-ui/config.js", &controllers.ConfigController{})
+	beego.Router(fmt.Sprintf("%s/config.js", config.ContextPath), &controllers.ConfigController{})
 	// portal static assets
-	beego.SetStaticPath("/nginx-ui", "static/web")
-	beego.SetStaticPath("/web", "static/web")
-
+	beego.SetStaticPath(config.ContextPath, "static/web")
 	beego.Get("/", func(ctx *context.Context) {
-		ctx.Redirect(301, "/nginx-ui/index.html")
+		ctx.Redirect(301, fmt.Sprintf("%s/index.html", config.ContextPath))
 	})
 
 	beego.ErrorHandler("404", func(writer http.ResponseWriter, request *http.Request) {

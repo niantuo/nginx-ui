@@ -4,6 +4,7 @@ import (
 	"encoding/gob"
 	"github.com/astaxie/beego"
 	_ "github.com/beego/beego/v2/server/web/session/redis"
+	"server/config"
 	_ "server/config"
 	"server/db"
 	"server/models"
@@ -15,8 +16,7 @@ func init() {
 }
 
 func main() {
-
 	db.Init()
+	config.InitAdmin()
 	beego.Run()
-
 }

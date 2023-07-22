@@ -8,8 +8,18 @@ import (
 	"github.com/astaxie/beego/session"
 	"github.com/beego/beego/v2/client/httplib"
 	"net/http"
+	"server/config"
 	"server/models"
+	"strings"
 )
+
+// 白名单，不需要登录即可访问
+var whitelist = map[string]bool{
+	"/user/login":      true,
+	"/user/register":   true,
+	"/oauth2":          true,
+	"/oauth2/callback": true,
+}
 
 type ThirdSession struct {
 	Enable     bool
@@ -62,6 +72,14 @@ func checkThirdSession(ctx *context.Context, sess session.Store) {
 }
 
 func AuthFilter(ctx *context.Context) {
+	path := ctx.Request.RequestURI
+	path = strings.TrimSuffix(path, "/")
+	path = strings.TrimPrefix(path, config.Config.BaseApi)
+	if whitelist[path] {
+		logs.Debug("in whitelist ,skip ", ctx.Request.RequestURI, path)
+		return
+	}
+	logs.Info(fmt.Sprintf("auth: %s,%s", ctx.Request.RequestURI, path))
 	sess := ctx.Input.CruSession
 	defer sess.SessionRelease(ctx.ResponseWriter)
 	data := sess.Get("user")
@@ -70,20 +88,20 @@ func AuthFilter(ctx *context.Context) {
 	}
 	data = sess.Get("user")
 	if data == nil {
-		writeForbidden(ctx.ResponseWriter)
+		WriteForbidden(ctx.ResponseWriter)
 		return
 	}
 	user := data.(models.User)
 	if len(user.Account) == 0 {
-		writeForbidden(ctx.ResponseWriter)
+		WriteForbidden(ctx.ResponseWriter)
 		return
 	}
 	logs.Info(fmt.Sprintf("request uri: %s, uid: %s", ctx.Request.RequestURI, user.Account))
 }
 
-func writeForbidden(w http.ResponseWriter) {
-	w.WriteHeader(403)
-	_, err := w.Write([]byte("403 Forbidden\n"))
+func WriteForbidden(w http.ResponseWriter) {
+	w.WriteHeader(401)
+	_, err := w.Write([]byte("401 Unauthorized\n"))
 	if err != nil {
 		logs.Warn("writeForbidden write error", err)
 		return

@@ -17,8 +17,13 @@ const ReplacePassword = "******"
 
 // Get getAll
 func (c *NginxController) Get() {
+	user := c.RequiredUser()
+	if user == nil {
+		return
+	}
+
 	o := orm.NewOrm()
-	qs := o.QueryTable("nginx")
+	qs := o.QueryTable("nginx").Filter("Uid", user.Account)
 	var list []*models.Nginx
 	_, err := qs.All(&list)
 	for i := range list {
@@ -155,7 +160,7 @@ func (c *NginxController) RefreshHttp() {
 
 	o := orm.NewOrm()
 	if nginx.HttpConf != "" {
-		_, err = o.Update(&nginx, "HttpConf","HttpData")
+		_, err = o.Update(&nginx, "HttpConf", "HttpData")
 		if err != nil {
 			c.ErrorJson(err)
 			return

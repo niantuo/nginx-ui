@@ -3,6 +3,8 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
+	"server/middleware"
+	"server/models"
 	"strconv"
 )
 
@@ -82,4 +84,21 @@ func (c *BaseController) getIntParam(k string) (int, error) {
 		return 0, err
 	}
 	return id, nil
+}
+
+func (c *BaseController) GetUser(required bool) *models.User {
+	data := c.GetSession("user")
+	if data == nil && required {
+		middleware.WriteForbidden(c.Ctx.ResponseWriter)
+		return nil
+	}
+	if data == nil {
+		return nil
+	}
+	user := data.(models.User)
+	return &user
+}
+
+func (c *BaseController) RequiredUser() *models.User {
+	return c.GetUser(true)
 }
