@@ -28,6 +28,13 @@ type CompleteOauth2Config struct {
 
 var OauthConfig = &CompleteOauth2Config{
 	Enable: false,
+	Config: &oauth2.Config{
+		ClientID:     "",
+		ClientSecret: "",
+		Endpoint:     oauth2.Endpoint{},
+		RedirectURL:  "",
+		Scopes:       []string{},
+	},
 }
 
 var Config = &AppConfig{}

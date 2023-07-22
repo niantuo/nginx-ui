@@ -21,6 +21,8 @@ var whitelist = map[string]bool{
 	"/oauth2/callback": true,
 }
 
+var UnauthorizedResp = `{"code": 401, "msg":"未登录或者登录已过期！"}`
+
 type ThirdSession struct {
 	Enable     bool
 	CookieName string
@@ -101,7 +103,8 @@ func AuthFilter(ctx *context.Context) {
 
 func WriteForbidden(w http.ResponseWriter) {
 	w.WriteHeader(401)
-	_, err := w.Write([]byte("401 Unauthorized\n"))
+	w.Header().Set("Content-Type", "application/json")
+	_, err := w.Write([]byte(UnauthorizedResp))
 	if err != nil {
 		logs.Warn("writeForbidden write error", err)
 		return

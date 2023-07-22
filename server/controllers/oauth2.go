@@ -16,6 +16,12 @@ type Oauth2Controller struct {
 	BaseController
 }
 
+type Oauth2SSOReq struct {
+	Code  string `json:"code"`
+	Scope string `json:"scope"`
+	State string `json:"state"`
+}
+
 // Get 获取oauth2.0的登录url
 func (c *Oauth2Controller) Get() {
 	state, err := utils.RandPassword(6)
@@ -29,13 +35,19 @@ func (c *Oauth2Controller) Get() {
 
 // Callback 用户注册
 func (c *Oauth2Controller) Callback() {
+	var ssoReq Oauth2SSOReq
+	err := json.Unmarshal(c.Ctx.Input.RequestBody, &ssoReq)
+	if err != nil {
+		logs.Error(err, string(c.Ctx.Input.RequestBody))
+		c.ErrorJson(err)
+		return
+	}
 	oauth := config.OauthConfig
-	code := c.GetString("code", "")
-	if len(code) == 0 {
+	if len(ssoReq.Code) == 0 {
 		c.setCode(-1).setMsg("登录失败(Code)：code is empty").json()
 		return
 	}
-	token, err := oauth.Exchange(context.Background(), code)
+	token, err := oauth.Exchange(context.Background(), ssoReq.Code)
 	if err != nil {
 		logs.Error("ExchangeToken", err)
 		c.setCode(-1).setMsg("登录失败(Exchange)：" + err.Error()).json()

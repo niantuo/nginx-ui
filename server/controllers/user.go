@@ -38,6 +38,14 @@ func (c *UserController) Login() {
 	c.setData(user).json()
 }
 
+func (c *UserController) User() {
+	user := c.RequiredUser()
+	if user == nil {
+		return
+	}
+	c.setData(user).json()
+}
+
 // Register 用户注册
 func (c *UserController) Register() {
 	var user models.User

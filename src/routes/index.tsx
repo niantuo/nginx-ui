@@ -1,4 +1,4 @@
-import { Routes,Route, HashRouter} from 'react-router-dom';
+import {Routes, Route, HashRouter} from 'react-router-dom';
 import {NginxList} from "../pages/nginx/list.tsx";
 import {Nginx} from "../pages/nginx";
 import {NginxSettings} from "../pages/nginx/settings";
@@ -11,6 +11,16 @@ import {NginxUpstream} from "../pages/nginx/upstream";
 import {NginxCerts} from "../pages/nginx/certs";
 import {NginxStream} from "../pages/nginx/stream";
 import {HelpPage} from "../pages/nginx/help";
+import {LoginApis} from "../api/user.ts";
+import {useEffect, useState} from "react";
+import {useAppDispatch, useAppSelector} from "../store";
+import {Spin} from "antd";
+import * as React from "react";
+import './index.less'
+import {useLocation, useNavigate} from "react-router";
+import {LoginPage} from "../pages/login";
+import {SignupPage} from "../pages/signup";
+import {UserActions} from "../store/slice/user.ts";
 
 /**
  * @author tuonian
@@ -18,82 +28,130 @@ import {HelpPage} from "../pages/nginx/help";
  */
 
 const nginxRoutes = [
-  {
-    path: '/nginx/:id',
-    component: Nginx,
-    children: [
-      {
-        index: true,
-        path: '',
-        component: NginxSettings
-      },
-      {
-        path: 'http',
-        component: NginxHttp
-      },
-      {
-        path:  'certs',
-        component: NginxCerts
-      },
-      {
-        path: 'upstream',
-        component: NginxUpstream
-      },
-      {
-        path:  'stream',
-        component: NginxStream
-      },
-      {
-        path: 'server/:sid',
-        component: NginxServer
-      },
-      {
-        path: 'server/:sid/conf',
-        component: NginxServer
-      },
-      {
-        path: 'server/:sid/location/:locId',
-        component: ServerLocation
-      },
-      {
-        path: 'server/:sid/location-new',
-        component: NewLocation
-      },
-      {
-        path: 'server-new',
-        component: NewServer
-      },
-      {
-        path: 'help',
+    {
+        path: '/nginx/:id',
+        component: Nginx,
+        children: [
+            {
+                index: true,
+                path: '',
+                component: NginxSettings
+            },
+            {
+                path: 'http',
+                component: NginxHttp
+            },
+            {
+                path: 'certs',
+                component: NginxCerts
+            },
+            {
+                path: 'upstream',
+                component: NginxUpstream
+            },
+            {
+                path: 'stream',
+                component: NginxStream
+            },
+            {
+                path: 'server/:sid',
+                component: NginxServer
+            },
+            {
+                path: 'server/:sid/conf',
+                component: NginxServer
+            },
+            {
+                path: 'server/:sid/location/:locId',
+                component: ServerLocation
+            },
+            {
+                path: 'server/:sid/location-new',
+                component: NewLocation
+            },
+            {
+                path: 'server-new',
+                component: NewServer
+            },
+            {
+                path: 'help',
+                component: HelpPage
+            }
+        ]
+    },
+    {
+        path: '/nginx/help',
         component: HelpPage
-      }
-    ]
-  },
-  {
-    path: '/nginx/help',
-    component: HelpPage
-  }
+    }
 ]
 
-export const MyRouter = ()=>{
+type RouteWrapperProps = {
+    Component: React.ComponentType
+    [key: string]: any
+}
+export const RouteWrapper = ({Component, ...props}: RouteWrapperProps) => {
 
- return (
-   <HashRouter basename={'/'}>
-     <Routes >
-       <Route path='/' Component={NginxList}/>
-       {
-         nginxRoutes.map((r)=>{
-           return (
-             <Route key={r.path} path={r.path} Component={r.component}>
-               {r.children?.map((c, cidx)=>{
-                 return (<Route key={r.path + cidx} index={c.index} path={c.path} Component={c.component} /> )
-               })}
-             </Route>
-           )
-         })
-       }
-     </Routes>
-   </HashRouter>
- )
+    const [loading, setLoading] = useState(false)
+    const user = useAppSelector(state => state.user.user)
+    const navigate = useNavigate()
+    const location = useLocation()
+    const dispatch = useAppDispatch()
+
+    const fetchUser = () => {
+        setLoading(true);
+        LoginApis.userinfo().then(({data}) => {
+          dispatch(UserActions.setUser(data.data))
+            console.log('fetchUser', data)
+        }).catch(e => {
+            console.warn('userinfo fail', e);
+            navigate('/login?to=' + location.pathname)
+        })
+            .finally(() => {
+                setLoading(false)
+            })
+    }
+
+    useEffect(() => {
+        if (user?.account) {
+            setLoading(false)
+        } else {
+            fetchUser()
+        }
+    }, [user])
+
+    if (!user || loading) {
+        return (<div className="empty-loading">
+            <Spin></Spin>
+            <div className="hint-msg">加载中,请稍等...</div>
+        </div>)
+    }
+
+    return <Component {...props} />
+}
+
+export const MyRouter = () => {
+
+
+    return (
+        <HashRouter basename={'/'}>
+            <Routes>
+                <Route path='/' element={<RouteWrapper Component={NginxList}/>}/>
+                {
+                    nginxRoutes.map((r) => {
+                        return (
+                            <Route key={r.path} path={r.path} element={<RouteWrapper Component={r.component}/>}>
+                                {r.children?.map((c, cidx) => {
+                                    return (<Route key={r.path + cidx} index={c.index} path={c.path}
+                                                   element={<RouteWrapper Component={c.component}/>}/>)
+                                })}
+                            </Route>
+                        )
+                    })
+                }
+                <Route path="/login" Component={LoginPage} />
+              <Route path="/signup" Component={SignupPage} />
+            </Routes>
+        </HashRouter>
+    )
 }
 

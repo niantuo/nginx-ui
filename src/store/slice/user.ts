@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {User} from "../../models/user.ts";
 
 export type IUserState = {
-  user?: any;
+  user?: User;
   isLogin: boolean;
   isAdmin?: boolean;
 };
@@ -15,7 +16,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUser(state, action: PayloadAction<any>) {
+    setUser(state, action: PayloadAction<User>) {
       state.user = action.payload;
       state.isLogin = true;
       const roles = state.user?.roles || '';

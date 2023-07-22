@@ -1,6 +1,8 @@
 import axios, {AxiosResponse} from 'axios';
 import {BaseResp} from "../models/api.ts";
 import {Message, Notify} from "planning-tools";
+import {store} from "../store";
+import {UserActions} from "../store/slice/user.ts";
 console.log('env', import.meta.env)
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -61,6 +63,9 @@ request.interceptors.response.use((resp: AxiosResponse<BaseResp>)=>{
     errData.msg = 'request fail'
   }
   (!disableErrorMsg)&& Message.error(errData.msg)
+  if (error.response.statusCode == 401){
+    store.dispatch(UserActions.clearUser())
+  }
   return Promise.reject(errData)
 })
 

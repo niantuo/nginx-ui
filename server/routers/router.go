@@ -34,9 +34,10 @@ func init() {
 		beego.NSRouter("/file/deploy", &controllers.FileController{}, "post:Deploy"),
 
 		beego.NSRouter("/user/login", &controllers.UserController{}, "post:Login"),
+		beego.NSRouter("/user/info", &controllers.UserController{}, "get:User"),
 		beego.NSRouter("/user/register", &controllers.UserController{}, "post:Register"),
-		beego.NSRouter("/oauth2", &controllers.UserController{}),
-		beego.NSRouter("/oauth2/callback", &controllers.UserController{}, "post:Callback"),
+		beego.NSRouter("/oauth2", &controllers.Oauth2Controller{}),
+		beego.NSRouter("/oauth2/callback", &controllers.Oauth2Controller{}, "post:Callback"),
 	)
 	beego.AddNamespace(ns)
 
