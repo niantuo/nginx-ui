@@ -12,7 +12,12 @@ type ServerController struct {
 }
 
 // Get getAllServers
+// Get /nginx/:id/server
 func (c *ServerController) Get() {
+	nginx, err := c.CheckNginxPermission()
+	if err != nil {
+		return
+	}
 
 	id, err := c.GetInt("id", 0)
 	if err != nil {
@@ -21,8 +26,8 @@ func (c *ServerController) Get() {
 	}
 
 	o := orm.NewOrm()
-	server := models.ServerHost{Id: id}
-	err = o.Read(&server)
+	server := models.ServerHost{Id: id, NginxId: nginx.Id}
+	err = o.Read(&server, "Id", "NginxId")
 	if err != nil {
 		c.ErrorJson(err)
 		return
@@ -31,18 +36,25 @@ func (c *ServerController) Get() {
 }
 
 // Post add or update nginx instance
+// POST /nginx/:id/server
 func (c *ServerController) Post() {
+	nginx, err := c.CheckNginxPermission()
+	if err != nil {
+		return
+	}
 	var server models.ServerHost
-	err := json.Unmarshal(c.Ctx.Input.RequestBody, &server)
+	err = json.Unmarshal(c.Ctx.Input.RequestBody, &server)
 	if err != nil {
 		c.ErrorJson(err)
 		return
 	}
 	o := orm.NewOrm()
 	var saveErr error
+	server.NginxId = nginx.Id
+	server.Uid = nginx.Uid
 	if server.Id > 0 {
-		tmp := models.ServerHost{Id: server.Id}
-		err := o.Read(&tmp, "last_name")
+		tmp := models.ServerHost{Id: server.Id, NginxId: nginx.Id}
+		err := o.Read(&tmp, "Id", "NginxId")
 		if err == nil {
 			server.LastName = tmp.LastName
 			server.ServerConf = tmp.ServerConf
@@ -60,9 +72,14 @@ func (c *ServerController) Post() {
 }
 
 // Delete add or update nginx instance
+// DELETE /nginx/:id/server
 func (c *ServerController) Delete() {
+	nginx, err := c.CheckNginxPermission()
+	if err != nil {
+		return
+	}
 	var server models.ServerHost
-	err := json.Unmarshal(c.Ctx.Input.RequestBody, &server)
+	err = json.Unmarshal(c.Ctx.Input.RequestBody, &server)
 	if err != nil {
 		c.ErrorJson(err)
 		return
@@ -73,21 +90,16 @@ func (c *ServerController) Delete() {
 		c.ErrorJson(err)
 		return
 	}
-	nginx := models.Nginx{Id: server.NginxId}
-	err = o.Read(&nginx)
-	if err != nil {
-		c.ErrorJson(err)
-		return
-	}
-	ins := nginx2.GetInstance(&nginx)
+
+	ins := nginx2.GetInstance(nginx)
 	server.Enable = false
 	err = ins.RefreshServer(server)
 	if err != nil {
 		c.ErrorJson(err)
 		return
 	}
-	delServer := models.ServerHost{Id: server.Id}
-	_, err = o.Delete(&delServer)
+	delServer := models.ServerHost{Id: server.Id, NginxId: nginx.Id}
+	_, err = o.Delete(&delServer, "Id", "NginxId")
 	if err != nil {
 		c.ErrorJson(err)
 		return
@@ -96,13 +108,22 @@ func (c *ServerController) Delete() {
 }
 
 // Refresh check and refresh to disk
+// POST /nginx/:id/server/refresh
 func (c *ServerController) Refresh() {
+	nginx, err := c.CheckNginxPermission()
+	if err != nil {
+		return
+	}
 	var postData models.ServerHost
-	err := json.Unmarshal(c.Ctx.Input.RequestBody, &postData)
+	err = json.Unmarshal(c.Ctx.Input.RequestBody, &postData)
 	if err != nil {
 		c.ErrorJson(err)
 		return
 	}
+
+	postData.NginxId = nginx.Id
+	postData.Uid = nginx.Uid
+	
 	o := orm.NewOrm()
 	_, err = o.Update(&postData)
 	if err != nil {
@@ -110,13 +131,7 @@ func (c *ServerController) Refresh() {
 		return
 	}
 
-	var nginx = models.Nginx{Id: postData.NginxId}
-	err = o.Read(&nginx)
-	if err != nil {
-		c.ErrorJson(err)
-		return
-	}
-	ins := nginx2.GetInstance(&nginx)
+	ins := nginx2.GetInstance(nginx)
 	err = ins.RefreshServer(postData)
 	if err != nil {
 		c.ErrorJson(err)

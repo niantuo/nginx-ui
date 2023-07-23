@@ -32,6 +32,10 @@ export const NginxApis= {
   },
   getNginx: (id:number) => request.get<BaseResp<{nginx: INginx, servers: IServerHost[]}>>(`/nginx/${id}`),
   delNginx: (id:number) => request.delete(`/nginx/${id}`),
+  status: (id:number) => request.post(`/nginx/${id}/status`, { }, { timeout: 60000 }),
+  startNginx: (id:number) => request.post(`/nginx/${id}/start`, { }, { timeout: 60000 }),
+  stopNginx: (id:number) => request.post(`/nginx/${id}/stop`, { }, { timeout: 60000 }),
+
   /**
    * 不更改配置文件，仅保存数据，方便某些特殊情况，一直手动修改配置文件
    * @param nginx
@@ -42,13 +46,13 @@ export const NginxApis= {
     const serverHost: Partial<IServerHost> = createServerHost(nginx,server);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    return request.post<BaseResp<IServerHost>>('/server',serverHost, { disableErrorMsg: true } as any)
-      .then(({data})=>{
-        if (data.data){
-          return createServer(data.data)
-        }
-        return Promise.reject(data)
-      })
+    return request.post<BaseResp<IServerHost>>(`/nginx/${nginx.id}/server`,serverHost, { disableErrorMsg: true } as any)
+        .then(({data})=>{
+          if (data.data){
+            return createServer(data.data)
+          }
+          return Promise.reject(data)
+        })
   },
   /**
    * 更改配置文件，保存数据
@@ -56,13 +60,9 @@ export const NginxApis= {
    * @param server
    */
   refreshServer: (server: Partial<IServerHost>) => {
-    return request.post('/server/refresh', server, { timeout: 60000 })
+    return request.post(`/nginx/${server.nginxId}/server/refresh`, server, { timeout: 60000 })
   },
-  deleteServer: (server: INginxServer) => request.delete(`/server`,{ data: { id: server.id}}),
-  status: (id:number) => request.post(`/nginx/${id}/status`, { }, { timeout: 60000 }),
-  startNginx: (id:number) => request.post(`/nginx/${id}/start`, { }, { timeout: 60000 }),
-  stopNginx: (id:number) => request.post(`/nginx/${id}/stop`, { }, { timeout: 60000 }),
-
+  deleteServer: (nginxId: number,server: INginxServer) => request.delete(`/nginx/${nginxId}/server`,{ data: { id: server.id}}),
   /**
    * 获取证书信息，不传name，则返回所有证书文件信息，传了name，则返回该证书的内容
    * @param id
@@ -122,5 +122,5 @@ export const uploadApis = {
       })
     })
   },
-  deploy:(data: IDeployReq)=>request.post('/file/deploy', data, {timeout: 120000}),
+  deploy:(data: IDeployReq)=>request.post(`/nginx/${data.nginxId}/file/deploy`, data, {timeout: 120000}),
 }

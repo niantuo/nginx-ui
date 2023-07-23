@@ -80,7 +80,7 @@ export const NginxServer = () => {
     removeServer.nginxId = current.id
     const handlerDelete = ()=>{
       setLoading(true)
-      NginxApis.deleteServer(removeServer)
+      NginxApis.deleteServer(current.id,removeServer)
           .then(()=>{
             const list = servers.filter(s=>s.id !== removeServer.id);
             dispatch(NginxActions.updateServers(list))

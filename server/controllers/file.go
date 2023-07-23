@@ -44,7 +44,8 @@ func (c *FileController) Get() {
 	c.Ctx.Output.Download(fromFile, fileName)
 }
 
-// Post save certs
+// Post 文件长传
+// POST /file
 func (c *FileController) Post() {
 	f, header, err := c.GetFile("file")
 	if err != nil {
@@ -96,9 +97,15 @@ func (c *FileController) Post() {
 }
 
 // Deploy 部署到服务器
+// POST /nginx/:id/file/deploy
 func (c *FileController) Deploy() {
+	nginx, err := c.CheckNginxPermission()
+	if err != nil {
+		return
+	}
+	logs.Info("deploy ", nginx.Id)
 	var req models.DeployReq
-	err := json.Unmarshal(c.Ctx.Input.RequestBody, &req)
+	err = json.Unmarshal(c.Ctx.Input.RequestBody, &req)
 	if err != nil {
 		logs.Error(err, string(c.Ctx.Input.RequestBody))
 		c.ErrorJson(err)

@@ -28,11 +28,11 @@ func init() {
 		beego.NSRouter("/nginx/:id/certs", &controllers.CertController{}),
 		beego.NSRouter("/nginx/:id/certs/sync", &controllers.CertController{}, "post:Sync"),
 		// nginx server apis
-		beego.NSRouter("/server", &controllers.ServerController{}),
-		beego.NSRouter("/server/refresh", &controllers.ServerController{}, "post:Refresh"),
+		beego.NSRouter("/nginx/:id/server", &controllers.ServerController{}),
+		beego.NSRouter("/nginx/:id/server/refresh", &controllers.ServerController{}, "post:Refresh"),
 		// file upload download
+		beego.NSRouter("/nginx/:id/file/deploy", &controllers.FileController{}, "post:Deploy"),
 		beego.NSRouter("/file", &controllers.FileController{}),
-		beego.NSRouter("/file/deploy", &controllers.FileController{}, "post:Deploy"),
 
 		beego.NSRouter("/user/login", &controllers.UserController{}, "post:Login"),
 		beego.NSRouter("/user/info", &controllers.UserController{}, "get:User"),
