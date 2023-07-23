@@ -17,9 +17,10 @@ func init() {
 	config := config2.Config
 	ns := beego.NewNamespace(config.BaseApi,
 		beego.NSRouter("/nginx", &controllers.NginxController{}),
+		beego.NSRouter("/nginx/:id", &controllers.NginxController{}, "post:Update"),
 		beego.NSRouter("/nginx/:id", &controllers.NginxController{}, "get:GetNginx"),
 		beego.NSRouter("/nginx/:id", &controllers.NginxController{}, "delete:DelNginx"),
-		beego.NSRouter("/http/refresh", &controllers.NginxController{}, "post:RefreshHttp"),
+		beego.NSRouter("/nginx/:id/http/refresh", &controllers.NginxController{}, "post:RefreshHttp"),
 		beego.NSRouter("/nginx/:id/start", &controllers.NginxController{}, "post:StartNginx"),
 		beego.NSRouter("/nginx/:id/stop", &controllers.NginxController{}, "post:StopNginx"),
 		beego.NSRouter("/nginx/:id/status", &controllers.NginxController{}, "post:StatusNginx"),

@@ -6,7 +6,6 @@ import (
 	"github.com/astaxie/beego/orm"
 	"server/models"
 	ngx "server/nginx"
-	"strconv"
 )
 
 type NginxController struct {
@@ -15,15 +14,18 @@ type NginxController struct {
 
 const ReplacePassword = "******"
 
-// Get getAll
+// Get getAll,
+// 管理员获取全部，非管理员或者自己名下的
 func (c *NginxController) Get() {
-	user := c.RequiredUser()
-	if user == nil {
+	current := c.RequiredUser()
+	if current == nil {
 		return
 	}
-
 	o := orm.NewOrm()
-	qs := o.QueryTable("nginx").Filter("Uid", user.Account)
+	qs := o.QueryTable("nginx")
+	if !current.IsAdmin() {
+		qs = qs.Filter("Uid", current.Account)
+	}
 	var list []*models.Nginx
 	_, err := qs.All(&list)
 	for i := range list {
@@ -32,7 +34,6 @@ func (c *NginxController) Get() {
 			item.Password = ReplacePassword
 		}
 	}
-
 	if err != nil {
 		c.ErrorJson(err)
 		return
@@ -43,6 +44,10 @@ func (c *NginxController) Get() {
 
 // Post add nginx instance
 func (c *NginxController) Post() {
+	current := c.RequiredUser()
+	if current == nil {
+		return
+	}
 	var nginx models.Nginx
 	err := json.Unmarshal(c.Ctx.Input.RequestBody, &nginx)
 	if err != nil {
@@ -52,29 +57,63 @@ func (c *NginxController) Post() {
 	}
 	nginx.Check()
 	o := orm.NewOrm()
-	var saveErr error
-	if nginx.Id == 0 {
-		_, err = o.Insert(&nginx)
-		saveErr = err
-	} else {
-		tmp := models.Nginx{
-			Id: nginx.Id,
-		}
-		err = o.Read(&tmp)
-		if err != nil {
-			c.ErrorJson(err)
-			return
-		}
-		if nginx.Password == ReplacePassword {
-			nginx.Password = tmp.Password
-		}
-		nginx.HttpConf = tmp.HttpConf
-		_, err = o.Update(&nginx)
-		saveErr = err
+
+	nginx.Uid = current.Account
+	_, err = o.Insert(&nginx)
+
+	if err != nil {
+		c.ErrorJson(err)
+		return
+	}
+	logs.Info("post", nginx)
+
+	instance := ngx.GetInstance(&nginx)
+	err = instance.Connect()
+	if err != nil {
+		c.setCode(1).setMsg(err.Error()).setData(nginx)
+		c.json()
+		return
+	}
+	out, err := instance.GetVersion()
+	if err != nil {
+		c.setCode(1).setMsg(err.Error()).setData(nginx)
+		c.json()
+		return
+	}
+	nginx.VersionInfo = out
+	_, _ = o.Update(&nginx, "VersionInfo")
+	c.setData(nginx).json()
+}
+
+// Update modify nginx instance
+// post /nginx/:id
+func (c *NginxController) Update() {
+
+	exist, err := c.CheckNginxPermission()
+	if err != nil {
+		return
 	}
 
-	if saveErr != nil {
-		c.ErrorJson(saveErr)
+	var nginx models.Nginx
+	err = json.Unmarshal(c.Ctx.Input.RequestBody, &nginx)
+	if err != nil {
+		logs.Error(err, string(c.Ctx.Input.RequestBody))
+		c.ErrorJson(err)
+		return
+	}
+	nginx.Id = exist.Id
+	nginx.Uid = exist.Uid
+	nginx.Check()
+	o := orm.NewOrm()
+
+	if nginx.Password == ReplacePassword {
+		nginx.Password = exist.Password
+	}
+	nginx.HttpConf = exist.HttpConf
+	_, err = o.Update(&nginx)
+
+	if err != nil {
+		c.ErrorJson(err)
 		return
 	}
 	logs.Info("post", nginx)
@@ -98,58 +137,43 @@ func (c *NginxController) Post() {
 }
 
 // StartNginx startNginx
+// post /nginx/:id/start
 func (c *NginxController) StartNginx() {
-	idStr := c.getParam(":id")
-	id, err := strconv.Atoi(idStr)
-	logs.Info("id", id)
+
+	nginx, err := c.CheckNginxPermission()
 	if err != nil {
-		c.ErrorJson(err)
 		return
 	}
-	var nginx = models.Nginx{
-		Id: id,
-	}
-	o := orm.NewOrm()
-	err = o.Read(&nginx)
-	if err != nil {
-		c.ErrorJson(err)
-		return
-	}
-	instance := ngx.GetInstance(&nginx)
+
+	instance := ngx.GetInstance(nginx)
 	err = instance.Start()
 	isRun, msg := instance.Status()
 	c.setData(isRun).setMsg(msg).json()
 }
 
 // StopNginx add nginx instance
+// post /nginx/:id/stop
 func (c *NginxController) StopNginx() {
-	idStr := c.getParam(":id")
-	id, err := strconv.Atoi(idStr)
-	logs.Info("id", id)
+	nginx, err := c.CheckNginxPermission()
 	if err != nil {
-		c.ErrorJson(err)
 		return
 	}
-
-	var nginx = models.Nginx{
-		Id: id,
-	}
-	o := orm.NewOrm()
-	err = o.Read(&nginx)
-	if err != nil {
-		c.ErrorJson(err)
-		return
-	}
-	instance := ngx.GetInstance(&nginx)
+	instance := ngx.GetInstance(nginx)
 	err = instance.Stop()
 	isRun, msg := instance.Status()
 	c.setData(isRun).setMsg(msg).json()
 }
 
 // RefreshHttp nginx detail data
+// post /nginx/:id/http/refresh
 func (c *NginxController) RefreshHttp() {
+	exist, err := c.CheckNginxPermission()
+	if err != nil {
+		return
+	}
+
 	var nginx models.Nginx
-	err := json.Unmarshal(c.Ctx.Input.RequestBody, &nginx)
+	err = json.Unmarshal(c.Ctx.Input.RequestBody, &nginx)
 	if err != nil {
 		logs.Error(err, string(c.Ctx.Input.RequestBody))
 		c.ErrorJson(err)
@@ -165,37 +189,24 @@ func (c *NginxController) RefreshHttp() {
 			c.ErrorJson(err)
 			return
 		}
+		exist.HttpConf = nginx.HttpConf
+		exist.HttpData = nginx.HttpData
 	}
-	err = o.Read(&nginx)
+
+	ins := ngx.GetInstance(exist)
+	err = ins.RefreshHttp(*exist)
 	if err != nil {
 		c.ErrorJson(err)
 		return
 	}
-	ins := ngx.GetInstance(&nginx)
-	err = ins.RefreshHttp(nginx)
-	if err != nil {
-		c.ErrorJson(err)
-		return
-	}
-	c.setData(nginx)
 	c.json()
 }
 
 // GetNginx nginx detail data
+// get /nginx/:id
 func (c *NginxController) GetNginx() {
-	idStr := c.getParam(":id")
-	id, err := strconv.Atoi(idStr)
-	logs.Info("id", id)
+	nginx, err := c.CheckNginxPermission()
 	if err != nil {
-		c.ErrorJson(err)
-		return
-	}
-	o := orm.NewOrm()
-
-	var nginx = models.Nginx{Id: id}
-	err = o.Read(&nginx)
-	if err != nil {
-		c.ErrorJson(err)
 		return
 	}
 	if nginx.Password != "" {
@@ -203,8 +214,10 @@ func (c *NginxController) GetNginx() {
 	}
 	c.addRespData("nginx", nginx)
 
+	o := orm.NewOrm()
+
 	var servers []models.ServerHost
-	_, err = o.QueryTable((*models.ServerHost)(nil)).Filter("NginxId", id).All(&servers)
+	_, err = o.QueryTable((*models.ServerHost)(nil)).Filter("NginxId", nginx.Id).All(&servers)
 	if err != nil {
 		c.ErrorJson(err)
 		return
@@ -214,15 +227,14 @@ func (c *NginxController) GetNginx() {
 }
 
 // DelNginx delete a instance
+// delete /nginx/:id
 func (c *NginxController) DelNginx() {
-	id, err := c.getIntParam(":id")
+	nginx, err := c.CheckNginxPermission()
 	if err != nil {
-		c.ErrorJson(err)
 		return
 	}
 	o := orm.NewOrm()
-	nginx := models.Nginx{Id: id}
-	count, err := o.Delete(&nginx)
+	count, err := o.Delete(nginx, "Id")
 	if err != nil {
 		c.ErrorJson(err)
 	} else {
@@ -230,26 +242,14 @@ func (c *NginxController) DelNginx() {
 	}
 }
 
-// StopNginx add nginx instance
+// StatusNginx add nginx instance
+// post /nginx/:id/status
 func (c *NginxController) StatusNginx() {
-	idStr := c.getParam(":id")
-	id, err := strconv.Atoi(idStr)
-	logs.Info("id", id)
+	nginx, err := c.CheckNginxPermission()
 	if err != nil {
-		c.ErrorJson(err)
 		return
 	}
-
-	var nginx = models.Nginx{
-		Id: id,
-	}
-	o := orm.NewOrm()
-	err = o.Read(&nginx)
-	if err != nil {
-		c.ErrorJson(err)
-		return
-	}
-	instance := ngx.GetInstance(&nginx)
+	instance := ngx.GetInstance(nginx)
 	isRun, msg := instance.Status()
 	c.setData(isRun).setMsg(msg).json()
 }

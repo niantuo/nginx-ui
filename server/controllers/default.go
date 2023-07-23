@@ -102,3 +102,7 @@ func (c *BaseController) GetUser(required bool) *models.User {
 func (c *BaseController) RequiredUser() *models.User {
 	return c.GetUser(true)
 }
+
+func (c *BaseController) Forbidden() {
+	c.setCode(403).setMsg("您没有权限操作该实例！").json()
+}

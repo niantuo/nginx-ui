@@ -16,13 +16,19 @@ export const NginxApis= {
   findAll: () => request.get<BaseResp<INginx[]>>('/nginx'),
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  updateOrAdd: (data: Partial<INginx>) => request.post<BaseResp<INginx>>('/nginx', data, { disableErrorMsg: true, timeout: 60000 } as any),
+  updateOrAdd: (data: Partial<INginx>) => {
+    if (data.id){
+      return request.post<BaseResp<INginx>>(`/nginx/${data.id}`, data, { disableErrorMsg: true, timeout: 60000 } as any)
+    }else {
+      return request.post<BaseResp<INginx>>('/nginx', data, { disableErrorMsg: true, timeout: 60000 } as any)
+    }
+  },
   /**
    * 同步配置文件到本地，仅需要传递id  和httpConf, httpData 三个参数
    * @param nginx
    */
   refreshHttp: (nginx: RefreshHttpData) => {
-    return request.post('/http/refresh', nginx, { timeout: 60000 })
+    return request.post(`/nginx/${nginx.id}/http/refresh`, nginx, { timeout: 60000 })
   },
   getNginx: (id:number) => request.get<BaseResp<{nginx: INginx, servers: IServerHost[]}>>(`/nginx/${id}`),
   delNginx: (id:number) => request.delete(`/nginx/${id}`),
