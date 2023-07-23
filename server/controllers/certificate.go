@@ -9,7 +9,6 @@ import (
 	"server/models"
 	nginx2 "server/nginx"
 	"server/utils"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -34,39 +33,20 @@ func saveOrUpdate(cert *models.NginxCerts) error {
 	return err
 }
 
-func (c *CertController) getNginx() *models.Nginx {
-	idStr := c.getParam(":id")
-	id, err := strconv.Atoi(idStr)
-	logs.Info("id", id)
+// Get getAll
+// get /nginx/:id/certs
+func (c *CertController) Get() {
+	nginx, err := c.CheckNginxPermission()
 	if err != nil {
-		c.ErrorJson(err)
-		return nil
-	}
-	var nginx = models.Nginx{
-		Id: id,
-	}
-	o := orm.NewOrm()
-	err = o.Read(&nginx)
-	if err != nil {
-		c.ErrorJson(err)
-		return nil
+		return
 	}
 	if nginx.DataDir == "" {
 		c.setCode(-1).setMsg("请先配置数据目录位置！").json()
-		return nil
-	}
-	return &nginx
-}
-
-// Get getAll
-func (c *CertController) Get() {
-	nginx := c.getNginx()
-	if nginx == nil {
 		return
 	}
 	o := orm.NewOrm()
 	var list []models.NginxCerts
-	_, err := o.QueryTable((*models.NginxCerts)(nil)).Filter("NginxId", nginx.Id).All(&list)
+	_, err = o.QueryTable((*models.NginxCerts)(nil)).Filter("NginxId", nginx.Id).All(&list)
 	if err != nil {
 		c.ErrorJson(err)
 		return
@@ -75,9 +55,10 @@ func (c *CertController) Get() {
 }
 
 // Sync 从配置的证书路径同步证书到数据库
+// post /nginx/:id/certs/sync
 func (c *CertController) Sync() {
-	nginx := c.getNginx()
-	if nginx == nil {
+	nginx, err := c.CheckNginxPermission()
+	if err != nil {
 		return
 	}
 	ins := nginx2.GetInstance(nginx)
@@ -106,13 +87,14 @@ func (c *CertController) Sync() {
 }
 
 // Post save certs
+// post /nginx/:id/certs
 func (c *CertController) Post() {
-	nginx := c.getNginx()
-	if nginx == nil {
+	nginx, err := c.CheckNginxPermission()
+	if err != nil {
 		return
 	}
 	var cert models.NginxCerts
-	err := json.Unmarshal(c.Ctx.Input.RequestBody, &cert)
+	err = json.Unmarshal(c.Ctx.Input.RequestBody, &cert)
 	if err != nil {
 		logs.Error(err, string(c.Ctx.Input.RequestBody))
 		c.ErrorJson(err)
@@ -153,9 +135,10 @@ func (c *CertController) Post() {
 }
 
 // Delete del certs
+// delete /nginx/:id/certs
 func (c *CertController) Delete() {
-	nginx := c.getNginx()
-	if nginx == nil {
+	nginx, err := c.CheckNginxPermission()
+	if err != nil {
 		return
 	}
 	ins := nginx2.GetInstance(nginx)
