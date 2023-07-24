@@ -14,24 +14,33 @@ export const getFirst = (item: string | null | Array<string | null>)=>{
 
 export function useQuery<T>  (){
     const [query,setQuery] = useState<T>()
-    
+
     const location = useLocation()
 
+  const parseQuery = ()=>{
+      console.log('location', location.search)
+    if (!location.search){
+      setQuery(undefined)
+      return
+    }
+    const query:querystring.ParsedQuery =  querystring.parse(location.search)
+    if (!query.code){
+      return;
+    }
+    const newQuery:any = {}
+    Object.keys(query).forEach(k=>{
+      newQuery[k] = getFirst(query[k])
+    })
+    setQuery(newQuery)
+  }
+
     useEffect(()=>{
-        if (!location.search){
-            setQuery(undefined)
-            return
-        }
-        const query:querystring.ParsedQuery =  querystring.parse(location.search)
-        if (!query.code){
-            return;
-        }
-        const newQuery:any = {}
-        Object.keys(query).forEach(k=>{
-            newQuery[k] = getFirst(query[k])
-        })
-        setQuery(newQuery)
+        parseQuery()
     },[location])
+
+  useEffect(()=>{
+    parseQuery()
+  },[])
 
     return query
 }

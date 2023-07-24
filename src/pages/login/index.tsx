@@ -3,13 +3,14 @@ import './index.less'
 import {Button, Form, Input, Spin, Tabs} from "antd";
 import {TabsProps} from "antd/lib/tabs";
 import {Link} from "react-router-dom";
-import {LoginApis, LoginReq, SSOReq} from "../../api/user.ts";
-import {useEffect, useState} from "react";
+import {LoginApis, LoginReq } from "../../api/user.ts";
+import { useState} from "react";
 import {useAppDispatch} from "../../store";
 import {UserActions} from "../../store/slice/user.ts";
 import {Message} from "planning-tools";
 import {useNavigate } from "react-router";
 import {useQuery} from "../../utils";
+import {useSSOLogin} from "./sso.ts";
 
 const AccountPanel = ()=>{
 
@@ -59,11 +60,7 @@ const AccountPanel = ()=>{
 export const LoginPage = ()=>{
 
     const [activeKey,setActiveKey] = useState('account')
-    const ssoData = useQuery<SSOReq & {to?: string}>()
-    const [loading,setLoading] = useState(false)
-    const navigate = useNavigate()
-
-
+    const [loading] = useSSOLogin()
 
     const fetchSSO = ()=>{
         LoginApis.oauth2Url()
@@ -76,21 +73,6 @@ export const LoginPage = ()=>{
             })
     }
 
-    const onSSOCallback = (data: SSOReq)=>{
-        setLoading(true);
-        LoginApis.oauth2Callback(data)
-            .then(({data})=>{
-                if (data.code === 0){
-                    Message.success(data.msg);
-                    navigate(ssoData?.to || '/')
-                }else {
-                    Message.warning(data.msg)
-                }
-            })
-            .finally(()=>{
-                setLoading(false)
-            })
-    }
 
     const onActiveKeyChange = (ak: string)=>{
         if (ak === 'sso'){
@@ -101,12 +83,6 @@ export const LoginPage = ()=>{
         }
     }
 
-    useEffect(()=>{
-        if (ssoData?.code){
-            onSSOCallback(ssoData)
-        }
-        console.log('ssoData', ssoData)
-    },[ssoData])
 
     const tabItems:TabsProps["items"] = [
         {
@@ -127,3 +103,5 @@ export const LoginPage = ()=>{
         </div>
     </div>)
 }
+
+
