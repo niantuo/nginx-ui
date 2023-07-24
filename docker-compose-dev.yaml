@@ -20,3 +20,4 @@ services:
 #    network_mode: host
     volumes:
       - ./docker/data:/app/data
+      - ./docker/data/conf:/app/conf
