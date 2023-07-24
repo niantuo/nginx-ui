@@ -9,8 +9,8 @@ import {INginx} from "../../models/nginx.ts";
 import {NginxApis} from "../../api/nginx.ts";
 import {AutoForm, AutoFormInstance, Message, Notify} from "planning-tools";
 import {useFormConfig} from "./config.tsx";
-import {DeleteOutlined, PlusOutlined, SyncOutlined} from "@ant-design/icons";
-import {EditNginxBtn} from "./components/EditNginxBtn.tsx";
+import {DeleteOutlined, EditOutlined, PlusOutlined, SyncOutlined} from "@ant-design/icons";
+import {Link} from "react-router-dom";
 
 export const NginxList = ()=>{
 
@@ -94,7 +94,7 @@ export const NginxList = ()=>{
   const renderOperations = (data: INginx)=>{
 
     return (<>
-      <EditNginxBtn nginx={data} />
+      <Link to={`/nginx/${data.id}`}><EditOutlined /></Link>
       <Button onClick={()=>onRemoveNginx(data)} danger type="text" icon={<DeleteOutlined />}/>
     </>)
 

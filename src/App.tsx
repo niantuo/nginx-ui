@@ -9,8 +9,7 @@ import 'antd/dist/antd.css'
 import 'planning-tools/dist/umd/planning-tools.min.css'
 
 function App() {
-
-  return (
+    return (
     <>
       <Provider store={store}>
         <PersistGate loading persistor={persistor}>
@@ -18,9 +17,7 @@ function App() {
             <MyRouter />
           </ConfigProvider>
         </PersistGate>
-
       </Provider>
-
     </>
   )
 }

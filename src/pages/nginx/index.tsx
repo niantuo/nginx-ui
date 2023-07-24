@@ -16,6 +16,7 @@ import {NavLink} from "react-router-dom";
 import {BackButton} from "../../components/BackButton.tsx";
 import {StopStartButton} from "./components/StopStartButton.tsx";
 import './components'
+import {useNginx} from "./utils/nginx.ts";
 
 /**
  * nginx配置首页
@@ -27,7 +28,7 @@ export const Nginx = ({children}: any)=>{
   const location = useLocation();
   const params = useParams<NginxRouteParams>()
   const navigate = useNavigate()
-  const current = useAppSelector(state => state.nginx.current);
+  const [current] = useNginx(params.id);
   const server = useAppSelector(state => state.nginx.server);
   const servers = useAppSelector(state => state.nginx.servers)
 
@@ -36,16 +37,7 @@ export const Nginx = ({children}: any)=>{
 
   const dispatch = useAppDispatch();
 
-
   console.log('children',children,params)
-
-  useEffect(()=>{
-    if (!current || String(current.id) != params.id){
-      navigate(-1)
-    }else {
-      console.log('nginx data', current, params.id)
-    }
-  },[params.id])
 
   useEffect(()=>{
     setActiveKey(location.pathname)

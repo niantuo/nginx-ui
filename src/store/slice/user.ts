@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {User} from "../../models/user.ts";
+import dayjs from "dayjs";
 
 export type IUserState = {
-  user?: User;
+  user?: User & { timestamp: number };
   isLogin: boolean;
   isAdmin?: boolean;
 };
@@ -18,6 +19,7 @@ const userSlice = createSlice({
   reducers: {
     setUser(state, action: PayloadAction<User>) {
       state.user = action.payload;
+      state.user.timestamp = dayjs().unix()
       state.isLogin = true;
       const roles = state.user?.roles || '';
       state.isAdmin = roles.indexOf('ADMIN') > -1;

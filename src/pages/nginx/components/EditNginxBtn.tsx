@@ -16,6 +16,8 @@ import {nginxPrefix} from "../../../routes/routes.tsx";
 type IProps = {
   nginx: INginx
 }
+
+
 export const EditNginxBtn = ({nginx}: IProps)=>{
 
   const [loading,setLoading] = useState(false)

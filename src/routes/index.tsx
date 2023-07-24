@@ -21,6 +21,8 @@ import {useLocation, useNavigate} from "react-router";
 import {LoginPage} from "../pages/login";
 import {SignupPage} from "../pages/signup";
 import {UserActions} from "../store/slice/user.ts";
+import dayjs from "dayjs";
+import {SSOWrapper} from "../pages/login/sso.tsx";
 
 /**
  * @author tuonian
@@ -112,7 +114,13 @@ export const RouteWrapper = ({Component, ...props}: RouteWrapperProps) => {
     }
 
     useEffect(() => {
-        if (user?.account) {
+        if (!user?.account){
+            fetchUser()
+            return
+        }
+        const unix = dayjs().unix()
+        const cacheUnix = user.timestamp || 0;
+        if (unix - cacheUnix < 3600) {
             setLoading(false)
         } else {
             fetchUser()
@@ -130,28 +138,28 @@ export const RouteWrapper = ({Component, ...props}: RouteWrapperProps) => {
 }
 
 export const MyRouter = () => {
-
-
     return (
-        <HashRouter basename={'/'}>
-            <Routes>
-                <Route path='/' element={<RouteWrapper Component={NginxList}/>}/>
-                {
-                    nginxRoutes.map((r) => {
-                        return (
-                            <Route key={r.path} path={r.path} element={<RouteWrapper Component={r.component}/>}>
-                                {r.children?.map((c, cidx) => {
-                                    return (<Route key={r.path + cidx} index={c.index} path={c.path}
-                                                   element={<RouteWrapper Component={c.component}/>}/>)
-                                })}
-                            </Route>
-                        )
-                    })
-                }
-                <Route path="/login" Component={LoginPage} />
-              <Route path="/signup" Component={SignupPage} />
-            </Routes>
-        </HashRouter>
+       <SSOWrapper>
+           <HashRouter basename={'/'}>
+               <Routes>
+                   <Route path='/' element={<RouteWrapper Component={NginxList}/>}/>
+                   {
+                       nginxRoutes.map((r) => {
+                           return (
+                               <Route key={r.path} path={r.path} element={<RouteWrapper Component={r.component}/>}>
+                                   {r.children?.map((c, cidx) => {
+                                       return (<Route key={r.path + cidx} index={c.index} path={c.path}
+                                                      element={<RouteWrapper Component={c.component}/>}/>)
+                                   })}
+                               </Route>
+                           )
+                       })
+                   }
+                   <Route path="/login" Component={LoginPage} />
+                   <Route path="/signup" Component={SignupPage} />
+               </Routes>
+           </HashRouter>
+       </SSOWrapper>
     )
 }
 

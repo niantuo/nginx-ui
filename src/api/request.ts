@@ -63,7 +63,8 @@ request.interceptors.response.use((resp: AxiosResponse<BaseResp>)=>{
     errData.msg = 'request fail'
   }
   (!disableErrorMsg)&& Message.error(errData.msg)
-  if (error.response.statusCode == 401){
+  console.log('status', error.response?.status)
+  if (error.response.status == 401){
     store.dispatch(UserActions.clearUser())
   }
   return Promise.reject(errData)

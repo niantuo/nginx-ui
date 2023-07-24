@@ -7,4 +7,8 @@ export type User = {
     nickname: string
     roles?: string
     remark?: string
+    /**
+     * 缓存时间
+     */
+    timestamp: number
 }

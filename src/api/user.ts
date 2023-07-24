@@ -24,6 +24,6 @@ export const LoginApis = {
     signUp: (data: RegisterReq) => request.post('/user/register', data),
     userinfo: () => request.get('/user/info', { disableErrorMsg: true } as never),
     oauth2Url: ()=> request.get('/oauth2'),
-    oauth2Callback: (data: SSOReq) => request.post('/oauth2/callback', data)
+    oauth2Callback: (data: SSOReq) => request.post('/oauth2/callback', data, { disableErrorMsg: true } as never)
 
 }

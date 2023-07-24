@@ -30,7 +30,7 @@ export const NginxApis= {
   refreshHttp: (nginx: RefreshHttpData) => {
     return request.post(`/nginx/${nginx.id}/http/refresh`, nginx, { timeout: 60000 })
   },
-  getNginx: (id:number) => request.get<BaseResp<{nginx: INginx, servers: IServerHost[]}>>(`/nginx/${id}`),
+  getNginx: (id:number | string) => request.get<BaseResp<{nginx: INginx, servers: IServerHost[]}>>(`/nginx/${id}`),
   delNginx: (id:number) => request.delete(`/nginx/${id}`),
   status: (id:number) => request.post(`/nginx/${id}/status`, { }, { timeout: 60000 }),
   startNginx: (id:number) => request.post(`/nginx/${id}/start`, { }, { timeout: 60000 }),

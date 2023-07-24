@@ -9,8 +9,7 @@ import {useAppDispatch} from "../../store";
 import {UserActions} from "../../store/slice/user.ts";
 import {Message} from "planning-tools";
 import {useNavigate } from "react-router";
-import {useQuery} from "../../utils";
-import {useSSOLogin} from "./sso.ts";
+import {cacheTo, parseQuery, useQuery} from "../../utils";
 
 const AccountPanel = ()=>{
 
@@ -60,16 +59,24 @@ const AccountPanel = ()=>{
 export const LoginPage = ()=>{
 
     const [activeKey,setActiveKey] = useState('account')
-    const [loading] = useSSOLogin()
+    const [loading,setLoading] = useState(false)
+    const { query } = parseQuery()
+    console.log('query', query)
 
     const fetchSSO = ()=>{
+        setLoading(true)
+
         LoginApis.oauth2Url()
             .then(({data})=>{
-                if (data.code == 0){
-                    window.location.href = data.data.redirect_url
-                }else {
-                    Message.warning(data.msg)
-                }
+                cacheTo(query?.to);
+                window.location.href = data.data.redirect_url
+            })
+            .catch(e=>{
+                setActiveKey('account');
+                console.log('fetchSSO data fail', e)
+            })
+            .finally(()=>{
+                setLoading(false)
             })
     }
 
