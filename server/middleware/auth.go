@@ -64,6 +64,10 @@ func AuthFilter(ctx *context.Context) {
 	}
 	logs.Info(fmt.Sprintf("auth: %s,%s", ctx.Request.RequestURI, path))
 	sess := ctx.Input.CruSession
+	if sess == nil {
+		logs.Warn("no session found in request")
+		return
+	}
 	defer sess.SessionRelease(ctx.ResponseWriter)
 	data := sess.Get("user")
 	if data == nil {

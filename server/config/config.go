@@ -98,6 +98,15 @@ func init() {
 	OauthConfig.Scopes = beego.AppConfig.DefaultStrings("oauth2_scopes", []string{})
 	OauthConfig.Userinfo = beego.AppConfig.DefaultString("oauth2_userinfo", "")
 	OauthConfig.Enable = beego.AppConfig.DefaultBool("oauth2_enable", false)
+	// session 相关的配置
+	sessionon := beego.AppConfig.DefaultBool("sessionon", true)
+	beego.BConfig.WebConfig.Session.SessionOn = sessionon
+	sessionprovider := beego.AppConfig.DefaultString("sessionprovider", "file")
+	beego.BConfig.WebConfig.Session.SessionProvider = sessionprovider
+	sessionproviderconfig := beego.AppConfig.DefaultString("sessionproviderconfig", "./data/sessions")
+	beego.BConfig.WebConfig.Session.SessionProviderConfig = sessionproviderconfig
+	sessiongcmaxlifetime := beego.AppConfig.DefaultInt("sessiongcmaxlifetime", 7200)
+	beego.BConfig.WebConfig.Session.SessionCookieLifeTime = sessiongcmaxlifetime
 }
 
 func InitAdmin() {
