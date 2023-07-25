@@ -4,13 +4,15 @@ import './dragger.less'
 import {uniqueKey} from "planning-tools";
 import {Button, Tree} from "antd";
 import {
-    InboxOutlined,
+    DeleteOutlined,
+    DownOutlined,
     FileOutlined,
     FolderOutlined,
-    DownOutlined,
-    DeleteOutlined, LoadingOutlined, UploadOutlined
+    InboxOutlined,
+    LoadingOutlined,
+    UploadOutlined
 } from "@ant-design/icons";
-import type { DataNode } from 'antd/es/tree';
+import type {DataNode} from 'antd/es/tree';
 import {uploadApis} from "../../../../../api/nginx.ts";
 import classNames from "classnames";
 
@@ -84,18 +86,20 @@ export const Dragger:React.FC<IProps> = ({onComplete}: IProps) => {
 
     const [ fileList,setFileList] = useState<MyFile[]>([])
     const [loading,setLoading] = useState(false)
-    const [batchId,setBatchId] = useState<string>(uniqueKey(15))
     const [statusMap,setStatusMap] = useState<StatusMap>({})
     const filesRef = useRef<MyFile[]>([])
 
     const dropRef = useRef<HTMLDivElement>()
     const inputRef = useRef<HTMLInputElement>()
     const fileMapRef = useRef<{[key:string]: MyFile}>({})
+    const fileListRef = useRef(fileList)
+
+    const batchId = useRef<string>(uniqueKey(15))
 
 
     const onReset = ()=>{
         setFileList([])
-        setBatchId(uniqueKey(15))
+        batchId.current = uniqueKey(15)
         setStatusMap({})
         fileMapRef.current = {}
     }
@@ -106,11 +110,15 @@ export const Dragger:React.FC<IProps> = ({onComplete}: IProps) => {
         }
        const okList = filesRef.current.filter(item=>statusMap[item.key]?.success)
         if (okList.length === filesRef.current.length){
-            onComplete?.(batchId, true)
+            onComplete?.(batchId.current, true)
         }else {
-            onComplete?.(batchId, false)
+            onComplete?.(batchId.current, false)
         }
     },[statusMap])
+
+    useEffect(()=>{
+        fileListRef.current = fileList || []
+    },[fileList])
 
 
     const  onUploadFile = (data: MyFile)=>{
@@ -125,7 +133,7 @@ export const Dragger:React.FC<IProps> = ({onComplete}: IProps) => {
             loading: true
         }
         setStatusMap(map=>({...map,[data.key]: status}))
-        return uploadApis.uploadFile(data.item as FileSystemFileEntry , batchId)
+        return uploadApis.uploadFile(data.item as FileSystemFileEntry , batchId.current)
             .then(({data: resp})=>{
                 const status = {
                     key: data.key,
@@ -179,7 +187,7 @@ export const Dragger:React.FC<IProps> = ({onComplete}: IProps) => {
                          batchUpload()
                      }else {
                          setLoading(false)
-                         onComplete?.(batchId)
+                         onComplete?.(batchId.current)
                      }
                  })
         }
@@ -188,6 +196,7 @@ export const Dragger:React.FC<IProps> = ({onComplete}: IProps) => {
     }
 
     const onDelete =(file: MyFile) => {
+        delete fileMapRef.current[file.key];
         if (!file.pKey){
             const list = fileList.filter(item=>item.key !== file.key);
             setFileList(list)
@@ -207,15 +216,12 @@ export const Dragger:React.FC<IProps> = ({onComplete}: IProps) => {
         console.log('file',file, fileMapRef.current)
     }
     const appendFiles = (items: DataTransferItemList)=>{
-        const files: MyFile[] = []
-        const fileMap: {[key:string]:MyFile} = {}
-        const id = uniqueKey(15)
-        setBatchId(id)
-        let order = 1
+        const files: MyFile[] = [...fileListRef.current]
+        console.log('current files', fileListRef.current, fileMapRef.current)
+        const fileMap: {[key:string]:MyFile} = fileMapRef.current
+        const id = batchId.current;
         const createKey = ()=>{
-            const key = id+'_'+order
-            order++
-            return key
+            return id + '_' + uniqueKey(10)
         }
 
         const scanFiles = (item: FileSystemEntry, parent?: MyFile)=>{
@@ -267,7 +273,6 @@ export const Dragger:React.FC<IProps> = ({onComplete}: IProps) => {
             scanFiles(item)
         }
         setFileList(files)
-        fileMapRef.current = fileMap
         console.log('files', files)
     }
 
@@ -275,18 +280,18 @@ export const Dragger:React.FC<IProps> = ({onComplete}: IProps) => {
         evt.preventDefault()
     },[])
 
-    const onDropEvent = useCallback((evt: DragEvent)=>{
+    const onDropEvent = (evt: DragEvent)=>{
         evt.preventDefault()
         if (!evt.dataTransfer){
             console.log('onDropEvent dataTransfer is null')
             return
         }
         const items = evt.dataTransfer.items;
-        const files = evt.dataTransfer.files;
+        // const files = evt.dataTransfer.files;
         appendFiles(items)
         console.log('items', items)
-        console.log('files', files)
-    },[])
+        // console.log('files', files)
+    }
 
     useEffect(()=>{
         const container = dropRef.current;
@@ -304,16 +309,16 @@ export const Dragger:React.FC<IProps> = ({onComplete}: IProps) => {
     },[])
 
     return (<div className="dragger-input">
-        <div onClick={()=>inputRef.current?.click()} ref={dropRef as any} className="dragger">
+        <div ref={dropRef as never} className="dragger">
             <p className="ant-upload-drag-icon">
                 <InboxOutlined />
             </p>
-            <p className="ant-upload-text">点击或者拖拽文件添加上传的问题</p>
+            <p className="ant-upload-text">拖拽文件添加上传的文件</p>
             <p className="ant-upload-hint">
-               支持单个文件，或者多个文件，将会压缩成tar.xz文件上传到服务端;更新不会备份Nginx服务器上已有的文件，如果初次使用该功能，请注意文件备份，更新的文件在服务端和nginx的服务器均有备份
+               支持单个文件，或者多个文件，将会压缩成tar.gz文件上传到服务端;更新不会备份Nginx服务器上已有的文件，如果初次使用该功能，请注意文件备份，上传的文件在服务端和nginx的服务器均有备份
             </p>
         </div>
-        <input hidden ref={inputRef as any} type="file"/>
+        <input hidden ref={inputRef as never} type="file"/>
         <div className="file-tree-title btn-list">
             <span className="list-name">文件列表</span>
             <Button danger type="link" size="small" disabled={loading} hidden={!fileList.length} onClick={onReset}>清空</Button>

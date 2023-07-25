@@ -138,15 +138,17 @@
                 "type": "int",
                 "min": 200,
                 "max": 600,
-                "placeholder": "请输入http状态码",
-                "width": 180
+                "placeholder": "http状态码",
+                "width": 120,
+                "title": "状态码"
               },
               {
                 "key": "content",
-                "type": "string",
+                "type": "textarea",
                 "title": "内容",
                 "placeholder": "响应内容",
-                "width": 300
+                "width": 360,
+                "rows": 3
               }
             ]
           }

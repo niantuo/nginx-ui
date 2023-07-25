@@ -42,10 +42,7 @@ export const ProxyPassInput = ({value, onChange}: AutoTypeInputProps)=>{
     }else if (value.startsWith('http://')){
       setProtocol('http')
     }
-    let pass = value.replace(/http(s)?:\/\//,'');
-    if (pass.endsWith('/')){
-      pass = pass.substring(0,pass.length-1)
-    }
+    const pass = value.replace(/http(s)?:\/\//,'');
     if (pass){
       setData(pass)
     }
@@ -55,10 +52,7 @@ export const ProxyPassInput = ({value, onChange}: AutoTypeInputProps)=>{
     if (!pro || !host){
       return
     }
-    let pass = `${pro}://${host}`
-    if (!pass.endsWith('/')){
-      pass=pass+'/'
-    }
+    const pass = `${pro}://${host}`
     onChange?.(pass)
   }
 
@@ -69,8 +63,9 @@ export const ProxyPassInput = ({value, onChange}: AutoTypeInputProps)=>{
 
   const onSelectUpstream = (v?:string)=>{
     if (v){
-      setData(v)
-      triggerChange(protocol,v)
+      const val = v +'/'
+      setData(val)
+      triggerChange(protocol,val)
     }
   }
 

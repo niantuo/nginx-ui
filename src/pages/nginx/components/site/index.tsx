@@ -3,7 +3,7 @@ import {
     Message
 } from "planning-tools";
 import { useState} from "react";
-import {EditOutlined} from "@ant-design/icons";
+import {CloudUploadOutlined} from "@ant-design/icons";
 
 
 import './index.less'
@@ -90,7 +90,7 @@ export const SiteInput = ({ location }: IProps) => {
 
     return (
         <>
-            <Button onClick={()=>onAddData()} className="add-btn" type="link" icon={<EditOutlined/>}/>
+            <Button onClick={()=>onAddData()} className="add-btn" type="link" icon={<CloudUploadOutlined/>}/>
             <Drawer title={"静态资源部署"}
                     placement="right"
                     open={!!editData}
