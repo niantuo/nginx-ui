@@ -51,6 +51,11 @@ func GetDataDir() string {
 
 func init() {
 	beego.BConfig.CopyRequestBody = true
+	mode := beego.AppConfig.DefaultString("runmode", "prod")
+	beego.BConfig.RunMode = mode
+	port := beego.AppConfig.DefaultInt("httpport", 8080)
+	beego.BConfig.Listen.HTTPPort = port
+
 	// 需要和前端配置好
 	baseApi := beego.AppConfig.DefaultString("baseApi", "/nginx-ui/api")
 	baseApi = strings.TrimSuffix(baseApi, "/")
