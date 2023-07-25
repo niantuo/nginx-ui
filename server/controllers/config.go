@@ -14,8 +14,12 @@ type ConfigController struct {
 func (c *ConfigController) Get() {
 
 	config := config2.Config
-
-	js := fmt.Sprintf("  window.CONFIG = {\n        baseApi: '%s'\n    }", config.BaseApi)
+	oauth2Config := config2.OauthConfig
+	var sso = "false"
+	if oauth2Config.Enable {
+		sso = "true"
+	}
+	js := fmt.Sprintf("  window.CONFIG = {\n        baseApi: '%s',\n SSO: %s   }", config.BaseApi, sso)
 	output := c.Ctx.Output
 
 	output.SetStatus(200)

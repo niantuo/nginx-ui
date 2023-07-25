@@ -97,12 +97,15 @@ export const LoginPage = ()=>{
             key: 'account',
             children: <AccountPanel />
         },
-        {
+    ]
+    // @ts-ignore
+    if (window.CONFIG.SSO){
+        tabItems.push({
             label: "SSO",
             key: 'sso',
             children: <Spin />
-        }
-    ]
+        })
+    }
 
     return (<div className="login-page">
         <div className="login-container">
