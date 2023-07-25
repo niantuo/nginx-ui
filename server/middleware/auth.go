@@ -23,40 +23,21 @@ var whitelist = map[string]bool{
 
 var UnauthorizedResp = `{"code": 401, "msg":"未登录或者登录已过期！"}`
 
-type ThirdSession struct {
-	Enable     bool
-	CookieName string
-	CheckUrl   string
-}
-
-var thirdSession = ThirdSession{
-	Enable:     false,
-	CookieName: "",
-	CheckUrl:   "",
-}
-
 func init() {
 	beego.BConfig.WebConfig.Session.SessionAutoSetCookie = true
-
-	thirdSession.Enable = beego.AppConfig.DefaultBool("thirdsessionenable", false)
-	thirdSession.CookieName = beego.AppConfig.DefaultString("thirdsessionname", "")
-	thirdSession.CheckUrl = beego.AppConfig.DefaultString("thirdsessioncheckurl", "")
-	if thirdSession.Enable && (len(thirdSession.CookieName) == 0 || len(thirdSession.CheckUrl) == 0) {
-		logs.Info("no thirdsessionname or thirdsessioncheckurl info,skip !")
-		thirdSession.Enable = false
-	}
 }
 
 func checkThirdSession(ctx *context.Context, sess session.Store) {
-	if !thirdSession.Enable {
+	cfg := config.Config
+	if !cfg.ThirdSession {
 		return
 	}
-	cookie, err := ctx.Request.Cookie(thirdSession.CookieName)
+	cookie, err := ctx.Request.Cookie(cfg.ThirdSessionName)
 	if err != nil {
 		logs.Warn("no cookie", err)
 		return
 	}
-	req := httplib.Get(thirdSession.CheckUrl)
+	req := httplib.Get(cfg.ThirdSessionCheckUrl)
 	req.SetEnableCookie(true)
 	req.SetCookie(cookie)
 	user := models.User{}

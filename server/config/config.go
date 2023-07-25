@@ -15,9 +15,15 @@ import (
 )
 
 type AppConfig struct {
-	BaseApi     string
-	DataDir     string
-	ContextPath string
+	BaseApi              string
+	DataDir              string
+	DBDir                string
+	ContextPath          string
+	NginxPath            string
+	NginxDir             string
+	ThirdSession         bool
+	ThirdSessionName     string
+	ThirdSessionCheckUrl string
 }
 
 type CompleteOauth2Config struct {
@@ -44,26 +50,32 @@ func GetDataDir() string {
 }
 
 func init() {
+	beego.BConfig.CopyRequestBody = true
 	// 需要和前端配置好
-	baseApi := beego.AppConfig.String("baseApi")
-	if baseApi == "" {
-		baseApi = "/ngx"
-		err := beego.AppConfig.Set("baseApi", baseApi)
-		if err != nil {
-			logs.Info("init set baseApi", err)
-		}
-	}
+	baseApi := beego.AppConfig.DefaultString("baseApi", "/nginx-ui/api")
 	baseApi = strings.TrimSuffix(baseApi, "/")
-	Config.ContextPath = beego.AppConfig.DefaultString("contextpath", "")
+	Config.ContextPath = beego.AppConfig.DefaultString("contextpath", "/nginx-ui")
 	Config.ContextPath = strings.TrimSuffix(Config.ContextPath, "/")
 	Config.BaseApi = baseApi
-	Config.DataDir = beego.AppConfig.String("datadir")
+	Config.DataDir = beego.AppConfig.DefaultString("datadir", "./data")
+	Config.DBDir = beego.AppConfig.DefaultString("dbdir", "./data/db")
 	if exist := utils.IsExist(Config.DataDir); exist == false {
 		err := os.MkdirAll(Config.DataDir, 0777)
 		logs.Warn("create data dir fail", err)
 		if err != nil {
 			panic(err)
 		}
+	}
+
+	Config.NginxPath = beego.AppConfig.DefaultString("nginxPath", "/usr/sbin/nginx")
+	Config.NginxDir = beego.AppConfig.DefaultString("nginxDir", "/etc/nginx")
+
+	Config.ThirdSession = beego.AppConfig.DefaultBool("thirdsessionenable", false)
+	Config.ThirdSessionName = beego.AppConfig.DefaultString("thirdsessionname", "")
+	Config.ThirdSessionCheckUrl = beego.AppConfig.DefaultString("thirdsessioncheckurl", "")
+	if Config.ThirdSession && (len(Config.ThirdSessionName) == 0 || len(Config.ThirdSessionCheckUrl) == 0) {
+		logs.Warn("please config thirdsessionname and thirdsessioncheckurl, third session will skip!")
+		Config.ThirdSession = false
 	}
 
 	OauthConfig.ClientID = beego.AppConfig.DefaultString("oauth2_client_id", "")

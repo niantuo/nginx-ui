@@ -11,6 +11,7 @@ require (
 	github.com/pkg/sftp v1.13.5
 	github.com/smartystreets/goconvey v1.6.4
 	golang.org/x/crypto v0.11.0
+	golang.org/x/oauth2 v0.10.0
 )
 
 require (
@@ -39,7 +40,6 @@ require (
 	github.com/ulikunitz/xz v0.5.10 // indirect
 	go4.org v0.0.0-20200411211856-f5505b9728dd // indirect
 	golang.org/x/net v0.12.0 // indirect
-	golang.org/x/oauth2 v0.10.0 // indirect
 	golang.org/x/sys v0.10.0 // indirect
 	golang.org/x/text v0.11.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect

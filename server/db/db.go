@@ -1,17 +1,17 @@
 package db
 
 import (
-	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/mattn/go-sqlite3"
 	"os"
+	"server/config"
 	"server/models"
 	"server/utils"
 	"time"
 )
 
 func Init() {
-	dir := beego.AppConfig.String("dbdir")
+	dir := config.Config.DBDir
 	if !utils.IsExist(dir) {
 		os.MkdirAll(dir, 0777)
 	}
