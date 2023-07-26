@@ -40,7 +40,7 @@ export const renderLocation = (origin: INginxLocation) => {
     lines.push(`location ${loc.match.regex || ''} ${loc.match.path || '/'} {`)
 
     if (loc.rewrite && loc.rewrite.replacement && loc.rewrite.regex){
-        lines.push(`    rewrite ${loc.rewrite.regex} ${loc.rewrite.replacement} ${loc.rewrite.flag || ''};`)
+        lines.push(`    rewrite ${loc.rewrite.regex} ${loc.rewrite.replacement} ${loc.rewrite.flag || 'permanent'};`)
     }
 
     (loc.add_header || []).forEach(h=>{

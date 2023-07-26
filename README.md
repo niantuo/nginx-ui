@@ -6,6 +6,13 @@
 - 项目的web前端基于react开发，使用vite构建工具；
 - 后端使用golang语言开发（菜鸟学习中）
 
+## demos and docs
+[在线demo](http://demos.tonyandmoney.cn/nginx-ui/#/) \
+账号： demo \
+密码： demo
+
+[在线文档](https://portal.tonyandmoney.cn/common/notes/html/pages/list?type=nginx-ui)
+
 ## 构建
 项目构建基于docker-compose， 分为两种情况
 - 基础镜像为nginx

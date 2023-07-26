@@ -212,14 +212,16 @@
           "title": "正则表达式",
           "type": "string",
           "width": 180,
-          "description": "必须填写正则表达式和跳转路径才能生效"
+          "description": "必须填写正则表达式和跳转路径才能生效",
+          "required": false
         },
         {
           "key": "replacement",
           "title": "跳转路径",
           "type": "string",
           "placeholder": "跳转后的内容",
-          "width": 300
+          "width": 300,
+          "required": false
         },
         {
           "width": 120,
@@ -227,6 +229,8 @@
           "title": "flag",
           "type": "select",
           "option": ["last","break","redirect","permanent"],
+          "value": "permanent",
+          "required": false,
           "description": "last: 相当于Apache的【L】标记，表示完成rewrite;\nbreak:本条规则匹配完成即终止，不在匹配后面的任何规则;\nredirect: 返回302临时重定向，浏览器地址栏会显示跳转后的URL地址，爬虫不会更新url;\npermanent:返回301永久重定向，浏览器地址栏会显示跳转后的URL地址，爬虫更新url;"
         }
       ]
