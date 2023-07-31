@@ -110,6 +110,7 @@ func init() {
 }
 
 func InitAdmin() {
+	logs.Info("InitAdmin")
 	o := orm.NewOrm()
 	reset := beego.AppConfig.DefaultBool("reset_admin_password", false)
 	admin := models.User{Account: "admin"}
