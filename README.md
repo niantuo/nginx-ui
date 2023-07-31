@@ -13,6 +13,35 @@
 
 [在线文档](https://portal.tonyandmoney.cn/common/notes/html/pages/list?type=nginx-ui)
 
+## 快速部署
+
+- docker-compose
+```yaml
+
+version: "3"
+
+services:
+  nginx-with-ui:
+    image: tuonina/nginx-with-ui
+    restart: always
+    ports:
+      - 8080:8080
+    #    network_mode: host
+    volumes:
+      - ./data:/app/data
+      - ./data/conf:/app/conf
+
+```
+- docker快速启动
+
+```shell
+docker run -itd --name nginx-ui -p8080:8080 -v {datadir}:/app/data -v {confdir}:/app/conf tuonina/nginx-with-ui
+```
+
+- 说明
+  - 8080为nginx-ui的服务端口，其余则为nginx代理端口，自定义或者直接使用 network_mode: host 模式即可
+  - 配置文件参考[在线文档](https://portal.tonyandmoney.cn/common/notes/html/pages/list?type=nginx-ui)
+
 ## 构建
 项目构建基于docker-compose， 分为两种情况
 - 基础镜像为nginx
