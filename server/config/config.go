@@ -114,7 +114,8 @@ func InitAdmin() {
 	reset := beego.AppConfig.DefaultBool("reset_admin_password", false)
 	admin := models.User{Account: "admin"}
 	err := o.Read(&admin, "Account")
-	if err == nil && !reset {
+	if admin.Id > 0 && !reset {
+		logs.Info("admin has exist and reset is false, skip")
 		return
 	}
 	password := beego.AppConfig.DefaultString("admin_password", randPassword(10))

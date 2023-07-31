@@ -59,6 +59,12 @@ func (c *NginxController) Post() {
 	o := orm.NewOrm()
 
 	nginx.Uid = current.Account
+	nginx.NginxPath = "/usr/sbin/nginx"
+	nginx.NginxDir = "/etc/nginx"
+	if nginx.IsLocal {
+		nginx.IsServer = true
+	}
+	nginx.DataDir = "/app/data"
 	_, err = o.Insert(&nginx)
 
 	if err != nil {
