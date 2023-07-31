@@ -163,6 +163,13 @@
       "required": false
     },
     {
+      "title": "Access",
+      "key": "access",
+      "type": "access",
+      "required": false,
+      "description": "deny or allow,白名单或者黑名单访问限制"
+    },
+    {
       "type": "auth",
       "title": "鉴权",
       "key": "auth_request",

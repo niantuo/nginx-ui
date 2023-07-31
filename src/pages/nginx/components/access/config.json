@@ -1,0 +1,28 @@
+{
+  "form": [
+    {
+      "title": "Allow/Deny",
+      "type": "array",
+      "key": "access",
+      "hideLabel": true,
+      "required": false,
+      "items": [
+        {
+          "title": "Allow/Deny",
+          "type": "select",
+          "key": "type",
+          "option": ["allow","deny"],
+          "width": 120,
+          "description": "允许或者拒绝,eg. deny  192.168.1.1;\n    allow 192.168.1.0/24;\n    allow 10.1.1.0/16;\n    allow 2001:0db8::/32;\n    deny  all;"
+        },
+        {
+          "title": "address|CIDR|unix|all",
+          "type": "string",
+          "width": 250,
+          "key": "address",
+          "description": "The rules are checked in sequence until the first match is found. In this example, access is allowed only for IPv4 networks 10.1.1.0/16 and 192.168.1.0/24 excluding the address 192.168.1.1, and for IPv6 network 2001:0db8::/32. In case of a lot of rules, the use of the ngx_http_geo_module module variables is preferable."
+        }
+      ]
+    }
+  ]
+}

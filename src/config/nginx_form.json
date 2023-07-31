@@ -80,6 +80,13 @@
       "description": "gzip"
     },
     {
+      "title": "Access",
+      "key": "access",
+      "type": "access",
+      "required": false,
+      "description": "deny or allow,白名单或者黑名单访问限制"
+    },
+    {
       "type": "auth",
       "title": "鉴权",
       "key": "auth_request",
@@ -452,6 +459,13 @@
           "title": "keepalive_timeout",
           "description": "单位为秒(s), 0表示不限制",
           "min": 0
+        },
+        {
+          "title": "Access",
+          "key": "http.access",
+          "type": "access",
+          "required": false,
+          "description": "deny or allow,白名单或者黑名单访问限制"
         },
         {
           "key": "http.proxy_settings",
