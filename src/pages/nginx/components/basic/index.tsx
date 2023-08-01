@@ -3,12 +3,13 @@
  * @date 2023/7/5
  */
 import {AdvanceInputConfigs, AutoForm, AutoTypeInputProps, FormColumnType} from 'planning-tools'
-import {Button, FormInstance, Popover} from "antd";
+import {Button, Drawer, FormInstance, Popover} from "antd";
 import {EditOutlined} from "@ant-design/icons";
 import React, {useEffect, useState} from "react";
 import {AutoFormFooterProps} from "planning-tools/dist/esm/Components/AutoForm/form";
 import {NgxModuleData} from "../input.ts";
 import './index.less'
+import {DrawerProps} from "antd/lib/drawer";
 
 export type OnChange = (values: any) => void
 
@@ -23,7 +24,9 @@ type IProps = {
   renderLines: (values: any) => string[]
   renderHttpLines?: (values: any) =>string[]
   overlayClassName?: string
-  labelCol?: number
+  labelCol?: number;
+  drawer?: boolean;
+  drawerProps?: Partial<DrawerProps>
 }
 export const NgxBasicInput = (
   {
@@ -33,7 +36,9 @@ export const NgxBasicInput = (
       renderHttpLines,
     overlayClassName,
     labelCol = 6,
-    value, onChange
+    value, onChange,
+      drawer,
+      drawerProps,
   }: IProps & AutoTypeInputProps) => {
 
   const [data, setData] = useState<any>({})
@@ -87,16 +92,36 @@ export const NgxBasicInput = (
                       data={data}/>)
   }
 
+  const renderFormContainer = ()=>{
+      if (drawer){
+          return (<>
+              <Button type="link" onClick={() => setOpen(true)} icon={<EditOutlined/>}/>
+              <Drawer open={open}
+                      destroyOnClose
+                      onClose={()=>setOpen(false)}
+                      width={500}
+                      className="drawer-input"
+                      {...drawerProps}
+              >
+                  {renderForm()}
+              </Drawer>
+              </>)
+      }
+      return (
+          <Popover destroyTooltipOnHide
+                   overlayClassName={`popover-popover ${overlayClassName || ''}`}
+                   placement="right"
+                   open={open}
+                   onOpenChange={o => setOpen(o)}
+                   trigger="click" content={renderForm}>
+              <Button type="link" onClick={() => setOpen(true)} icon={<EditOutlined/>}/>
+          </Popover>
+      )
+  }
+
   return (<div className="popover-input">
     <ContentComp data={data} onChange={onValuesChange}/>
-    <Popover destroyTooltipOnHide
-             overlayClassName={`popover-popover ${overlayClassName || ''}`}
-             placement="right"
-             open={open}
-             onOpenChange={o => setOpen(o)}
-             trigger="click" content={renderForm}>
-      <Button type="link" onClick={() => setOpen(true)} icon={<EditOutlined/>}/>
-    </Popover>
+      {renderFormContainer()}
   </div>)
 }
 

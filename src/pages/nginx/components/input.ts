@@ -26,3 +26,31 @@ export const isNgxModuleValue = (value: any)=>{
   }
   return !!Array.isArray((value as NgxModuleData)?.lines);
 }
+
+/**
+ * 键值对
+ */
+export type KeyValue = {
+    name: string
+    value: string
+}
+
+/**
+ * 值是那种 ，{name: xxx, value: 123}的形式
+ * @param value
+ */
+export const isNameValue = (value: any)=>{
+    return value && value.name && value.value
+}
+
+export type ProcessorData = {
+    key: string,
+    value: any,
+    lines:string[],
+    httpLines:string[]
+}
+
+/**
+ * 返回true，表示已经处理完了，不继续后续的处理
+ */
+export type IRenderProcessor = (data: ProcessorData) => boolean

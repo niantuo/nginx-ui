@@ -1,0 +1,145 @@
+{
+  "form": [
+    {
+      "title": "fastcgi_pass",
+      "key": "fastcgi_pass",
+      "type": "proxy_pass",
+      "hideProtocol": true,
+      "required": false,
+      "description": "设置 FastCGI 服务器的地址。该地址可以指定为域名或 IP 地址，以及端口或者作为 UNIX 域套接字路径。如果域名解析为多个地址，则所有这些地址都将以循环方式使用；<br>参考来源：https://blog.51cto.com/u_15715098/5733155"
+    },
+    {
+      "title": "index",
+      "key": "fastcgi_index",
+      "type": "select",
+      "option": ["index.php"],
+      "mode": "tags",
+      "required": false
+    },
+    {
+      "title": "缓存路径",
+      "key": "fastcgi_cache_path",
+      "type": "string",
+      "width": 460,
+      "required": false,
+      "description": "设置缓存的路径和其他参数。缓存数据存储在文件中。缓存中的 key 和文件名是代理 URL 经过 MD5 函数处理后得到的值。levels参数定义缓存的层次结构级别：范围从1到3，每个级别可接受值为1或2。eg. <br> fastcgi_cache_path /data/nginx/cache levels=1:2 keys_zone=one:10m"
+    },
+    {
+      "title": "缓冲区大小",
+      "key": "fastcgi_buffer_size",
+      "type": "string",
+      "ruleType": "reg",
+      "pattern": "^(\\d+)k$",
+      "description":"指定读取FastCGI应答第一部分需要用多大的缓冲区，一般第一部分应答不会超过1k，由于页面大小为4k，所以这里设置为4k。",
+      "required": false,
+      "value": "4k"
+    },
+    {
+      "title": "缓冲设置",
+      "key": "fastcgi_buffers",
+      "type": "string",
+      "ruleType": "reg",
+      "pattern": "^(\\d+)(\\s+)(\\d+k)$",
+      "description":"指定本地需要用多少和多大的缓冲区来缓冲FastCGI的应答,eg. 8 4k",
+      "required": false,
+      "value": "8 4k"
+    },
+    {
+      "title": "fastcgi_bind",
+      "type": "object",
+      "key": "fastcgi_bind",
+      "required": false,
+      "hideHeader": false,
+      "description": "从指定的本地IP地址发出到 FastCGI 服务器的传出连接。特殊值off取消从上层配置级别继承到的fastcgi_bind指令作用，这允许系统自动分配本地IP地址和端口。",
+      "items": [
+        {
+          "title": "address",
+          "key": "address",
+          "type": "string",
+          "width": 250,
+          "required": false,
+          "description": "IP or off or $remote_addr"
+        },
+        {
+          "title": "transparent",
+          "key": "transparent",
+          "type": "switch",
+          "width": 120,
+          "description": "允许从非本地 IP 地址（例如来自客户端的真实 IP 地址）的到 FastCGI 服务器的传出连接，比如：$remote_addr"
+        }
+      ]
+    },
+    {
+      "title": "参数设置",
+      "type": "array",
+      "key": "fastcgi_param",
+      "hideHeader": true,
+      "required": false,
+      "description": "设置应传递给 FastCGI 服务器的parameter(参数)。该值可以包含文本、变量及其组合。当且仅当在当前级别上没有定义fastcgi_param指令时，这些指令才从前一级继承。",
+      "items": [
+        {
+          "title": "参数名",
+          "type": "string",
+          "width": 150,
+          "key": "name"
+        },
+        {
+          "title": "参数值",
+          "type": "string",
+          "width": 250,
+          "key": "value"
+        }
+      ]
+    },
+    {
+      "title": "连接超时时间",
+      "key": "fastcgi_connect_timeout",
+      "type": "string",
+      "ruleType": "reg",
+      "pattern": "^(\\d+)(s|m)?$",
+      "description":"设置与 FastCGI 服务器建立连接的超时时间。需要注意的是，这个超时通常不能超过 75 秒。",
+      "required": false
+    },
+    {
+      "title": "发送超时时间",
+      "key": "fastcgi_send_timeout",
+      "type": "string",
+      "ruleType": "reg",
+      "pattern": "^(\\d+)(s|m)?$",
+      "description":"向FastCGI传送请求的超时时间，这个值是指已经完成两次握手后向FastCGI传送请求的超时时间。",
+      "required": false
+    },
+    {
+      "title": "接收超时时间",
+      "key": "fastcgi_read_timeout",
+      "type": "string",
+      "ruleType": "reg",
+      "pattern": "^(\\d+)(s|m)?$",
+      "description":"接收FastCGI应答的超时时间，这个值是指已经完成两次握手后接收FastCGI应答的超时时间",
+      "required": false
+    },
+    {
+      "title": "更多配置",
+      "type": "array",
+      "key": "more_settings",
+      "hideHeader": true,
+      "required": false,
+      "items": [
+        {
+          "title": "名称",
+          "type": "string",
+          "width": 150,
+          "key": "name",
+          "ruleType": "^(fastcgi)_(.+)$",
+          "description": "fastcgi_开头的配置名称，eq. fastcgi_cache_min_uses"
+        },
+        {
+          "title": "配置",
+          "type": "string",
+          "width": 250,
+          "key": "value"
+        }
+      ]
+    }
+  ]
+}

@@ -11,13 +11,23 @@ import './index.less'
 
 const protocols = [{value:"http", label:"http"},{ value: 'https',label: 'https'}]
 
-
-export const ProxyPassInput = ({value, onChange}: AutoTypeInputProps)=>{
+/**
+ * proxy_pass 或者fastcgi_pass .后者没有协议
+ * @param value
+ * @param onChange
+ * @param column
+ * @constructor
+ */
+export const ProxyPassInput = ({value, onChange, column}: AutoTypeInputProps)=>{
 
   const upstreamServer = useAppSelector(state => state.nginx.upstream);
 
   const [data,setData] = useState<string>()
   const [protocol,setProtocol] = useState<string>("http")
+
+    const hideProtocol = useMemo(()=>{
+        return (column as any).hideProtocol;
+    },[column])
 
   const options = useMemo(()=>{
     let list:any[] = []
@@ -52,8 +62,12 @@ export const ProxyPassInput = ({value, onChange}: AutoTypeInputProps)=>{
     if (!pro || !host){
       return
     }
-    const pass = `${pro}://${host}`
-    onChange?.(pass)
+    if (hideProtocol){
+        onChange?.(host)
+    }else {
+        const pass = `${pro}://${host}`
+        onChange?.(pass)
+    }
   }
 
   const onProtocolChange = (pro: string)=>{
@@ -63,7 +77,7 @@ export const ProxyPassInput = ({value, onChange}: AutoTypeInputProps)=>{
 
   const onSelectUpstream = (v?:string)=>{
     if (v){
-      const val = v +'/'
+      const val = v + (hideProtocol ? '': '/')
       setData(val)
       triggerChange(protocol,val)
     }
@@ -78,8 +92,13 @@ export const ProxyPassInput = ({value, onChange}: AutoTypeInputProps)=>{
 
 
   return (<div className="proxy-pass-input">
-    <Select value={protocol} onChange={onProtocolChange}
-            className="protocol" options={protocols} />
+      {
+          hideProtocol ? null: (
+              <Select value={protocol}
+                      onChange={onProtocolChange}
+                      className="protocol" options={protocols} />
+          )
+      }
     <Input onChange={userInputChange} value={data} allowClear/>
     <Select onChange={onSelectUpstream}
             placeholder="选择负载均衡"

@@ -70,7 +70,12 @@
       },{
         "label": "静态资源",
         "value": "static"
-      },{
+      },
+        {
+          "label": "fastcgi",
+          "value": "fastcgi"
+        },
+        {
         "label": "其它",
         "value": "other"
       }],
@@ -122,6 +127,15 @@
             "description": "",
             "required": false,
             "width": 450
+          }
+        ],
+        "fastcgi": [
+          {
+            "key": "fastcgi",
+            "title": "fastcgi",
+            "type": "fastcgi",
+            "required": false,
+            "description": "ngx_http_fastcgi_module,allows passing requests to a FastCGI server."
           }
         ],
         "other": [

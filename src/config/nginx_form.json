@@ -66,6 +66,13 @@
       "description": "更多代理设置"
     },
     {
+      "key": "fastcgi",
+      "title": "fastcgi",
+      "type": "fastcgi",
+      "required": false,
+      "description": "ngx_http_fastcgi_module,allows passing requests to a FastCGI server."
+    },
+    {
       "type": "locations",
       "title": "代理/站点",
       "key": "locations",
@@ -472,6 +479,13 @@
           "title": "代理设置",
           "type": "proxy_settings",
           "required": false
+        },
+        {
+          "key": "http.fastcgi",
+          "title": "fastcgi",
+          "type": "fastcgi",
+          "required": false,
+          "description": "ngx_http_fastcgi_module,allows passing requests to a FastCGI server."
         },
         {
           "key": "http.more",
