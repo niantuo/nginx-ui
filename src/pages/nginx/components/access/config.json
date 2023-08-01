@@ -1,25 +1,35 @@
 {
   "form": [
     {
-      "title": "Allow/Deny",
+      "title": "Allow",
       "type": "array",
-      "key": "access",
+      "key": "allow",
       "hideLabel": true,
       "required": false,
+      "description": "允许访问的白名单配置,eg. <br>    allow 192.168.1.0/24;<br>    allow 10.1.1.0/16;<br>    allow 2001:0db8::/32;",
       "items": [
-        {
-          "title": "Allow/Deny",
-          "type": "select",
-          "key": "type",
-          "option": ["allow","deny"],
-          "width": 120,
-          "description": "允许或者拒绝,eg. deny  192.168.1.1;\n    allow 192.168.1.0/24;\n    allow 10.1.1.0/16;\n    allow 2001:0db8::/32;\n    deny  all;"
-        },
         {
           "title": "address|CIDR|unix|all",
           "type": "string",
           "width": 250,
-          "key": "address",
+          "key": "value",
+          "description": "The rules are checked in sequence until the first match is found. In this example, access is allowed only for IPv4 networks 10.1.1.0/16 and 192.168.1.0/24 excluding the address 192.168.1.1, and for IPv6 network 2001:0db8::/32. In case of a lot of rules, the use of the ngx_http_geo_module module variables is preferable."
+        }
+      ]
+    },
+    {
+      "title": "Deny",
+      "type": "array",
+      "key": "deny",
+      "hideLabel": true,
+      "required": false,
+      "description": "拒绝访问的名单配置,eg. deny  192.168.1.1;\n    deny  all;",
+      "items": [
+        {
+          "title": "address|CIDR|unix|all",
+          "type": "string",
+          "width": 250,
+          "key": "value",
           "description": "The rules are checked in sequence until the first match is found. In this example, access is allowed only for IPv4 networks 10.1.1.0/16 and 192.168.1.0/24 excluding the address 192.168.1.1, and for IPv6 network 2001:0db8::/32. In case of a lot of rules, the use of the ngx_http_geo_module module variables is preferable."
         }
       ]

@@ -29,7 +29,7 @@ export const AccessInput = (props: AutoTypeInputProps)=>{
                 <Popover
                     overlayClassName="more-conf-popover"
                     destroyTooltipOnHide content={()=>renderMoreContent(lines)}>
-                    <span className="less-values">{lines.length ? lines.join(' ; ') : '无配置'}</span>
+                    <span className="less-values">{lines.length ? lines.join(' ') : '无配置'}</span>
                 </Popover>
             </div>
         )
@@ -38,9 +38,14 @@ export const AccessInput = (props: AutoTypeInputProps)=>{
     const renderLines = (values: any)=>{
         console.log('renderLines',values)
         const results: string[] = [];
-        if (Array.isArray(values?.access)){
-            values.access.forEach((item: any)=>{
-                results.push(`${item.type}    ${item.address};`)
+        if (Array.isArray(values?.allow)){
+            values.allow.forEach((item: any)=>{
+                results.push(`allow    ${item.value};`)
+            })
+        }
+        if (Array.isArray(values?.deny)){
+            values.deny.forEach((item: any)=>{
+                results.push(`deny    ${item.value};`)
             })
         }
         return results
