@@ -5,7 +5,8 @@
       "title": "透传客户端IP",
       "type": "switch",
       "required": false,
-      "description": "添加：proxy_set_header X-Real_IP $remote_addr,X-Forwarded-For $proxy_add_x_forwarded_for"
+      "description": "添加：proxy_set_header X-Real_IP $remote_addr,X-Forwarded-For $proxy_add_x_forwarded_for",
+      "minimizeDesc": true
     },
     {
       "key": "tmp_trans_host",
@@ -58,7 +59,8 @@
           "title": "请求头名称",
           "mode": "tags",
           "option": ["Host","X-Real-IP","X-Forwarded-For","Upgrade","Connection"],
-          "description": "Host,X-Real-IP,X-Forwarded-For,Upgrade,Connection"
+          "description": "Host,X-Real-IP,X-Forwarded-For,Upgrade,Connection",
+          "width": 180
         },
         {
           "key": "value",
@@ -67,7 +69,8 @@
           "placeholder": "请求头值",
           "title": "请求头值",
           "option": ["$host","$remote_addr","$proxy_add_x_forwarded_for","$http_upgrade","upgrade"],
-          "description": "如：$host,$remote_addr,$proxy_add_x_forwarded_for,$http_upgrade,upgrade"
+          "description": "如：$host,$remote_addr,$proxy_add_x_forwarded_for,$http_upgrade,upgrade",
+          "width": 180
         }
       ],
       "required": false
@@ -78,7 +81,7 @@
       "type": "select",
       "option": ["error","timeout","invalid_header","http_500","http_502","http_503","http_504","http_403","http_404","http_429","non_idempotent","off"],
       "mode": "multiple",
-      "description": "default: proxy_next_upstream error timeout",
+      "placeholder": "default: proxy_next_upstream error timeout",
       "required": false,
       "width": 425
     },
@@ -87,14 +90,14 @@
       "title": "next_upstream_timeout",
       "type": "string",
       "required": false,
-      "description": "eg. 60s 5m"
+      "placeholder": "eg. 60s 5m"
     },
     {
       "key": "proxy_next_upstream_tries",
       "title": "proxy_next_upstream_tries",
       "type": "int",
       "required": false,
-      "description": "proxy_next_upstream_tries,default is 0"
+      "placeholder": "proxy_next_upstream_tries,default is 0"
     },
     {
       "key": "proxy_custom_config",

@@ -99,7 +99,7 @@ export const ProxyPassInput = ({value, onChange, column}: AutoTypeInputProps)=>{
                       className="protocol" options={protocols} />
           )
       }
-    <Input onChange={userInputChange} value={data} allowClear/>
+    <Input className="service-host-input" onChange={userInputChange} value={data} allowClear/>
     <Select onChange={onSelectUpstream}
             placeholder="选择负载均衡"
             allowClear

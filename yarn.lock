@@ -4618,10 +4618,10 @@ pify@^4.0.1:
   resolved "https://registry.npmmirror.com/pify/-/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
-planning-tools@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.npmmirror.com/planning-tools/-/planning-tools-0.1.1.tgz#d69d1ccd82bee2fba30771246ef26237f2b78be5"
-  integrity sha512-UlId03rwgNwzpsWDjDBRTrXr/AjT8SoitC+hogPaOEvFqH5QNbKH9Ngitx8Ho9Hci41Xg0OtfN3vMC02LZsOJw==
+planning-tools@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/planning-tools/-/planning-tools-0.1.2.tgz#bda8c97b561602d7f7489af50f111fa526935055"
+  integrity sha512-fOzE/F6yv5m1e/Fd/gjyS3rcQFPTlJCQYX7qEoxqNEv2/RfrHit7GzJm0Y9qe5lhSXKheT8gW9ZAIEu1gRwXww==
   dependencies:
     "@ant-design/icons" "^5.0.1"
     ace-builds "^1.16.0"

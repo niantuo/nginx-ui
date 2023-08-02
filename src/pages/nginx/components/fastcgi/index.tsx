@@ -71,7 +71,8 @@ export const FastcgiInput = (props: AutoTypeInputProps)=>{
                           labelCol={4}
                           drawer={true}
                           drawerProps={{
-                              width: 650
+                              width: 650,
+                              title: 'FastCGI'
                           }}
                           content={renderContent}
                           {...props}/>

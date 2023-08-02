@@ -273,7 +273,7 @@
       "key": "nginxPath",
       "title": "nginx位置",
       "type": "string",
-      "description": "nginx的文件所在的绝对路径，默认为:/usr/sbin/nginx,可使用nginx -V 查看参数--sbin-path；或者先填写，保存成功之后返回版本信息，可参考修正即可",
+      "description": "nginx的文件所在的绝对路径，默认为:/usr/sbin/nginx,可使用nginx -V 查看参数--sbin-path；",
       "value": "/usr/sbin/nginx"
     },
     {
@@ -287,7 +287,7 @@
       "key":"dataDir",
       "type": "string",
       "title": "数据目录",
-      "description": "nginx的自定义配置文件所在目录"
+      "description": "nginx的自定义配置文件所在目录，注意，是nginx的配置文件目录，包括配置文件，证书，备份文件都将保存到该目录下"
     },
     {
       "key": "remark",

@@ -32,7 +32,8 @@
       "pattern": "^(\\d+)k$",
       "description":"指定读取FastCGI应答第一部分需要用多大的缓冲区，一般第一部分应答不会超过1k，由于页面大小为4k，所以这里设置为4k。",
       "required": false,
-      "value": "4k"
+      "value": "4k",
+      "placeholder": "4k"
     },
     {
       "title": "缓冲设置",
@@ -42,7 +43,8 @@
       "pattern": "^(\\d+)(\\s+)(\\d+k)$",
       "description":"指定本地需要用多少和多大的缓冲区来缓冲FastCGI的应答,eg. 8 4k",
       "required": false,
-      "value": "8 4k"
+      "value": "8 4k",
+      "placeholder": "8 4k"
     },
     {
       "title": "fastcgi_bind",
@@ -58,7 +60,8 @@
           "type": "string",
           "width": 250,
           "required": false,
-          "description": "IP or off or $remote_addr"
+          "description": "IP or off or $remote_addr",
+          "placeholder": "填写ip或者off或者$remote_addr等"
         },
         {
           "title": "transparent",
@@ -78,16 +81,18 @@
       "description": "设置应传递给 FastCGI 服务器的parameter(参数)。该值可以包含文本、变量及其组合。当且仅当在当前级别上没有定义fastcgi_param指令时，这些指令才从前一级继承。",
       "items": [
         {
-          "title": "参数名",
+          "title": "参数",
           "type": "string",
           "width": 150,
-          "key": "name"
+          "key": "name",
+          "placeholder": "参数，eg. QUERY_STRING"
         },
         {
-          "title": "参数值",
+          "title": "参数内容",
           "type": "string",
           "width": 250,
-          "key": "value"
+          "key": "value",
+          "placeholder": "参数内容，eg. $query_string"
         }
       ]
     },
@@ -98,7 +103,8 @@
       "ruleType": "reg",
       "pattern": "^(\\d+)(s|m)?$",
       "description":"设置与 FastCGI 服务器建立连接的超时时间。需要注意的是，这个超时通常不能超过 75 秒。",
-      "required": false
+      "required": false,
+      "placeholder": "eg. 30s"
     },
     {
       "title": "发送超时时间",
@@ -107,7 +113,8 @@
       "ruleType": "reg",
       "pattern": "^(\\d+)(s|m)?$",
       "description":"向FastCGI传送请求的超时时间，这个值是指已经完成两次握手后向FastCGI传送请求的超时时间。",
-      "required": false
+      "required": false,
+      "placeholder": "eg. 30s"
     },
     {
       "title": "接收超时时间",
@@ -116,7 +123,8 @@
       "ruleType": "reg",
       "pattern": "^(\\d+)(s|m)?$",
       "description":"接收FastCGI应答的超时时间，这个值是指已经完成两次握手后接收FastCGI应答的超时时间",
-      "required": false
+      "required": false,
+      "placeholder": "eg. 30s"
     },
     {
       "title": "更多配置",

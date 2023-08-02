@@ -188,6 +188,7 @@
       "title": "鉴权",
       "key": "auth_request",
       "required": false,
+      "minimizeDesc": true,
       "description": "ngx_http_auth_request_module:实现了基于一子请求的结果的客户端的授权。如果子请求返回2xx响应码，则允许访问。如果它返回401或403，则访问被拒绝并显示相应的错误代码。子请求返回的任何其他响应代码都被认为是错误的"
     },
     {
