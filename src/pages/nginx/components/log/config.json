@@ -1,0 +1,47 @@
+{
+  "error_log": {
+    "title": "error_log",
+    "type": "object",
+    "key": "error_log",
+    "items": [
+      {
+        "title": "path",
+        "key": "path",
+        "type": "string",
+        "placeholder": "default. logs/error.log",
+        "width": 250
+      },
+      {
+        "title": "level",
+        "key": "level",
+        "type": "select",
+        "option": ["debug","info","notice","warn","error","crit","alert","emerg"],
+        "width": 120
+      }
+    ],
+    "description": "日志级别，debug->emerg，级别从低到高。级别越低输出的错误日志就会越多。生产环境建议跳转到warn及以上。否则会有大量的IO请求，耗费系统资源。eg. /var/log/nginx/error.log notice"
+  },
+  "access_log": {
+    "title": "access_log",
+    "type": "object",
+    "key": "access_log",
+    "items": [
+      {
+        "title": "path",
+        "key": "path",
+        "type": "string",
+        "placeholder": "default. logs/access.log",
+        "width": 250
+      },
+      {
+        "title": "level",
+        "key": "level",
+        "type": "select",
+        "option": [],
+        "width": 120,
+        "placeholder": "日志格式"
+      }
+    ],
+    "description": "日志格式需要再http的“日志格式”中进行配置,配置后请先保存再进行选择"
+  }
+}

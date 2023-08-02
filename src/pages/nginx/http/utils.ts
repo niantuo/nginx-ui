@@ -12,7 +12,6 @@ const valueProcessor: {[key:string]: (value:any) => string |string[]} = {
     log_format: (values: any[]) => {
         return values.map(v=>`${v.name}     ${v.content}`)
     },
-    access_log: (values:any) => `${values.path}     ${values.name}`
 }
 
 /**
@@ -96,10 +95,14 @@ export const append2Lines = (prefix: string,lines: string[],key: string, value: 
 }
 export const toNginxConf = ( nginx: INginx, data: any)=>{
     const nginxObj: any = toNginxObj(data)
+    console.log('toNginxConf', data, nginxObj)
     const lines: string[] = [];
     lines.push(`user  ${nginxObj.user || 'nginx'};`)
     lines.push(`worker_processes  ${nginxObj.worker_processes || 'auto'};`)
-    lines.push(`error_log  ${nginxObj.error_log};`)
+    if (isNgxModuleValue(nginxObj.error_log)){
+        const logData = nginxObj.error_log as NgxModuleData;
+        logData.lines?.forEach(line=>lines.push(line))
+    }
     lines.push(`pid        ${nginxObj.pid || '/var/run/nginx.pid'};`)
     lines.push(`events {`)
     if (nginxObj.events){
@@ -112,9 +115,11 @@ export const toNginxConf = ( nginx: INginx, data: any)=>{
     lines.push(`http {`)
     if (nginxObj.http){
         Object.keys(nginxObj.http).forEach(k=>{
-          const value = nginxObj.http[k] as never
+          const value: any = nginxObj.http[k] as never
           if (k === 'more'){
-            lines.push(value)
+              (value ?? '').split('\n').filter((item:string)=>!!item).forEach((line: string)=>{
+                  lines.push(`    ${line}`)
+              })
             return;
           }
           if (isNull(value)){

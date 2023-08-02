@@ -198,7 +198,8 @@ export const renderServer = (nginx: INginx,origin?: Partial<INginxServer>) => {
   }
 
   if (server.tmp_custom_config){
-    lines.push(server.tmp_custom_config)
+      server.tmp_custom_config.split('\n').filter(line=>!!line)
+          .forEach(line=>lines.push(`    ${line}`))
   }
 
   (server.locations || []).forEach(l=>{

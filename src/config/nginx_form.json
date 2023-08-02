@@ -59,6 +59,12 @@
       }
     },
     {
+      "key": "access_log",
+      "title": "访问日志",
+      "type": "access_log",
+      "required": false
+    },
+    {
       "key": "proxy_settings",
       "title": "更多代理设置",
       "type": "proxy_settings",
@@ -316,9 +322,11 @@
     {
       "key": "error_log",
       "title": "错误日志路径",
-      "type": "string",
-      "value": "/var/log/nginx/error.log notice",
-      "description": "eg. /var/log/nginx/error.log notice"
+      "type": "error_log",
+      "value": {
+        "path": "/var/log/nginx/error.log",
+        "level": "notice"
+      }
     },
     {
       "key": "pid",
@@ -401,42 +409,34 @@
               "placeholder": "日志格式名称，eg. main compression",
               "width": 200,
               "description": "日志格式名称，eg. main compression log1 log2",
-              "trim": false
+              "trim": false,
+              "required": true
             },
             {
               "type": "textarea",
               "key": "content",
               "value": "",
               "title": "日志格式",
+              "required": true,
               "rows": 4,
               "width": 400,
               "trim": false,
               "placeholder": "'$remote_addr - $remote_user [$time_local] \"$request\" '\n                      '$status $body_bytes_sent \"$http_referer\" '\n                      '\"$http_user_agent\" \"$http_x_forwarded_for\"'",
-              "description": "参数                      说明                                         示例\n$remote_addr             客户端地址                                    211.28.65.253\n$remote_user             客户端用户名称                                --\n$time_local              访问时间和时区                                18/Jul/2012:17:00:01 +0800\n$request                 请求的URI和HTTP协议                           \"GET /article-10000.html HTTP/1.1\"\n$http_host               请求地址，即浏览器中你输入的地址（IP或域名）     www.wang.com 192.168.100.100\n$status                  HTTP请求状态                                  200\n$upstream_status         upstream状态                                  200\n$body_bytes_sent         发送给客户端文件内容大小                        1547\n$http_referer            url跳转来源                                   https://www.baidu.com/\n$http_user_agent         用户终端浏览器等信息                           \"Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; SV1; GTB7.0; .NET4.0C;\n$ssl_protocol            SSL协议版本                                   TLSv1\n$ssl_cipher              交换数据中的算法                               RC4-SHA\n$upstream_addr           后台upstream的地址，即真正提供服务的主机地址     10.10.10.100:80\n$request_time            整个请求的总时间                               0.205\n$upstream_response_time  请求过程中，upstream响应时间                    0.002\n"
+              "description": "参数                      说明                                         示例\n$remote_addr             客户端地址                                    211.28.65.253\n$remote_user             客户端用户名称                                --\n$time_local              访问时间和时区                                18/Jul/2012:17:00:01 +0800\n$request                 请求的URI和HTTP协议                           \"GET /article-10000.html HTTP/1.1\"\n$http_host               请求地址，即浏览器中你输入的地址（IP或域名）     www.wang.com 192.168.100.100\n$status                  HTTP请求状态                                  200\n$upstream_status         upstream状态                                  200\n$body_bytes_sent         发送给客户端文件内容大小                        1547\n$http_referer            url跳转来源                                   https://www.baidu.com/\n$http_user_agent         用户终端浏览器等信息                           \"Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; SV1; GTB7.0; .NET4.0C;\n$ssl_protocol            SSL协议版本                                   TLSv1\n$ssl_cipher              交换数据中的算法                               RC4-SHA\n$upstream_addr           后台upstream的地址，即真正提供服务的主机地址     10.10.10.100:80\n$request_time            整个请求的总时间                               0.205\n$upstream_response_time  请求过程中，upstream响应时间                    0.002\neg.'$remote_addr - $remote_user [$time_local] \"$request\" '\n                      '$status $body_bytes_sent \"$http_referer\" '\n                      '\"$http_user_agent\" \"$http_x_forwarded_for\"'"
             }
           ]
         },
         {
           "key": "http.access_log",
           "title": "访问日志",
-          "type": "object",
-          "value": "/var/log/nginx/access.log  main",
-          "items": [
-            {
-              "key": "name",
-              "type": "string",
-              "title": "格式标签",
-              "placeholder": "日志格式配置的格式名称",
-              "description": "输入日志格式配置的格式名称",
-              "width": 200
-            },
-            {
-              "key": "path",
-              "type": "string",
-              "title": "日志路径",
-              "width": 250
-            }
-          ]
+          "type": "access_log",
+          "required": false
+        },
+        {
+          "key": "http.error_log",
+          "title": "错误日志",
+          "type": "error_log",
+          "required": false
         },
         {
           "key": "http.sendfile",
@@ -528,6 +528,7 @@
               "rows": 4,
               "width": 400,
               "trim": false,
+              "description": "eg. '$time_local|$remote_addr|$protocol|$status|$bytes_sent|$bytes_received|$session_time|$upstream_addr|$upstream_bytes_sent|$upstream_bytes_received|$upstream_connect_time'",
               "placeholder": "'$time_local|$remote_addr|$protocol|$status|$bytes_sent|$bytes_received|$session_time|$upstream_addr|$upstream_bytes_sent|$upstream_bytes_received|$upstream_connect_time'"
             }
           ]
@@ -535,34 +536,21 @@
         {
           "key": "stream.access_log",
           "title": "访问日志",
-          "type": "object",
+          "type": "access_log",
           "value": {
-            "name": "tcp_format",
+            "level": "tcp_format",
             "path": "/var/log/nginx/access_stream.log"
           },
-          "items": [
-            {
-              "key": "name",
-              "type": "string",
-              "title": "格式标签",
-              "placeholder": "日志格式配置的格式名称",
-              "description": "输入日志格式配置的格式名称",
-              "width": 200,
-              "value": "tcp_format"
-            },
-            {
-              "key": "path",
-              "type": "string",
-              "title": "日志路径",
-              "width": 250
-            }
-          ]
+          "stream": true
         },
         {
           "key": "stream.error_log",
           "title": "错误日志",
-          "type": "string",
-          "value": "/var/log/nginx/error_stream.log"
+          "type": "error_log",
+          "stream": true,
+          "value": {
+            "path": "/var/log/nginx/error_stream.log"
+          }
         }
       ]
     }

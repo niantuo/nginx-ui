@@ -26,6 +26,10 @@ export const NginxHttp = () => {
 
   const dispatch = useAppDispatch()
 
+    const onGetRealData = async ()=>{
+        const values = await formRef.current?.onSyncSubmit(true);
+        return  { ...data, ...values };
+    }
   const onSubmitForm = async (sync?: boolean)=>{
     if (!nginx){
       return
@@ -43,7 +47,7 @@ export const NginxHttp = () => {
     postData.httpData = JSON.stringify(saveData);
     postData.httpConf = "";
     setLoading(false)
-    dispatch(NginxActions.updateNginx(postData))
+    dispatch(NginxActions.updateNginx({ httpData: postData.httpData }))
     NginxApis.updateOrAdd(postData)
         .then(()=>{
           Message.success('保存成功！')
@@ -69,10 +73,7 @@ export const NginxHttp = () => {
       httpData: JSON.stringify(nginxData)
     }
     setLoading(true);
-    dispatch(NginxActions.updateNginx({
-      ...nginx,
-      httpConf: nginxConf,
-    }))
+    dispatch(NginxActions.updateNginx(postData))
     NginxApis.refreshHttp(postData)
       .then(()=>{
         Message.success('sync success!');
@@ -108,7 +109,7 @@ export const NginxHttp = () => {
     <div className="page-header">
       <span>nginx.conf配置</span>
       <div style={{flex:1}} />
-      <HttpConfSync nginx={nginx} />
+      <HttpConfSync getRealData={onGetRealData} nginx={nginx} />
       <Button danger loading={loading} onClick={() => onSubmitForm(true)}>
         同步
         <Tooltip placement="left" title="同步配置文件到服务器,如果该server为禁用状态，将从服务器删除该配置文件">

@@ -36,7 +36,6 @@ export const AccessInput = (props: AutoTypeInputProps)=>{
     }
 
     const renderLines = (values: any)=>{
-        console.log('renderLines',values)
         const results: string[] = [];
         if (Array.isArray(values?.allow)){
             values.allow.forEach((item: any)=>{
