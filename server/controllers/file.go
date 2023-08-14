@@ -44,7 +44,7 @@ func (c *FileController) Get() {
 	c.Ctx.Output.Download(fromFile, fileName)
 }
 
-// Post 文件长传
+// Post file upload
 // POST /file
 func (c *FileController) Post() {
 	f, header, err := c.GetFile("file")
@@ -170,6 +170,12 @@ func HandleDeploy(req models.DeployReq) error {
 	_, err = ins.Run(cmd)
 	if err != nil {
 		return err
+	}
+	if len(req.Cmd) > 0 {
+		_, err = ins.Run(req.Cmd)
+	}
+	if err != nil {
+		return errors.New(fmt.Sprintf("部署已完成，命令执行异常:%s", err.Error()))
 	}
 	return nil
 }

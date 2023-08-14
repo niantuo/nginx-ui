@@ -13,4 +13,15 @@ type DeployReq struct {
 	Dir string `json:"dir"`
 	// 是否先清空文件夹，再部署
 	Clear bool `json:"clear"`
+	// 文件上传后执行后置命令，适用于简单的部署
+	Cmd string `json:"cmd"`
+}
+
+type LoggerReq struct {
+	Start int `json:"start"`
+	End   int `json:"end"`
+	// 文件的绝对路径
+	FileName string `json:"fileName"`
+	// 最大显示行数
+	MaxLines int `json:"maxLines"`
 }

@@ -33,6 +33,7 @@ func init() {
 		// file upload download
 		beego.NSRouter("/nginx/:id/file/deploy", &controllers.FileController{}, "post:Deploy"),
 		beego.NSRouter("/file", &controllers.FileController{}),
+		beego.NSRouter("/logger", &controllers.LoggerController{}),
 
 		beego.NSRouter("/user/login", &controllers.UserController{}, "post:Login"),
 		beego.NSRouter("/user/info", &controllers.UserController{}, "get:User"),
