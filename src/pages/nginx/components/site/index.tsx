@@ -109,6 +109,9 @@ export const SiteInput = ({ location }: IProps) => {
                                name="clear" label="全量部署" tooltip={{title: "全量部署会删除已有的文件，请注意"}}>
                         <Switch />
                     </Form.Item>
+                    <Form.Item label="部署命令" tooltip="文件更新后执行该命令，谨慎操作">
+                        <Input.TextArea rows={1}/>
+                    </Form.Item>
                     <Form.Item name="files" label="资源更新">
                         <Dragger onComplete={onUploadComplete}/>
                     </Form.Item>
