@@ -44,10 +44,11 @@ export const UpstreamTab = forwardRef<ITabInstance, IProps>(({server, isStream},
         const upstreams = server?.upstreams;
         if (Array.isArray(upstreams) && upstreams.length){
           const items =upstreams.map((item: any)=>{
-            if (!item.key){
-              item.key = uniqueKey(20)
+              const copy = {...item};
+            if (!copy.key){
+                copy.key = uniqueKey(20)
             }
-            return item
+            return copy
           })
             setData(items)
         }else {
