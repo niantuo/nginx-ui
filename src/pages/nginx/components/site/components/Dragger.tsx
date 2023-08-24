@@ -245,12 +245,23 @@ export const Dragger:React.FC<IProps> = ({onComplete}: IProps) => {
                     pKey: parent?.key
                 }
                 pList.push(myFile)
-                const reader = (item as FileSystemDirectoryEntry).createReader()
-                reader.readEntries(function (entries){
+                const reader = (item as FileSystemDirectoryEntry).createReader();
+
+                let maxTimes = 5;
+                const readEntries = ()=> {
+                  maxTimes--;
+                  reader.readEntries(function (entries){
                     entries.forEach(entry=>{
-                        scanFiles(entry, myFile)
-                    })
-                })
+                      scanFiles(entry, myFile)
+                    });
+                    if (entries.length > 0 && maxTimes > 0){
+                      readEntries();
+                    }
+                  })
+                }
+                readEntries();
+
+
             }else{
                 const myFile = {
                     title: item.name,
