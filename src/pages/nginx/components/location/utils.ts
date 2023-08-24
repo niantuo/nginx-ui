@@ -71,7 +71,7 @@ export const renderLocation = (origin: INginxLocation) => {
         if (blacklist[k]){
             return;
         }
-        if (k.startsWith("tmp" || k.startsWith("temp"))){
+        if (k.startsWith("tmp" || k.startsWith("temp")) || k.startsWith("__")){
             return;
         }
         let value = (loc as any)[k];

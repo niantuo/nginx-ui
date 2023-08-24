@@ -226,6 +226,7 @@ export type INginxLocation = Omit<NgxModuleData, "data"> & {
    * 临时数据，表示
    */
   __index__?: number
+  __deploy__?: any
 }
 
 export type PLocation = Partial<INginxLocation>

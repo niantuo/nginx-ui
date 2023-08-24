@@ -14,6 +14,7 @@ import {useAppSelector} from "../../../../store";
 
 type IProps = {
     location: INginxLocation
+  onChange?: (location: INginxLocation) => void
 }
 
 /**
@@ -23,7 +24,7 @@ type IProps = {
  * @param column
  * @constructor
  */
-export const SiteInput = ({ location }: IProps) => {
+export const SiteInput = ({ location, onChange }: IProps) => {
 
     const [editData,setEditData] = useState<Partial<IDeployReq>>()
 
@@ -43,15 +44,27 @@ export const SiteInput = ({ location }: IProps) => {
             return;
         }
         const initialData :Partial<IDeployReq> = {
+          clear: false,
+          ...location.__deploy__ as any,
             nginxId: nginx.id,
-            clear: false
         }
-        if (location.alias){
+        if (!initialData.dir){
+          if (location.alias){
             initialData.dir = location.alias
-        }else if (location.root){
+          }else if (location.root){
             initialData.dir = location.root
+          }
         }
         setEditData(initialData)
+    }
+
+    const updateLocation = (deployData: IDeployReq) => {
+      const cacheData = {
+        cmd: deployData.cmd,
+        clear: deployData.clear,
+        dir: deployData.dir,
+      };
+      onChange?.({ ...location, __deploy__: cacheData})
     }
 
     const onSubmitData = async ()=>{
@@ -71,7 +84,8 @@ export const SiteInput = ({ location }: IProps) => {
         }
       uploadApis.deploy(postData)
           .then(()=>{
-              Message.success('部署成功！')
+              Message.success('部署成功！');
+              updateLocation(postData);
           })
           .finally(()=>{
               setLoading(false)
@@ -109,7 +123,7 @@ export const SiteInput = ({ location }: IProps) => {
                                name="clear" label="全量部署" tooltip={{title: "全量部署会删除已有的文件，请注意"}}>
                         <Switch />
                     </Form.Item>
-                    <Form.Item label="部署命令" tooltip="文件更新后执行该命令，谨慎操作">
+                    <Form.Item label="部署命令" name="cmd" tooltip="文件更新后执行该命令，谨慎操作">
                         <Input.TextArea rows={1}/>
                     </Form.Item>
                     <Form.Item name="files" label="资源更新">

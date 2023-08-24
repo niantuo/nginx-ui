@@ -22,9 +22,10 @@ import {renderLocation} from "./utils.ts";
 /**
  * 部分的重要信息
  * @param data
+ * @param onChange
  * @constructor
  */
-const LocationInfo = ({data}:{ data: INginxLocation})=>{
+const LocationInfo = ({data, onChange}:{ data: INginxLocation, onChange?: (data: INginxLocation) => void})=>{
 
     const rootDir = ()=>{
         if (data.alias){
@@ -39,7 +40,7 @@ const LocationInfo = ({data}:{ data: INginxLocation})=>{
             data.proxy_type === 'proxy' ? <div>{`proxy: ${data.proxy_pass}`}</div> : null
         }
         {
-            data.proxy_type === 'static' ? <div>{rootDir()}<SiteInput location={data} /></div>:null
+            data.proxy_type === 'static' ? <div>{rootDir()}<SiteInput onChange={onChange} location={data} /></div>:null
         }
         <div>
             {
@@ -173,6 +174,20 @@ export const LocationInput = ({value, onChange }: AutoTypeInputProps) => {
         setEditData(undefined)
     }
 
+  /**
+   * 部署数据变化，不重新渲染
+   * @param data
+   */
+  const onDeployDataChange = (data: INginxLocation) => {
+    const newList = locations.map(item=>{
+      if (item.id === data.id){
+        return { ...item, ...data}
+      }
+      return item;
+    });
+    onChange?.(newList)
+  }
+
     const renderPreview = (data: INginxLocation)=>{
         let content ='';
         let rows = 0;
@@ -224,7 +239,7 @@ export const LocationInput = ({value, onChange }: AutoTypeInputProps) => {
             dataIndex: 'proxy_pass',
             title: '代理或路径',
             render: (_,record: any)=>{
-                return (<LocationInfo data={record} />)
+                return (<LocationInfo onChange={onDeployDataChange} data={record} />)
             }
         },
         {

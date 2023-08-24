@@ -97,6 +97,7 @@ export type IDeployReq  ={
    * 是否清空文件夹再部署
    */
   clear?: boolean
+  cmd?: string
 }
 /**
  * 文件上传
