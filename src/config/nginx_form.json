@@ -142,6 +142,13 @@
       ]
     },
     {
+      "key": "cors_setting",
+      "title": "跨域配置",
+      "type": "cors",
+      "description": "跨域配置，可以通过该配置项解决前端跨域问题",
+      "required": false
+    },
+    {
       "key": "tmp_custom_config",
       "title": "自定义配置",
       "type": "textarea",
@@ -176,13 +183,6 @@
           "description": "eg. 500m 20m",
           "required": false,
           "value": "10m"
-        },
-        {
-          "key": "access_log",
-          "type": "string",
-          "placeholder": "access日志文件路径",
-          "required": false,
-          "title": "Access日志"
         },
         {
           "key": "charset",

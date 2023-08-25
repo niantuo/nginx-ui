@@ -79,7 +79,7 @@ export const CorsInput = ({...props}: AutoTypeInputProps)=>{
     }
 
     if (values.methods?.length){
-      lines.push(`add_header 'Access-Control-Allow-Origin' '${values.methods.join(',')}';`)
+      lines.push(`add_header 'Access-Control-Allow-Methods' '${values.methods.join(',')}';`)
     }
     if (values.headers?.length){
       lines.push(`add_header 'Access-Control-Allow-Headers' '${values.headers.join(',')}';`)
