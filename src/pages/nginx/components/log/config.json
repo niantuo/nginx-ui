@@ -31,7 +31,8 @@
         "key": "path",
         "type": "string",
         "placeholder": "default. logs/access.log",
-        "width": 250
+        "width": 250,
+        "required": false
       },
       {
         "title": "level",
@@ -39,7 +40,9 @@
         "type": "select",
         "option": [],
         "width": 120,
-        "placeholder": "日志格式"
+        "placeholder": "日志格式",
+        "required": false,
+        "value": "main"
       }
     ],
     "description": "日志格式需要再http的“日志格式”中进行配置,配置后请先保存再进行选择"
