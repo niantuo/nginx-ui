@@ -61,7 +61,10 @@ export const ErrorLog = ({value, column, onChange, columns}: ErrorLogProps) => {
         }else {
             const ngxData: NgxModuleData = {
                 data: item,
-                lines: [`${logColumn.key}   ${item.path} ${item.level};`]
+                lines: []
+            }
+            if (item?.path){
+              ngxData.lines?.push(`${logColumn.key}   ${item.path} ${item.level};`)
             }
             onChange?.(ngxData)
         }
@@ -87,18 +90,23 @@ export const AccessLog = (props: AutoTypeInputProps) => {
     const nginx = useAppSelector(state => state.nginx.current);
 
     const options = useMemo(()=>{
+      const isStream = (props.column as any).stream;
         if (!nginx?.httpData){
-            return []
+            return [ isStream ? 'tcp_format' : 'main']
         }
+        let result: string[] = [];
         try {
             const httpData = JSON.parse(nginx?.httpData) as HttpConfData ?? {};
             const list = (props.column as any).stream ? httpData["stream.log_format"] : httpData["http.log_format"] || []
-            return list.filter(item=>item.name && item.content)
+          result= list.filter(item=>item.name && item.content)
                 .map(item=>item.name)
         }catch (e) {
             console.log('AccessLog parse httpData fail',e)
         }
-        return []
+        if (result.length == 0){
+          result.push(isStream ? 'tcp_format' : 'main')
+        }
+        return result
     },[nginx, props.column])
 
     const col: FormColumnType = {...CONFIG.access_log};
