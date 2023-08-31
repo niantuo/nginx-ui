@@ -5,12 +5,12 @@
  */
 import {registerInput} from '../basic'
 import {
-    AutoTypeInputProps,
-    FormColumnType,
-    noRequired,
-    ObjectInput,
-    DataValidatorConfig,
-    AutoColumn
+  AutoTypeInputProps,
+  FormColumnType,
+  noRequired,
+  ObjectInput,
+  DataValidatorConfig,
+  AutoColumn, isNull
 } from "planning-tools";
 import {Button, Tooltip} from "antd";
 import CONFIG from './config.json'
@@ -20,6 +20,7 @@ import {useEffect, useMemo, useRef, useState} from "react";
 import {QuestionCircleOutlined} from "@ant-design/icons";
 import {useAppSelector} from "../../../../store";
 import {HttpConfData} from "../../types.ts";
+import {cloneDeep} from "lodash";
 
 type AccessLogData = {
     path: string
@@ -50,8 +51,10 @@ export const ErrorLog = ({value, column, onChange, columns}: ErrorLogProps) => {
         if (columns){
             return columns
         }
-        const col: FormColumnType = {...CONFIG.error_log};
-        col.required = column.required;
+        const col: FormColumnType = cloneDeep(CONFIG.error_log);
+        if (!isNull(column.required)){
+          col.required = column.required;
+        }
         return col
     },[columns, column])
 
@@ -89,31 +92,34 @@ export const AccessLog = (props: AutoTypeInputProps) => {
 
     const nginx = useAppSelector(state => state.nginx.current);
 
-    const options = useMemo(()=>{
+    const column = useMemo(()=>{
       const isStream = (props.column as any).stream;
-        if (!nginx?.httpData){
-            return [ isStream ? 'tcp_format' : 'main']
-        }
         let result: string[] = [];
-        try {
+        if (nginx?.httpData){
+          try {
             const httpData = JSON.parse(nginx?.httpData) as HttpConfData ?? {};
-            const list = (props.column as any).stream ? httpData["stream.log_format"] : httpData["http.log_format"] || []
-          result= list.filter(item=>item.name && item.content)
-                .map(item=>item.name)
-        }catch (e) {
+            const list = isStream ? httpData["stream.log_format"] : httpData["http.log_format"] || []
+            result= list.filter(item=>item.name && item.content)
+                .map(item=>item.name);
+          }catch (e) {
             console.log('AccessLog parse httpData fail',e)
+          }
         }
         if (result.length == 0){
           result.push(isStream ? 'tcp_format' : 'main')
         }
-        return result
+
+      const col: FormColumnType = cloneDeep(CONFIG.access_log);
+        if (!isNull(props.column.required)){
+          col.required = props.column.required;
+        }
+      const level = col.items?.find(item=>item.key === 'level');
+      level && (level.option = result)
+      console.log('accessLog=>',col, props.column.required)
+      return col
     },[nginx, props.column])
 
-    const col: FormColumnType = {...CONFIG.access_log};
-    col.required = props.column.required;
-    const level = col.items?.find(item=>item.key === 'level');
-    level && (level.option = options)
-    return (<ErrorLog {...props} columns={col} />)
+    return (<ErrorLog {...props} columns={column} />)
 }
 
 
@@ -121,7 +127,7 @@ registerInput('access_log', AccessLog)
 registerInput('error_log',ErrorLog)
 
 const validateLog = (value: any, config: AutoColumn) => {
-    if (noRequired(config.required) && !value){
+    if (noRequired(config.required) && !value?.data){
         return
     }
     if (!value || !value.data){
@@ -137,7 +143,7 @@ const validateLog = (value: any, config: AutoColumn) => {
 }
 
 const validateAccessLog = (value: any, config: AutoColumn) => {
-    if (noRequired(config.required) && !value){
+    if (noRequired(config.required) && !value?.data){
         return
     }
     if (!value || !value.data){

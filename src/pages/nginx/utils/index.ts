@@ -69,7 +69,11 @@ export const renderStream = (server: Partial<INginxServer>) =>{
       return
     }
     lines.push(`    server {`)
-    lines.push(`        listen ${server.listen};`)
+    if (server.isUdp){
+      lines.push(`        listen ${server.listen} udp;`)
+    }else {
+      lines.push(`        listen ${server.listen};`)
+    }
     lines.push(`        proxy_pass ${server.proxy_pass};`)
     if (server.proxy_connect_timeout){
       lines.push(`        proxy_connect_timeout ${server.proxy_connect_timeout}s;`)

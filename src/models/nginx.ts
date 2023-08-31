@@ -165,6 +165,10 @@ export type INginxStream = {
    * 是否启用
    */
   enable?: boolean
+  /**
+   * 是否监听TCP，但是isSteam=true时有效
+   */
+  isUdp?: boolean;
 }
 
 export type PNginxServer = Partial<INginxServer>

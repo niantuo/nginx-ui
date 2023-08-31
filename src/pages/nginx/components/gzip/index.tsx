@@ -31,7 +31,7 @@ export const GzipInput = ({value, onChange}:AutoTypeInputProps) => {
 
   const triggerChange = (values: any)=>{
     const lines:string[] = []
-    if (data?.gzip){
+    if (values?.gzip){
       lines.push(`gzip      on;`)
       Object.keys(values).forEach(k=>{
         let v = values[k];

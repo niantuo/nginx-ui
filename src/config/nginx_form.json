@@ -430,7 +430,8 @@
           "key": "http.access_log",
           "title": "访问日志",
           "type": "access_log",
-          "required": false
+          "required": false,
+          "stream": false
         },
         {
           "key": "http.error_log",
@@ -641,6 +642,12 @@
       "value": 3306,
       "title": "端口",
       "width": 100
+    },
+    {
+      "key": "isUdp",
+      "type": "switch",
+      "value": false,
+      "title": "是否UDP"
     },
     {
       "key": "proxy_pass",

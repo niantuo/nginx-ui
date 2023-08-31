@@ -3,6 +3,7 @@
     "title": "error_log",
     "type": "object",
     "key": "error_log",
+    "required": false,
     "items": [
       {
         "title": "path",
@@ -25,6 +26,7 @@
     "title": "access_log",
     "type": "object",
     "key": "access_log",
+    "required": false,
     "items": [
       {
         "title": "path",
