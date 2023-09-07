@@ -19,7 +19,7 @@ export const NginxHttp = () => {
   const formConfig = useFormConfig()
   const formTemplate = useFormTemplate();
 
-  const [data,setData] = useState<any>({})
+  const [data,setData] = useState<any>({...formTemplate.nginxConf})
   const formRef = useRef<AutoFormInstance>()
   const nginx = useAppSelector(state => state.nginx.current);
   const [loading,setLoading] = useState(false)
@@ -84,25 +84,15 @@ export const NginxHttp = () => {
   }
 
   useEffect(()=>{
-    const updateData = { ...formTemplate.nginxConf, ...data };
-    setData(updateData)
-    formRef.current?.setData(updateData)
-  },[formTemplate])
-
-  useEffect(()=>{
-    if (!nginx?.id){
-      return
-    }
     try {
-      const curData = JSON.parse(nginx.httpData)
+      const curData = nginx?.httpData ? JSON.parse(nginx.httpData) : {};
       const updateData = { ...formTemplate.nginxConf, ...curData };
       setData(updateData)
-      formRef.current?.setData(updateData)
+      formRef.current?.setData(updateData);
     }catch (e){
       console.log('parse httpData fail',e)
     }
-    console.log('nginx change', nginx)
-  },[nginx])
+  },[nginx,formTemplate])
 
 
   return (<div className="page">

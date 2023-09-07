@@ -115,7 +115,7 @@ export const AccessLog = (props: AutoTypeInputProps) => {
         }
       const level = col.items?.find(item=>item.key === 'level');
       level && (level.option = result)
-      console.log('accessLog=>',col, props.column.required)
+      // console.log('accessLog=>',col, props.column.required)
       return col
     },[nginx, props.column])
 
