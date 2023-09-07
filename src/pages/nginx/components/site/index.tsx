@@ -1,4 +1,4 @@
-import {Button, Drawer, Form, Input, Switch} from "antd";
+import {Button, Drawer, Form, Input, Modal, Switch} from "antd";
 import {
     Message
 } from "planning-tools";
@@ -30,7 +30,8 @@ export const SiteInput = ({ location, onChange }: IProps) => {
 
     const [complete,setComplete] = useState(false)
     const [loading,setLoading] = useState(false)
-    const [form] = Form.useForm()
+    const [form] = Form.useForm();
+    const [modal,modalContextHolder] = Modal.useModal();
 
     const nginx = useAppSelector(state => state.nginx.current);
 
@@ -44,9 +45,9 @@ export const SiteInput = ({ location, onChange }: IProps) => {
             return;
         }
         const initialData :Partial<IDeployReq> = {
-          clear: false,
           ...location.__deploy__ as any,
             nginxId: nginx.id,
+          clear: false,
         }
         if (!initialData.dir){
           if (location.alias){
@@ -61,10 +62,22 @@ export const SiteInput = ({ location, onChange }: IProps) => {
     const updateLocation = (deployData: IDeployReq) => {
       const cacheData = {
         cmd: deployData.cmd,
-        clear: deployData.clear,
         dir: deployData.dir,
       };
       onChange?.({ ...location, __deploy__: cacheData})
+    }
+
+    const onRequest = (postData: IDeployReq)=>{
+      setLoading(true)
+
+      uploadApis.deploy(postData)
+          .then(()=>{
+            Message.success('部署成功！');
+            updateLocation(postData);
+          })
+          .finally(()=>{
+            setLoading(false)
+          })
     }
 
     const onSubmitData = async ()=>{
@@ -72,24 +85,29 @@ export const SiteInput = ({ location, onChange }: IProps) => {
           return
       }
       const values = await form.validateFields()
-        console.log('onSubmitData',values)
-
-      setLoading(true)
-        const postData: IDeployReq = {
-          key: "",
-            dir:"",
-          ...editData,
-            ...values,
-          nginxId: nginx.id,
-        }
-      uploadApis.deploy(postData)
-          .then(()=>{
-              Message.success('部署成功！');
-              updateLocation(postData);
-          })
-          .finally(()=>{
-              setLoading(false)
-          })
+      const postData: IDeployReq = {
+        key: "",
+        dir:"",
+        ...editData,
+        ...values,
+        nginxId: nginx.id,
+      }
+        console.log('onSubmitData',postData);
+      if (postData.clear){
+        modal.confirm({
+          title: '警告',
+          content: '您确定要全量部署吗？改操作将会删除部署目录下的所有问题，请谨慎选择！',
+          cancelText: '取消全量部署',
+          okText: '仍然继续',
+          onCancel: ()=>{
+            postData.clear = false;
+            onRequest(postData)
+          },
+          onOk: ()=>onRequest(postData),
+        })
+        return;
+      }
+      await onRequest(postData);
     }
 
     /**
@@ -135,6 +153,7 @@ export const SiteInput = ({ location, onChange }: IProps) => {
                     </div>
                 </Form>
             </Drawer>
+          {modalContextHolder}
         </>
     )
 }

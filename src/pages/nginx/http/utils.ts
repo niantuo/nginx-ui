@@ -133,16 +133,18 @@ export const toNginxConf = ( nginx: INginx, data: any)=>{
     // lines.push(`    include ${nginx.nginxDir}/conf.d/*.conf;`)
     lines.push('}')
 
+  if (data.stream){
     lines.push(`stream {`)
     if (nginxObj.stream){
-        Object.keys(nginxObj.stream).forEach(k=>{
-          const value = nginxObj.stream[k]
-          append2Lines(`    `, lines,k,value)
-        })
-        lines.push(`    include ${nginx.dataDir}/stream.d/*.conf;`)
-        // lines.push(`    include ${nginx.nginxDir}/stream.d/*.conf;`)
+      Object.keys(nginxObj.stream).forEach(k=>{
+        const value = nginxObj.stream[k]
+        append2Lines(`    `, lines,k,value)
+      })
+      lines.push(`    include ${nginx.dataDir}/stream.d/*.conf;`)
+      // lines.push(`    include ${nginx.nginxDir}/stream.d/*.conf;`)
     }
     lines.push('}')
+  }
     return lines.join('\n')
 }
 

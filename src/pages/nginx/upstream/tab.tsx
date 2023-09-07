@@ -44,7 +44,7 @@ export const UpstreamTab = forwardRef<ITabInstance, IProps>(({server, isStream},
         const upstreams = server?.upstreams;
         if (Array.isArray(upstreams) && upstreams.length){
           const items =upstreams.map((item: any)=>{
-              const copy = {...item};
+              const copy = {...item,editing: false};
             if (!copy.key){
                 copy.key = uniqueKey(20)
             }

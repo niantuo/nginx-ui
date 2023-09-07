@@ -1,4 +1,4 @@
-import {INginx, INginxServer} from "../../../models/nginx.ts";
+import {INginx, INginxServer, IUpstream} from "../../../models/nginx.ts";
 import {isBasicData, isFalse, isNull} from "planning-tools";
 import {cloneDeep, isBoolean} from "lodash";
 import {isNgxModuleValue, NgxModuleData} from "../components/input.ts";
@@ -30,8 +30,24 @@ const serverBlacklist:{[key:string]:boolean} = {
  */
 export const renderUpstream = (server: Partial<INginxServer>) =>{
   const lines: string[]= [];
-  lines.push(`### upstream    ${server.isStream ? 'stream': 'http'}`)
-  server.upstreams?.forEach(up=>{
+  lines.push(`### upstream    ${server.isStream ? 'stream': 'http'}`);
+  const upstreamMap: {[key:string]: IUpstream} = {};
+  server.upstreams?.forEach(item=>{
+    if (!item.enable){
+      return
+    }
+    let upstream = upstreamMap[item.name];
+    if (!upstream){
+      upstream = item;
+      upstream.servers = item.servers || [];
+      upstreamMap[item.name] = upstream;
+    }else {
+      upstream.servers = upstream.servers.concat(item.servers);
+    }
+  })
+
+  const upstreams = Object.values(upstreamMap);
+  upstreams?.forEach(up=>{
     if (!up.enable){
       return
     }
@@ -54,7 +70,6 @@ export const renderUpstream = (server: Partial<INginxServer>) =>{
       })
       lines.push('}')
     }
-
   })
   return lines.join('\n')
 }
