@@ -59,19 +59,19 @@
           "required": false
         },
         {
-          "title": "max_fails",
-          "type": "int",
-          "key": "max_fails",
-          "required": false,
-          "description": "最大失败次数，也就是最多进行 3 次尝试，默认为1",
-          "width": 100
-        },
-        {
-          "title": "超时时间",
+          "title": "屏蔽时间",
           "type": "int",
           "key": "fail_timeout",
           "required": false,
-          "description": "超时时间，单位秒，默认值是10s",
+          "description": "fail_timeout：当错误次数超过配置(max_fails)时，该服务的屏蔽时间，单位秒，默认值是10s",
+          "width": 100
+        },
+        {
+          "title": "失败次数",
+          "type": "int",
+          "key": "max_fails",
+          "required": false,
+          "description": "最大失败次数，默认为1,失败次数达到指定的次数时，将会屏蔽该服务一定时间",
           "width": 100
         }
       ]

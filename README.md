@@ -92,6 +92,7 @@ docker run -itd -v ./data/:/app/data -p8080:8080 --name tuonina/nginx-ui
 配置部分参考一下文档：
 
 - [Nginx Rewrite](https://blog.csdn.net/qq1356059950/article/details/125014248)
+- [nginx负载均衡](https://zhuanlan.zhihu.com/p/557994010?utm_id=0)
 
 
 ## 构建部署
