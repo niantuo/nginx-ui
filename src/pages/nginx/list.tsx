@@ -10,7 +10,9 @@ import {NginxApis} from "../../api/nginx.ts";
 import {AutoForm, AutoFormInstance, Message, Notify} from "planning-tools";
 import {useFormConfig} from "./config.tsx";
 import {DeleteOutlined, EditOutlined, PlusOutlined, SyncOutlined} from "@ant-design/icons";
-import {Link} from "react-router-dom";
+import {useNavigate} from "react-router";
+import {useAppDispatch} from "../../store";
+import {NginxActions} from "../../store/slice/nginx.ts";
 
 export const NginxList = ()=>{
 
@@ -23,6 +25,8 @@ export const NginxList = ()=>{
   const [modal,contextHolder] = Modal.useModal()
 
   const formConfig = useFormConfig();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const fetchData = ()=>{
     setLoading(true)
@@ -91,10 +95,15 @@ export const NginxList = ()=>{
     fetchData()
   },[])
 
+  const toNginx = (nginx: INginx) => {
+    dispatch(NginxActions.reset())
+    navigate(`/nginx/${nginx.id}`)
+  }
+
   const renderOperations = (data: INginx)=>{
 
     return (<>
-      <Link to={`/nginx/${data.id}`}><EditOutlined /></Link>
+      <Button onClick={()=>toNginx(data)} type="link"><EditOutlined /></Button>
       <Button onClick={()=>onRemoveNginx(data)} danger type="text" icon={<DeleteOutlined />}/>
     </>)
 

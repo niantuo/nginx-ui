@@ -1,7 +1,7 @@
 import {IServerHost} from "../../../models/api.ts";
 import {INginx, INginxServer} from "../../../models/nginx.ts";
 import {renderServer} from "./index.ts";
-import {useAppDispatch, useAppSelector} from "../../../store";
+import {useAppDispatch} from "../../../store";
 import {NginxApis} from "../../../api/nginx.ts";
 import {Notify} from "planning-tools";
 import {NginxActions} from "../../../store/slice/nginx.ts";
@@ -30,8 +30,12 @@ export const createServerHost = (nginx: INginx, server: Partial<INginxServer>)=>
   }
 }
 
+/**
+ * 更新本地缓存信息
+ * @param id
+ */
 export const useNginx = (id?: string)=>{
-  const current = useAppSelector(state => state.nginx.current);
+  const [current,setCurrent] = useState<INginx>()
   const navigate = useNavigate();
   const [loading,setLoading] = useState(false)
   const dispatch = useAppDispatch()
@@ -54,10 +58,13 @@ export const useNginx = (id?: string)=>{
             nginx: respData.nginx,
             servers: respData.servers
           }))
+          setCurrent(respData.nginx)
         })
-        .catch(e=>{
-          Notify.warn(e.msg || e.message);
-          navigate('/')
+        .catch((e)=>{
+          setTimeout(()=>{
+            navigate('/');
+          },1000)
+          console.log('getNginx fail',e)
         })
         .finally(()=>{
           setLoading(false)
@@ -66,6 +73,7 @@ export const useNginx = (id?: string)=>{
   }
 
   useEffect(()=>{
+    dispatch(NginxActions.reset())
     toNginx()
   },[id])
   return [current]

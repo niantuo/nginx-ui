@@ -8,11 +8,11 @@ export type INginxState = {
   server?: INginxServer,
   location?: PLocation,
   currentId?: number
-  formConfig?: INginxFormConfig
-
   upstream?: INginxServer
   streamUpstream?: INginxServer
+
   servers: INginxServer[]
+  formConfig?: INginxFormConfig
 };
 
 export type SetCurrentData = {
@@ -28,9 +28,17 @@ const nginxSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    reset(state){
+      state.current = undefined;
+      state.server = undefined;
+      state.location = undefined;
+      state.currentId = undefined;
+      state.upstream = undefined;
+      state.streamUpstream = undefined;
+      state.servers = [];
+    },
     setCurrent(state, action: PayloadAction<SetCurrentData>) {
       const payload = action.payload;
-
       const servers: INginxServer[] = [];
        (payload.servers || []).forEach(item=>{
         const server = createServer(item)
