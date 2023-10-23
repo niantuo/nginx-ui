@@ -35,10 +35,9 @@ export const NginxServer = () => {
   const dispatch = useAppDispatch();
 
   useEffect(()=>{
+    formRef.current?.resetData()
     if (server && formRef.current){
       formRef.current?.setData(cloneDeep(server))
-    }else {
-      formRef.current?.setData({})
     }
   },[server])
 
