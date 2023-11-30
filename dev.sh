@@ -1,6 +1,5 @@
 #/usr/bin/sh
-export DOCKER_BUILDKIT=1
-docker-compose -f ./docker-compose-dev.yaml build
+./build-nginx-with-ui.sh
 docker-compose -f ./docker-compose-dev.yaml up -d
 
 
