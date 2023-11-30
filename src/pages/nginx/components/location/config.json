@@ -234,14 +234,15 @@
           "title": "正则表达式",
           "type": "string",
           "width": 180,
-          "description": "必须填写正则表达式和跳转路径才能生效",
-          "required": false
+          "description": "跳转匹配的正则表达式",
+          "required": false,
+          "placeholder": "eq. ^/(.*)"
         },
         {
           "key": "replacement",
           "title": "跳转路径",
           "type": "string",
-          "placeholder": "跳转后的内容",
+          "placeholder": "eq. https://www.demo.com/$1",
           "width": 300,
           "required": false
         },

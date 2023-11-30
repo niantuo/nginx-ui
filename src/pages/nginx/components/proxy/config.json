@@ -160,9 +160,10 @@
         },
         {
           "key": "proxy_ssl_verify",
-          "title": "证书校验",
+          "title": "SSL证书校验",
           "type": "switch",
-          "required": false
+          "required": false,
+          "description": "proxy_ssl_verify on|off"
         },
         {
           "key": "proxy_store",

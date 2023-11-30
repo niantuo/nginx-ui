@@ -6,8 +6,7 @@ ARG GOARCH=amd64
 
 RUN go env -w GOPROXY=https://goproxy.cn,direct
 
-RUN --mount=type=cache,target=/go --mount=type=cache,target=/root/.cache/go-build\
-    GOODS=${GOODS} GOARCH=${GOARCH}  go build -o /app/app
+RUN GOODS=${GOODS} GOARCH=${GOARCH}  go build -o /app/app
 
 FROM debian:sid-slim
 

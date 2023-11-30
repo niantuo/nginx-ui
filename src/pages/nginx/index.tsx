@@ -103,7 +103,7 @@ export const Nginx = ({children}: any)=>{
     <div className="nginx-conf">
       <Menu
         onClick={onClick}
-        style={{ width: 256 }}
+        style={{ width: 300 }}
         mode="inline"
         items={menuItems}
         activeKey={activeKey}

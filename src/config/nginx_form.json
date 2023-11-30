@@ -119,14 +119,15 @@
           "title": "正则表达式",
           "type": "string",
           "width": 180,
-          "placeholder": "<regex> 正则匹配",
+          "placeholder": "eq. ^/(.*)",
+          "description": "<regex> 正则匹配",
           "required": false
         },
         {
           "key": "replacement",
           "title": "跳转路径",
           "type": "string",
-          "placeholder": "<replacement> 跳转后的内容",
+          "placeholder": "eq. https://www.demo.com/$1",
           "width": 300,
           "required": false
         },
