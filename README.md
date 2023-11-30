@@ -22,7 +22,7 @@ version: "3"
 
 services:
   nginx-with-ui:
-    image: tuonina/nginx-with-ui
+    image: registry.cn-hangzhou.aliyuncs.com/tuon-pub/nginx-with-ui:latest
     restart: always
     ports:
       - 8080:8080
@@ -35,7 +35,7 @@ services:
 - docker快速启动
 
 ```shell
-docker run -itd --name nginx-ui -p8080:8080 -v {datadir}:/app/data -v {confdir}:/app/conf tuonina/nginx-with-ui
+docker run -itd --name nginx-ui -p8080:8080 -v {datadir}:/app/data -v {confdir}:/app/conf registry.cn-hangzhou.aliyuncs.com/tuon-pub/nginx-with-ui:latest
 ```
 
 - 说明
@@ -68,9 +68,9 @@ docker-compose -f ./docker-compose.yaml up -d
 使用IP:8080端口访问
 或者
 ```shell
-docker run -itd -v ./data/:/app/data --network host --name tuonina/nginx-with-ui
+docker run -itd -v ./data/:/app/data --network host --name registry.cn-hangzhou.aliyuncs.com/tuon-pub/nginx-with-ui:latest
 # or
-docker run -itd -v ./data/:/app/data -p8080:8080 --name tuonina/nginx-ui
+docker run -itd -v ./data/:/app/data -p8080:8080 --name registry.cn-hangzhou.aliyuncs.com/tuon-pub/nginx-ui
 ```
 
 ### 本地部署
