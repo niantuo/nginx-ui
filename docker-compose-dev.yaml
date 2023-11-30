@@ -9,7 +9,7 @@ services:
       dockerfile: docker/Dockerfile-with-nginx
     environment:
       - DOCKER_BUILDKIT=1
-    image: tuonina/nginx-with-ui
+    image: registry.cn-hangzhou.aliyuncs.com/tuon-pub/nginx-with-ui
     restart: always
     container_name: nginx-with-ui
     ports:
