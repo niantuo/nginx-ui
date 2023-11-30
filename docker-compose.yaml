@@ -2,11 +2,6 @@ version: "3"
 
 services:
   nginx-ui:
-    build:
-      context: ./
-      dockerfile: docker/Dockerfile
-    environment:
-      - DOCKER_BUILDKIT=1
     image: registry.cn-hangzhou.aliyuncs.com/tuon-pub/nginx-ui
     restart: always
     container_name: nginx-ui
