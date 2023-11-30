@@ -1,0 +1,41 @@
+.nginx-container{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  .nginx-header{
+    border-bottom: solid 1px #efefef;
+    font-weight: bolder;
+    font-size: 20px;
+    padding: 10px 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    box-sizing: border-box;
+    height: 50px;
+  }
+
+  .ant-menu{
+    height: 100%;
+  }
+  .nginx-conf{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    width: 100%;
+    .nginx-routes{
+      flex: 1;
+      width: 100%;
+      overflow: hidden;
+      .error{
+        padding: 20px;
+      }
+    }
+    .ant-menu{
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+  }
+}

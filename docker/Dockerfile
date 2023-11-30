@@ -16,7 +16,7 @@ COPY --from=builder /app/app /app
 COPY server/conf /app/conf
 COPY server/data  /app/data
 #COPY ../server/static  /app/static
-COPY dist  /app/static/web
+COPY frontend/dist  /app/static/web
 
 RUN chmod +x /app/app
 

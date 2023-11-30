@@ -1,0 +1,75 @@
+{
+  "id": 1,
+  "servers": [
+    {
+      "id": "server1",
+      "server_name": "demo.domain.cn",
+      "listen": 80,
+      "ssl": false,
+      "charset": "koi8-r",
+      "access_log": "/var/log/nginx/host.access.log  main",
+      "locations": [
+        {
+          "id": "loc1",
+          "match": {
+            "path": "/"
+          },
+          "rewrite": {
+            "regex": "^/(.*)",
+            "replacement": "https://dev.tonyandmoney.cn/$1",
+            "flag": "permanent"
+          }
+        }
+      ]
+    },
+    {
+      "id": "server2",
+      "server_name": "demo.domain.cn",
+      "listen": 443,
+      "ssl": true,
+      "ssl_certificate": "/data/certs/demo.domain.cn.pem",
+      "ssl_certificate_key": "/data/certs/demo.domain.cn.key",
+      "ssl_session_timeout": "5m",
+      "ssl_ciphers": "ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4",
+      "ssl_protocols": ["TLSv1","TLSv1.1","TLSv1.2"],
+      "ssl_prefer_server_ciphers": "on",
+      "client_max_body_size": "500m",
+      "locations": [
+
+        {
+          "id":"loc2",
+          "match": {
+            "path": "/common/"
+          },
+          "index": "index.html",
+          "proxy_set_header": [
+            {
+              "name": "Host",
+              "value": "$host"
+            },
+            {
+              "name": "X-Real-IP",
+              "value": "$remote_addr"
+            },
+            {
+              "name": "X-Forwarded-For",
+              "value": "$proxy_add_x_forwarded_for"
+            },
+            {
+              "name": "Upgrade",
+              "value": "$http_upgrade"
+            },
+            {
+              "name": "Connection",
+              "value": "upgrade"
+            }
+          ],
+          "proxy_pass": "http://172.16.0.5:3006/common/",
+          "proxy_next_upstream": ["http_502","http_504","http_404","error","timeout","invalid_header"],
+          "proxy_connect_timeout": "60s",
+          "proxy_http_version": "1.1"
+        }
+      ]
+    }
+  ]
+}

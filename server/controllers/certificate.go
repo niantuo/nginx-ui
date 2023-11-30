@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
-	"server/models"
-	nginx2 "server/nginx"
-	"server/utils"
+	"nginx-ui/server/models"
+	nginx2 "nginx-ui/server/nginx"
+	"nginx-ui/server/utils"
 	"strings"
 	"time"
 )

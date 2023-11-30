@@ -1,0 +1,53 @@
+{
+  "form": [
+    {
+      "title": "域名",
+      "key": "origins",
+      "type": "select",
+      "mode": "tags",
+      "description": "配置允许跨域的域名,多个域名用map指令实现",
+      "option": [],
+      "required": false
+    },
+    {
+      "title": "请求方法",
+      "type": "select",
+      "key": "methods",
+      "required": false,
+      "option": ["GET","POST","PUT","DELETE","OPTIONS"],
+      "description": "配置允许跨域的请求方法",
+      "mode": "tags"
+    },
+    {
+      "title": "请求头",
+      "type": "select",
+      "key": "headers",
+      "required": false,
+      "option": ["Authorization","Content-Type","Accept","Origin","Cache-Control","X-Requested-With"],
+      "description": "配置允许跨域的请求头",
+      "mode": "tags"
+    },
+    {
+      "title": "拦截preflight",
+      "key": "preflight",
+      "required": false,
+      "type": "switch",
+      "description": "拦截preflight的OPTION请求，返回跨域配置"
+    },
+    {
+      "title": "允许发送凭据",
+      "key": "credentials",
+      "type": "switch",
+      "required": false,
+      "description": "可选字段，为true表示允许发送Cookie"
+    },
+    {
+      "title": "跨域缓存",
+      "key": "maxAge",
+      "required": false,
+      "type": "int",
+      "description": "配置 Access-Control-Max-Age，代表着在指定时间(秒)之内不用请求该地址的时候，不需要再进行预检请求，也就是跨域缓存。",
+      "value": 86400
+    }
+  ]
+}

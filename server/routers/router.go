@@ -7,14 +7,17 @@ import (
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/logs"
 	"net/http"
-	config2 "server/config"
-	"server/controllers"
-	"server/middleware"
+	config2 "nginx-ui/server/config"
+	"nginx-ui/server/controllers"
+	"nginx-ui/server/middleware"
 	"strings"
 )
 
 func init() {
 	config := config2.Config
+
+	userController := controllers.NewUserController()
+
 	ns := beego.NewNamespace(config.BaseApi,
 		beego.NSRouter("/nginx", &controllers.NginxController{}),
 		beego.NSRouter("/nginx/:id", &controllers.NginxController{}, "post:Update"),
@@ -35,9 +38,9 @@ func init() {
 		beego.NSRouter("/file", &controllers.FileController{}),
 		beego.NSRouter("/logger", &controllers.LoggerController{}),
 
-		beego.NSRouter("/user/login", &controllers.UserController{}, "post:Login"),
-		beego.NSRouter("/user/info", &controllers.UserController{}, "get:User"),
-		beego.NSRouter("/user/register", &controllers.UserController{}, "post:Register"),
+		beego.NSRouter("/user/login", userController, "post:Login"),
+		beego.NSRouter("/user/info", userController, "get:User"),
+		beego.NSRouter("/user/register", userController, "post:Register"),
 		beego.NSRouter("/oauth2", &controllers.Oauth2Controller{}),
 		beego.NSRouter("/oauth2/callback", &controllers.Oauth2Controller{}, "post:Callback"),
 	)

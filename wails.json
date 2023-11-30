@@ -1,0 +1,14 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "nginx-ui",
+  "outputfilename": "nginx-ui",
+  "frontend:dir": "frontend",
+  "frontend:install": "yarn",
+  "frontend:build": "npm run build",
+  "frontend:dev:watcher": "npm run dev",
+  "frontend:dev:serverUrl": "auto",
+  "author": {
+    "name": "tuon",
+    "email": "976056042@qq.com"
+  }
+}

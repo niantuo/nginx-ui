@@ -7,9 +7,9 @@ import (
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
 	"io"
-	"server/config"
-	"server/models"
-	"server/utils"
+	"nginx-ui/server/config"
+	"nginx-ui/server/models"
+	"nginx-ui/server/utils"
 )
 
 type Oauth2Controller struct {

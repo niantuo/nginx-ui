@@ -8,8 +8,8 @@ import (
 	"github.com/astaxie/beego/session"
 	"github.com/beego/beego/v2/client/httplib"
 	"net/http"
-	"server/config"
-	"server/models"
+	"nginx-ui/server/config"
+	"nginx-ui/server/models"
 	"strings"
 )
 

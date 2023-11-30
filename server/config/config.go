@@ -8,9 +8,9 @@ import (
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
 	"golang.org/x/oauth2"
+	"nginx-ui/server/models"
+	"nginx-ui/server/utils"
 	"os"
-	"server/models"
-	"server/utils"
 	"strings"
 )
 

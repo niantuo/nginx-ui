@@ -3,8 +3,8 @@ package controllers
 import (
 	"encoding/json"
 	"github.com/astaxie/beego/orm"
-	"server/models"
-	nginx2 "server/nginx"
+	"nginx-ui/server/models"
+	nginx2 "nginx-ui/server/nginx"
 )
 
 type ServerController struct {
@@ -123,7 +123,7 @@ func (c *ServerController) Refresh() {
 
 	postData.NginxId = nginx.Id
 	postData.Uid = nginx.Uid
-	
+
 	o := orm.NewOrm()
 	_, err = o.Update(&postData)
 	if err != nil {

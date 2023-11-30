@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego/logs"
-	"server/models"
-	nginx2 "server/nginx"
+	"nginx-ui/server/models"
+	nginx2 "nginx-ui/server/nginx"
 )
 
 type LoggerController struct {

@@ -1,0 +1,22 @@
+.help-container{
+  padding: 0 15px;
+  overflow: hidden;
+  height: 100%;
+  .ant-tabs {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    .ant-tabs-nav{
+      margin-bottom: 0;
+    }
+    .ant-tabs-content-holder{
+      flex: 1;
+      overflow: hidden;
+      .ant-tabs-content,.ant-tabs-tabpane{
+        height: 100%;
+        overflow: auto;
+      }
+    }
+  }
+}

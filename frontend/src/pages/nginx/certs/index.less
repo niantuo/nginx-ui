@@ -1,0 +1,52 @@
+.cert-page{
+  padding: 0 10px;
+  .cert-list{
+    display: flex;
+    flex-direction: column;
+  }
+  .cert-tags{
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    .ant-tag{
+      margin-bottom: 5px;
+      cursor: pointer;
+    }
+  }
+
+}
+.cert-edit-drawer{
+  .ant-drawer-header{
+    padding: 5px 10px;
+  }
+  .ant-drawer-body{
+    padding: 10px;
+
+    .ant-picker{
+      min-width: 60%;
+    }
+  }
+
+  .cert-data{
+    max-width: 900px;
+    h5{
+      font-weight: bold;
+      font-size: 16px;
+    }
+  }
+  .inline-item{
+    display: flex;
+    flex-direction: row;
+    .ant-form-item{
+      flex: 1;
+      margin-right: 10px;
+    }
+  }
+  .footer-item{
+    padding-left: 16%;
+    .ant-btn+.ant-btn{
+      margin-left: 10px;
+    }
+  }
+}

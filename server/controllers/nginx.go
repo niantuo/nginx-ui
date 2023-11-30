@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
-	"server/models"
-	ngx "server/nginx"
+	"nginx-ui/server/models"
+	ngx "nginx-ui/server/nginx"
 )
 
 type NginxController struct {
