@@ -126,7 +126,11 @@ docker run -itd -v ./data/:/app/data -p8080:8080 --name registry.cn-hangzhou.ali
 - 20230719: 修复return语句在代理或者静态站点的情况下依然渲染的问题
 
 ## git代理
-git config --global http.proxy 127.0.0.1 1234
-git config --global https.proxy  127.0.0.1 1234
+git config --global http.proxy http://127.0.0.1:{port}
+
+git config --global https.proxy  http://127.0.0.1:{port}
+
+
 git config --global --unset http.proxy
+
 git config --global --unset https.proxy
