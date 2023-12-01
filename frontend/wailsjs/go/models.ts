@@ -1,7 +1,7 @@
 export namespace desktop {
 	
 	export class ApiResp {
-	    data: models.RespData;
+	    data?: models.RespData;
 	
 	    static createFrom(source: any = {}) {
 	        return new ApiResp(source);

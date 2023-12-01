@@ -21,8 +21,8 @@ func NewUserController() *UserController {
 
 // Login 登录
 func (c *UserController) Login() {
-	var user models.User
-	err := json.Unmarshal(c.Ctx.Input.RequestBody, &user)
+	var user *models.User
+	err := json.Unmarshal(c.Ctx.Input.RequestBody, user)
 	if err != nil {
 		logs.Error(err, string(c.Ctx.Input.RequestBody))
 		c.ErrorJson(err)
@@ -45,17 +45,6 @@ func (c *UserController) User() {
 
 // Register 用户注册
 func (c *UserController) Register() {
-	var user models.User
-	err := json.Unmarshal(c.Ctx.Input.RequestBody, &user)
-	if err != nil {
-		logs.Error(err, string(c.Ctx.Input.RequestBody))
-		c.ErrorJson(err)
-		return
-	}
-
-	if err != nil {
-		c.ErrorJson(err)
-		return
-	}
-	c.setMsg("注册成功！").json()
+	resp := c.service.SignUp(c.Ctx.Input.RequestBody)
+	c.postJson(resp)
 }

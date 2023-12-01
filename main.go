@@ -24,6 +24,9 @@ func main() {
 		Height: 768,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
+			//如果你想为你的前端动态加载或生成资产，你可以使用 AssetsHandler 选项 来实现。
+			//AssetsHandler 是一个通用的 http.Handler，对于资产服务器上的任何非 GET 请求以及由于找不到文件而无法从捆绑资产提供服务的 GET 请求，都会调用它。
+			//Handler: desktop.NewApiHandler(),
 		},
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
 		OnStartup:        api.Startup,
