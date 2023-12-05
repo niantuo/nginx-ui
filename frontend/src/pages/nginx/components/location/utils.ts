@@ -20,7 +20,8 @@ const blacklist: { [key:string]:boolean } = {
     "internal": true,
     "lines": true,
     http:true,
-    data: true
+    data: true,
+  'return': true, //需要特殊处理
 }
 
 /**
@@ -67,6 +68,7 @@ export const renderLocation = (origin: INginxLocation) => {
     }
     delete loc.internal;
 
+
     Object.keys(loc).forEach(k=>{
         if (blacklist[k]){
             return;
@@ -97,9 +99,17 @@ export const renderLocation = (origin: INginxLocation) => {
             lines.push(`    ${line}`)
         })
     }
-    if (loc.return && loc.return.code){
-        lines.push(`    return  ${loc.return.code}  ${loc.return.content};`)
+
+  if (loc.return?.code){
+    let content = loc.return.content
+    if (!content.startsWith('\'')){
+      content = `'${content}`
     }
+    if (!content.endsWith('\'')){
+      content = `${content}'`
+    }
+    lines.push(`    return  ${loc.return.code || 200}   ${content};`)
+  }
 
     lines.push('}')
     lines.push(`####   ${loc.name || loc.id} end...`)
