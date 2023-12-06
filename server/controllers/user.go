@@ -21,14 +21,14 @@ func NewUserController() *UserController {
 
 // Login 登录
 func (c *UserController) Login() {
-	var user *models.User
-	err := json.Unmarshal(c.Ctx.Input.RequestBody, user)
+	var user models.User
+	err := json.Unmarshal(c.Ctx.Input.RequestBody, &user)
 	if err != nil {
 		logs.Error(err, string(c.Ctx.Input.RequestBody))
 		c.ErrorJson(err)
 		return
 	}
-	resp := c.service.Login(user)
+	resp := c.service.Login(&user)
 	if resp.Success() {
 		c.SetSession("user", user)
 	}

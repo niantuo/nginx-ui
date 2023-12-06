@@ -9,5 +9,8 @@ wails dev
 
 ## 打包
 ```shell
-wails build
+## 生产版本
+wails build -webview2=embed
+## 带debug
+wails build -webview2=embed -debug
 ```

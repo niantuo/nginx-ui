@@ -4,8 +4,8 @@
   "outputfilename": "nginx-ui",
   "frontend:dir": "frontend",
   "frontend:install": "yarn",
-  "frontend:build": "npm run desktop",
-  "frontend:dev:watcher": "npm run dev",
+  "frontend:build": "npm run build:desktop",
+  "frontend:dev:watcher": "npm run dev:desktop",
   "frontend:dev:serverUrl": "auto",
   "author": {
     "name": "tuon",

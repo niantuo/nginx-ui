@@ -3,7 +3,7 @@ import {BaseResp} from "../models/api.ts";
 import {Message, Notify} from "planning-tools";
 import {store} from "../store";
 import {UserActions} from "../store/slice/user.ts";
-import {checkDesktopApi} from "./desktop.api.ts";
+// import {checkDesktopApi} from "./desktop.api.ts";
 console.log('env', import.meta.env)
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -71,7 +71,7 @@ request.interceptors.response.use((resp: AxiosResponse<BaseResp>)=>{
   return Promise.reject(errData)
 })
 
-checkDesktopApi(request)
+// checkDesktopApi(request)
 
 
 export default request

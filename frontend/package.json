@@ -10,8 +10,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:desktop": "vite --mode=desktop",
     "build": "tsc && vite build --base=/nginx-ui/",
-    "desktop": "tsc && vite build --base=/",
+    "build:desktop": "tsc && vite build --base=/ --mode=desktop",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },

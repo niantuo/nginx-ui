@@ -15,6 +15,7 @@ import (
 )
 
 type AppConfig struct {
+	Port                 int
 	BaseApi              string
 	DataDir              string
 	DBDir                string
@@ -53,8 +54,10 @@ func init() {
 	beego.BConfig.CopyRequestBody = true
 	mode := beego.AppConfig.DefaultString("runmode", "prod")
 	beego.BConfig.RunMode = mode
-	port := beego.AppConfig.DefaultInt("httpport", 8080)
+	port := beego.AppConfig.DefaultInt("httpport", 38080)
 	beego.BConfig.Listen.HTTPPort = port
+
+	Config.Port = port
 
 	// 需要和前端配置好
 	baseApi := beego.AppConfig.DefaultString("baseApi", "/nginx-ui/api")
