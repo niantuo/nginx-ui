@@ -102,12 +102,7 @@ export const renderLocation = (origin: INginxLocation) => {
 
   if (loc.return?.code){
     let content = loc.return.content
-    if (!content.startsWith('\'')){
-      content = `'${content}`
-    }
-    if (!content.endsWith('\'')){
-      content = `${content}'`
-    }
+    content = JSON.stringify(content)
     lines.push(`    return  ${loc.return.code || 200}   ${content};`)
   }
 
