@@ -10,6 +10,8 @@ import (
 	_ "nginx-ui/server/init"
 )
 
+// 桌面应用
+//
 //go:embed all:frontend/dist
 var assets embed.FS
 
