@@ -8,7 +8,7 @@ cp -rf ./conf ./local
 
 export GOODS=linux
 export GOARCH=amd64
-go build -o local/server  server/main.go
+go build -o local/server  app.go
 
 cp -rf ./frontend/dist/* ./local/static/web/
 rm -rf ./local/static/web/config.js

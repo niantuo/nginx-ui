@@ -1,20 +1,20 @@
 FROM golang:1.20 AS builder
 WORKDIR /app
-COPY server .
+COPY . .
 ARG GOODS=linux
 ARG GOARCH=amd64
 
 RUN go env -w GOPROXY=https://goproxy.cn,direct
 
 RUN --mount=type=cache,target=/go --mount=type=cache,target=/root/.cache/go-build \
-    GOODS=${GOODS} GOARCH=${GOARCH}  go build -o /app/app
+    GOODS=${GOODS} GOARCH=${GOARCH}  go build -o /app/app  app.go
 
 FROM nginx:1.25.1
 
 WORKDIR /app
 COPY --from=builder /app/app /app
-COPY server/conf /app/conf
-COPY server/data  /app/data
+COPY conf /app/conf
+COPY data  /app/data
 #COPY ../server/static  /app/static
 COPY frontend/dist  /app/static/web
 COPY docker/entrypoint.sh /entrypoint.sh
