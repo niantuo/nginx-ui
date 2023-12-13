@@ -1,13 +1,16 @@
-# nginx-ui desktop
+# nginx-ui
+nginx可视化配置
+
+## nginx-ui desktop
 
 参考文档： https://wails.io/zh-Hans/docs/reference/project-config
 
-## 开发
+### 开发
 ```shell
 wails dev
 ```
 
-## 打包
+### 打包
 ```shell
 ## 生产版本
 wails build -webview2=embed
