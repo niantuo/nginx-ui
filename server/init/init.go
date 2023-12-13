@@ -11,6 +11,7 @@ import (
 )
 
 func init() {
+	fmt.Printf("-------init---")
 	gob.Register(models.User{})
 	db.Init()
 	config.InitAdmin()
