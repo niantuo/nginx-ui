@@ -58,6 +58,8 @@ export const renderLocation = (origin: INginxLocation) => {
     if (loc.proxy_type !== 'static'){
         delete loc.root
         delete loc.alias
+        delete loc.index
+        delete loc.try_files
     }
     if (loc.proxy_type !== 'other'){
         delete loc.return

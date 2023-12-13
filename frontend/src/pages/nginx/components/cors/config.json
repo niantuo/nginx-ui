@@ -28,6 +28,15 @@
       "mode": "tags"
     },
     {
+      "title": "公开请求头",
+      "type": "select",
+      "key": "expose",
+      "required": false,
+      "option": ["Authorization","Content-Type","Accept","Origin","Cache-Control","X-Requested-With"],
+      "description": "跨域时，允许js获取的响应头名称,当返回自定义响应头，跨域的情况下，不设置，会导致无法获取该值",
+      "mode": "tags"
+    },
+    {
       "title": "拦截preflight",
       "key": "preflight",
       "required": false,

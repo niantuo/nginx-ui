@@ -16,6 +16,7 @@ type DataType = {
   origins?: string[]
   methods?: string[]
   headers?: string[]
+  expose?: string[]
   preflight?: boolean
   credentials?: boolean
   maxAge?: number
@@ -86,6 +87,9 @@ export const CorsInput = ({...props}: AutoTypeInputProps)=>{
     }
     if (!isNull(values.credentials)){
       lines.push(`add_header Access-Control-Allow-Credentials   '${values.credentials ? 'true': 'false'}';`)
+    }
+    if (values.expose?.length){
+      lines.push(`add_header 'Access-Control-Expose-Headers' '${values.expose.join(',')}';`)
     }
     if (!isNull(values.preflight)){
       lines.push(`if ($request_method = 'OPTIONS') {

@@ -203,6 +203,7 @@ export type INginxLocation = Omit<NgxModuleData, "data"> & {
   index?: string
   root?: string
   alias?: string
+  try_files?: string
   proxy_set_header?: IProxyHeader[]
   add_header?: IProxyHeader[]
   proxy_pass?: string
