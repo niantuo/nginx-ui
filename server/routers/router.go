@@ -26,6 +26,8 @@ func init() {
 
 	userController := controllers.NewUserController()
 
+	logs.Info("baseApi", config.BaseApi)
+
 	ns := beego.NewNamespace(config.BaseApi,
 		beego.NSRouter(NginxR, &controllers.NginxController{}),
 		beego.NSRouter(NginxGetR, &controllers.NginxController{}, "post:Update"),

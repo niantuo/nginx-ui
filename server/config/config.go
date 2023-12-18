@@ -38,9 +38,11 @@ var OauthConfig = &CompleteOauth2Config{
 	Config: &oauth2.Config{
 		ClientID:     "",
 		ClientSecret: "",
-		Endpoint:     oauth2.Endpoint{},
-		RedirectURL:  "",
-		Scopes:       []string{},
+		Endpoint: oauth2.Endpoint{
+			AuthStyle: oauth2.AuthStyleInParams,
+		},
+		RedirectURL: "",
+		Scopes:      []string{},
 	},
 }
 

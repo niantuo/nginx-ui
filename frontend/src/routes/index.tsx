@@ -23,6 +23,7 @@ import {SignupPage} from "../pages/signup";
 import {UserActions} from "../store/slice/user.ts";
 import dayjs from "dayjs";
 import {SSOWrapper} from "../pages/login/sso.tsx";
+import {ErrorPage} from "../pages/error";
 
 /**
  * @author tuonian
@@ -155,6 +156,7 @@ export const MyRouter = () => {
                            )
                        })
                    }
+                   <Route path="/error" Component={ErrorPage} />
                    <Route path="/login" Component={LoginPage} />
                    <Route path="/signup" Component={SignupPage} />
                </Routes>

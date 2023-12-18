@@ -55,7 +55,7 @@ func checkThirdSession(ctx *context.Context, sess session.Store) {
 }
 
 func AuthFilter(ctx *context.Context) {
-	path := ctx.Request.RequestURI
+	path := ctx.Request.URL.Path
 	path = strings.TrimSuffix(path, "/")
 	path = strings.TrimPrefix(path, config.Config.BaseApi)
 	if whitelist[path] {
