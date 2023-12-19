@@ -11,7 +11,9 @@
 账号： demo \
 密码： demo
 
-[在线文档](https://portal.tonyandmoney.cn/common/notes/html/pages/list?type=nginx-ui)
+[在线文档](https://www.tonyandmoney.cn/common/notes/html/pages/list?type=nginx-ui)
+[在线文档](https://www.tonyandmoney.cn/common/notes/html/pages/list?type=nginx-ui)
+[在线文档](https://www.tonyandmoney.cn/common/notes/html/pages/list?type=nginx-ui)
 
 ## 快速部署
 镜像： **registry.cn-hangzhou.aliyuncs.com/tuon-pub/nginx-with-ui**
@@ -43,7 +45,7 @@ docker run -itd --name nginx-ui -p8080:8080 -v {datadir}:/app/data -v {confdir}:
 - 说明
   - 8080为nginx-ui的服务端口，其余则为nginx代理端口，自定义或者直接使用 network_mode: host 模式即可
   - 启动成功后，在登录界面，先注册账号后，使用注册的账号登录即可使用，管理员账号可以查看docker的启动日志查看
-  - 配置文件参考[在线文档](https://portal.tonyandmoney.cn/common/notes/html/pages/list?type=nginx-ui)
+  - 配置文件参考[在线文档](https://www.tonyandmoney.cn/common/notes/html/pages/list?type=nginx-ui)
 
 
 ## 构建

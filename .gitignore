@@ -41,3 +41,4 @@ server/data/sessions
 /build/
 
 frontend/.idea
+frontend/.vite
