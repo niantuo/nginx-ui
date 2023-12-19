@@ -24,8 +24,9 @@ RUN chmod +x /app/app
 
 RUN rm -rf /app/static/web/config.js
 
-#RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
-#RUN sed -i 's/security.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
+RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
+RUN sed -i 's/security.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
 #RUN echo "deb http://mirrors.ustc.edu.cn/debian sid main" >> /etc/apt/sources.list
+RUN apt -qq update && apt -qq install -y --no-install-recommends ca-certificates curl
 
 ENTRYPOINT ["/app/app"]
