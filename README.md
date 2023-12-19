@@ -17,3 +17,10 @@ wails build -webview2=embed
 ## 带debug
 wails build -webview2=embed -debug
 ```
+
+
+## 变更说明
+
+### 2023-12-19
+- 对接第三方oauth
+- docker镜像增加ca-certificates curl 软件安装
