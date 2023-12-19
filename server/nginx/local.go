@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"github.com/astaxie/beego/logs"
 	"io"
+	"nginx-ui/server/models"
+	"nginx-ui/server/utils"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"server/models"
-	"server/utils"
 )
 
 // LocalInstance 本地实例

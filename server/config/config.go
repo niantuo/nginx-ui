@@ -8,13 +8,14 @@ import (
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
 	"golang.org/x/oauth2"
+	"nginx-ui/server/models"
+	"nginx-ui/server/utils"
 	"os"
-	"server/models"
-	"server/utils"
 	"strings"
 )
 
 type AppConfig struct {
+	Port                 int
 	BaseApi              string
 	DataDir              string
 	DBDir                string
@@ -37,9 +38,11 @@ var OauthConfig = &CompleteOauth2Config{
 	Config: &oauth2.Config{
 		ClientID:     "",
 		ClientSecret: "",
-		Endpoint:     oauth2.Endpoint{},
-		RedirectURL:  "",
-		Scopes:       []string{},
+		Endpoint: oauth2.Endpoint{
+			AuthStyle: oauth2.AuthStyleInParams,
+		},
+		RedirectURL: "",
+		Scopes:      []string{},
 	},
 }
 
@@ -53,8 +56,10 @@ func init() {
 	beego.BConfig.CopyRequestBody = true
 	mode := beego.AppConfig.DefaultString("runmode", "prod")
 	beego.BConfig.RunMode = mode
-	port := beego.AppConfig.DefaultInt("httpport", 8080)
+	port := beego.AppConfig.DefaultInt("httpport", 38080)
 	beego.BConfig.Listen.HTTPPort = port
+
+	Config.Port = port
 
 	// 需要和前端配置好
 	baseApi := beego.AppConfig.DefaultString("baseApi", "/nginx-ui/api")
@@ -88,11 +93,12 @@ func init() {
 
 	authorizeEndpoint := beego.AppConfig.DefaultString("oauth2_authorize_endpoint", "")
 	tokenEndpoint := beego.AppConfig.DefaultString("oauth2_token_endpoint", "")
+	authStyle := beego.AppConfig.DefaultInt("oauth2_auth_style", 1)
 
 	OauthConfig.Endpoint = oauth2.Endpoint{
 		AuthURL:   authorizeEndpoint,
 		TokenURL:  tokenEndpoint,
-		AuthStyle: 0,
+		AuthStyle: oauth2.AuthStyle(authStyle),
 	}
 	OauthConfig.RedirectURL = beego.AppConfig.DefaultString("oauth2_redirect_uri", "")
 	OauthConfig.Scopes = beego.AppConfig.DefaultStrings("oauth2_scopes", []string{})

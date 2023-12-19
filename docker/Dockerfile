@@ -1,29 +1,31 @@
 FROM golang:1.20 AS builder
 WORKDIR /app
-COPY server .
+COPY . .
 ARG GOODS=linux
 ARG GOARCH=amd64
 
 RUN go env -w GOPROXY=https://goproxy.cn,direct
 
 RUN --mount=type=cache,target=/go --mount=type=cache,target=/root/.cache/go-build\
-    GOODS=${GOODS} GOARCH=${GOARCH}  go build -o /app/app
+    GOODS=${GOODS} GOARCH=${GOARCH} go build -o /app/app  app.go
 
 FROM debian:sid-slim
 
+RUN mkdir -p /app/static/web
+
 WORKDIR /app
 COPY --from=builder /app/app /app
-COPY server/conf /app/conf
-COPY server/data  /app/data
+COPY conf /app/conf
+COPY data  /app/data
 #COPY ../server/static  /app/static
-COPY dist  /app/static/web
+COPY frontend/dist  /app/static/web
 
 RUN chmod +x /app/app
 
 RUN rm -rf /app/static/web/config.js
 
-#RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
-#RUN sed -i 's/security.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
-#RUN echo "deb http://mirrors.ustc.edu.cn/debian sid main" >> /etc/apt/sources.list
+RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/*
+RUN sed -i 's/security.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/*
+RUN apt -qq update && apt -qq install -y --no-install-recommends ca-certificates curl
 
 ENTRYPOINT ["/app/app"]

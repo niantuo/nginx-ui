@@ -35,3 +35,9 @@ nginx-ui.tar.gz
 
 server/conf/app.local.conf
 server/data/sessions
+
+/data/sessions
+/conf/app.local.conf
+/build/
+
+frontend/.idea

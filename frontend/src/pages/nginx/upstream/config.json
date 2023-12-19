@@ -1,0 +1,80 @@
+{
+  "columns": [
+    {
+      "title": "名称",
+      "key": "name",
+      "description": "名称相同则为同一组负载均衡,只支持英文字母",
+      "type": "string"
+    },
+    {
+      "title": "负载方式",
+      "key": "type",
+      "type": "select",
+      "option": ["ip_hash","weight"],
+      "width": 100,
+      "required": false,
+      "description": "ip_hash： 每个请求按访问ip的hash结果分配，这样每个访客固定访问一个后端服务器，可以解决session不能跨服务器的问题。如果后端服务器down掉，要手工down掉；weight：指定轮询几率，weight和访问比率成正比，如果后端服务器down掉，能自动剔除。"
+    },
+    {
+      "title": "是否启用",
+      "key": "enable",
+      "type": "switch",
+      "value": true
+    },
+    {
+      "title": "服务配置",
+      "type": "array",
+      "key": "servers",
+      "items": [
+        {
+          "title": "主机",
+          "type": "string",
+          "key": "host",
+          "description": "后端服务IP",
+          "width": 150
+        },
+        {
+          "title": "端口",
+          "type": "int",
+          "key": "port",
+          "description": "后端服务端口",
+          "width": 100
+        },
+        {
+          "title": "权重",
+          "type": "int",
+          "key": "weight",
+          "description": "权重，ip_hash模式下不生效，数字越大，越高,为0将剔除",
+          "width": 80,
+          "min": 0,
+          "value": 100
+        },
+        {
+          "title": "状态/角色",
+          "type": "select",
+          "key": "status",
+          "option": ["normal","down","backup"],
+          "description": "weight,backup 不能和 ip_hash 关键字一起使用;down：表示当前的server暂时不参与负载",
+          "width": 100,
+          "required": false
+        },
+        {
+          "title": "屏蔽时间",
+          "type": "int",
+          "key": "fail_timeout",
+          "required": false,
+          "description": "fail_timeout：当错误次数超过配置(max_fails)时，该服务的屏蔽时间，单位秒，默认值是10s",
+          "width": 100
+        },
+        {
+          "title": "失败次数",
+          "type": "int",
+          "key": "max_fails",
+          "required": false,
+          "description": "最大失败次数，默认为1,失败次数达到指定的次数时，将会屏蔽该服务一定时间",
+          "width": 100
+        }
+      ]
+    }
+  ]
+}

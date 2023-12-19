@@ -14,7 +14,8 @@
 [在线文档](https://portal.tonyandmoney.cn/common/notes/html/pages/list?type=nginx-ui)
 
 ## 快速部署
-
+镜像： **registry.cn-hangzhou.aliyuncs.com/tuon-pub/nginx-with-ui**
+该镜像以**nginx:1.25.1** 为基础打包，自带nginx，网络模式使用主机模式
 - docker-compose
 ```yaml
 
@@ -24,12 +25,13 @@ services:
   nginx-with-ui:
     image: registry.cn-hangzhou.aliyuncs.com/tuon-pub/nginx-with-ui:latest
     restart: always
-    ports:
-      - 8080:8080
-    #    network_mode: host
+ #   ports:
+ #     - 8080:8080
+    network_mode: host
     volumes:
       - ./data:/app/data
       - ./data/conf:/app/conf
+      - ./web:/data               # 映射静态资源地址
 
 ```
 - docker快速启动
@@ -125,6 +127,10 @@ docker run -itd -v ./data/:/app/data -p8080:8080 --name registry.cn-hangzhou.ali
 - 20230710：修复return 语句未渲染的问题
 - 20230719: 修复return语句在代理或者静态站点的情况下依然渲染的问题
 
+### 2023-12-19
+- 对接第三方oauth
+- docker镜像增加ca-certificates curl 软件安装
+
 ## git代理
 git config --global http.proxy http://127.0.0.1:{port}
 
@@ -134,3 +140,20 @@ git config --global https.proxy  http://127.0.0.1:{port}
 git config --global --unset http.proxy
 
 git config --global --unset https.proxy
+
+
+## desktop 桌面版本
+参考文档： https://wails.io/zh-Hans/docs/reference/project-config
+
+### 开发
+```shell
+wails dev
+```
+
+### 打包
+```shell
+## 生产版本
+wails build -webview2=embed
+## 带debug
+wails build -webview2=embed -debug
+```

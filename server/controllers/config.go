@@ -3,7 +3,7 @@ package controllers
 import (
 	"fmt"
 	"github.com/astaxie/beego/logs"
-	config2 "server/config"
+	config2 "nginx-ui/server/config"
 )
 
 type ConfigController struct {

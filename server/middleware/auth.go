@@ -8,8 +8,8 @@ import (
 	"github.com/astaxie/beego/session"
 	"github.com/beego/beego/v2/client/httplib"
 	"net/http"
-	"server/config"
-	"server/models"
+	"nginx-ui/server/config"
+	"nginx-ui/server/models"
 	"strings"
 )
 
@@ -55,7 +55,7 @@ func checkThirdSession(ctx *context.Context, sess session.Store) {
 }
 
 func AuthFilter(ctx *context.Context) {
-	path := ctx.Request.RequestURI
+	path := ctx.Request.URL.Path
 	path = strings.TrimSuffix(path, "/")
 	path = strings.TrimPrefix(path, config.Config.BaseApi)
 	if whitelist[path] {

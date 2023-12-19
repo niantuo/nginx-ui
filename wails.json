@@ -1,0 +1,22 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "nginx-ui",
+  "outputfilename": "nginx-ui",
+  "frontend:dir": "frontend",
+  "frontend:install": "yarn",
+  "frontend:build": "npm run build:desktop",
+  "frontend:dev:watcher": "npm run dev:desktop",
+  "frontend:dev:serverUrl": "auto",
+  "author": {
+    "name": "tuon",
+    "email": "976056042@qq.com"
+  },
+  "info": {
+    "companyName": "tuonian",
+    "productName": "nginx-ui",
+    "productVersion": "v1.0.0",
+    "copyright": "tonyandmoney.cn",
+    "comments": ""
+  },
+  "nsisType": "single"
+}

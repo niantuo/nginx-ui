@@ -3,20 +3,14 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
-	"server/middleware"
-	"server/models"
+	"nginx-ui/server/middleware"
+	"nginx-ui/server/models"
 	"strconv"
 )
 
-type RespData struct {
-	Code int         `json:"code"`
-	Msg  string      `json:"msg"`
-	Data interface{} `json:"data"`
-}
-
 type BaseController struct {
 	beego.Controller
-	jsonData *RespData
+	jsonData *models.RespData
 	// json real data
 	respData map[string]any
 }
@@ -30,6 +24,11 @@ func (c *BaseController) json() {
 	c.ServeJSON()
 }
 
+func (c *BaseController) postJson(json interface{}) {
+	c.Data["json"] = json
+	c.ServeJSON()
+}
+
 func (c *BaseController) ErrorJson(error error) {
 	c.setCode(-1).setMsg(error.Error()).json()
 }
@@ -37,7 +36,7 @@ func (c *BaseController) ErrorJson(error error) {
 func (c *BaseController) checkJsonData() *BaseController {
 	data := c.jsonData
 	if data == nil {
-		data = &RespData{
+		data = &models.RespData{
 			Code: 0,
 			Msg:  "success",
 			Data: nil,

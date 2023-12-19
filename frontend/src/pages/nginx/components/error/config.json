@@ -1,0 +1,32 @@
+{
+  "form": [
+    {
+      "title": "错误页面",
+      "type": "array",
+      "key": "error_pages",
+      "required": false,
+      "items": [
+        {
+          "title": "错误码",
+          "key": "codes",
+          "type": "select",
+          "option": ["502","401","403","503"],
+          "mode": "tags"
+        },
+        {
+          "title": "响应码",
+          "key": "respCode",
+          "type": "int",
+          "required": false,
+          "description": "重定向错误页面后，返回给前端的HTTP状态码，比如：404,200,301"
+        },
+        {
+          "title": "跳转uri",
+          "key": "uri",
+          "type": "string",
+          "description": "当错误发生时，跳转的路由或者页面"
+        }
+      ]
+    }
+  ]
+}

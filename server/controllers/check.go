@@ -4,8 +4,8 @@ import (
 	"errors"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
-	"server/middleware"
-	"server/models"
+	"nginx-ui/server/middleware"
+	"nginx-ui/server/models"
 	"strconv"
 )
 

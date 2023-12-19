@@ -3,10 +3,10 @@ package db
 import (
 	"github.com/astaxie/beego/orm"
 	_ "github.com/mattn/go-sqlite3"
+	"nginx-ui/server/config"
+	"nginx-ui/server/models"
+	"nginx-ui/server/utils"
 	"os"
-	"server/config"
-	"server/models"
-	"server/utils"
 	"time"
 )
 

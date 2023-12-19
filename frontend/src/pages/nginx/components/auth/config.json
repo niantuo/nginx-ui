@@ -1,0 +1,42 @@
+{
+  "form": [
+    {
+      "title": "是否启用",
+      "key": "auth_request_on",
+      "required": false,
+      "type": "switch",
+      "cascade": {
+        "true": [
+          {
+            "title": "auth_request_uri",
+            "key": "auth_request_uri",
+            "type": "string",
+            "placeholder": "输入鉴权的路由",
+            "width": 382
+          }
+        ]
+      }
+    },
+    {
+      "title": "auth_request_set",
+      "key": "auth_request_set",
+      "required": false,
+      "type": "array",
+      "items": [
+        {
+          "key": "name",
+          "title": "变量",
+          "type": "string",
+          "width": 120
+        },
+        {
+          "key": "value",
+          "title": "变量值",
+          "type": "string",
+          "width": 200
+        }
+      ],
+      "description": "Sets the request variable to the given value after the authorization request completes. The value may contain variables from the authorization request, such as $upstream_http_*."
+    }
+  ]
+}

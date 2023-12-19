@@ -1,7 +1,7 @@
 package nginx
 
 import (
-	"server/models"
+	"nginx-ui/server/models"
 )
 
 var INSTANCES = map[int]*Instance{}

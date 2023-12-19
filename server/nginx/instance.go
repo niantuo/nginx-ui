@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/astaxie/beego/logs"
-	"server/models"
+	"nginx-ui/server/models"
 	"strings"
 	"time"
 )
