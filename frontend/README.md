@@ -125,6 +125,10 @@ docker run -itd -v ./data/:/app/data -p8080:8080 --name registry.cn-hangzhou.ali
 - 20230710：修复return 语句未渲染的问题
 - 20230719: 修复return语句在代理或者静态站点的情况下依然渲染的问题
 
+### 2023-12-19
+- 对接第三方oauth
+- docker镜像增加ca-certificates curl 软件安装
+
 ## git代理
 git config --global http.proxy http://127.0.0.1:{port}
 
@@ -134,3 +138,20 @@ git config --global https.proxy  http://127.0.0.1:{port}
 git config --global --unset http.proxy
 
 git config --global --unset https.proxy
+
+
+## desktop 桌面版本
+参考文档： https://wails.io/zh-Hans/docs/reference/project-config
+
+### 开发
+```shell
+wails dev
+```
+
+### 打包
+```shell
+## 生产版本
+wails build -webview2=embed
+## 带debug
+wails build -webview2=embed -debug
+```
