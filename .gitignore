@@ -39,3 +39,5 @@ server/data/sessions
 /data/sessions
 /conf/app.local.conf
 /build/
+
+frontend/.idea

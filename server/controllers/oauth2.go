@@ -71,12 +71,13 @@ func (c *Oauth2Controller) Callback() {
 	err = json.Unmarshal(content, &user)
 	if err != nil {
 		logs.Error("GetUserinfo Unmarshal", err)
-		c.setCode(-1).setMsg(fmt.Sprintf("登录失败(Unmarshal)：%s", err.Error())).json()
-		return
 	}
 	if len(user.Account) == 0 {
 		c.setCode(-1).setMsg("登录失败,请确认userinfo接口返回了account字段").json()
 		return
+	}
+	if len(user.Nickname) == 0 {
+		user.Nickname = user.Account
 	}
 	o := orm.NewOrm()
 	err = o.Read(&user, "Account")

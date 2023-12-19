@@ -93,11 +93,12 @@ func init() {
 
 	authorizeEndpoint := beego.AppConfig.DefaultString("oauth2_authorize_endpoint", "")
 	tokenEndpoint := beego.AppConfig.DefaultString("oauth2_token_endpoint", "")
+	authStyle := beego.AppConfig.DefaultInt("oauth2_auth_style", 1)
 
 	OauthConfig.Endpoint = oauth2.Endpoint{
 		AuthURL:   authorizeEndpoint,
 		TokenURL:  tokenEndpoint,
-		AuthStyle: 0,
+		AuthStyle: oauth2.AuthStyle(authStyle),
 	}
 	OauthConfig.RedirectURL = beego.AppConfig.DefaultString("oauth2_redirect_uri", "")
 	OauthConfig.Scopes = beego.AppConfig.DefaultStrings("oauth2_scopes", []string{})
