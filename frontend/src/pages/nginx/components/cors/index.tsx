@@ -57,7 +57,7 @@ export const CorsInput = ({...props}: AutoTypeInputProps)=>{
       return lines
     }
     lines.push(`map  $http_origin ${values.key}  {`)
-    lines.push(`    default 0;`)
+    lines.push(`    default  ${values.origins[0]};`)
     values.origins.forEach(host=>{
       lines.push(`    "~${host}"   ${host};`)
     })
