@@ -5,6 +5,7 @@ import App from './App.tsx'
 import './index.css'
 import './styles/index.less'
 import renderWithQiankun from "vite-plugin-qiankun/es/helper";
+import './i18n/i18n.ts'
 
 let root: Root | null
 

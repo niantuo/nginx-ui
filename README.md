@@ -121,17 +121,22 @@ docker run -itd -v ./data/:/app/data -p8080:8080 --name registry.cn-hangzhou.ali
 - [ ] 考虑多租户的功能，目前前端使用的是nginx auth的授权认证，该方式是否能传递用户id作为查询数据的条件
 - [ ] 考虑增加jwt,basic授权
 
+## 更新日志
+
 ### 2023-07-06
 - [ ] [ngx_http_auth_request_module](https://nginx.org/en/docs/http/ngx_http_auth_request_module.html)
     鉴权模块的实现
-
-## 更新日志
+- 
 - 20230710：修复return 语句未渲染的问题
 - 20230719: 修复return语句在代理或者静态站点的情况下依然渲染的问题
 
 ### 2023-12-19
 - 对接第三方oauth
 - docker镜像增加ca-certificates curl 软件安装
+
+### 2024-06-16
+- 调整项目文件结构
+- 增加桌面版本打包
 
 ## git代理
 git config --global http.proxy http://127.0.0.1:{port}

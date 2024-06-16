@@ -10,14 +10,21 @@ import {
     uniqueKey
 } from "planning-tools";
 import {useEffect, useRef, useState} from "react";
-import {CopyOutlined, DeleteOutlined, EditOutlined, PlusOutlined} from "@ant-design/icons";
+import { useTranslation } from 'react-i18next'
+import {
+    ArrowDownOutlined,
+    ArrowUpOutlined,
+    CopyOutlined,
+    DeleteOutlined,
+    EditOutlined,
+    PlusOutlined
+} from "@ant-design/icons";
 import {INginxLocation} from "../../../../models/nginx.ts";
 import {cloneDeep} from "lodash";
 import FormConfig from './config.json'
-
-import './index.less'
 import {SiteInput} from "../site";
 import {renderLocation} from "./utils.ts";
+import './index.less'
 
 /**
  * 部分的重要信息
@@ -65,6 +72,7 @@ export const LocationInput = ({value, onChange }: AutoTypeInputProps) => {
     const isAddRef = useRef(false)
 
     const [modal,contextHolder] = Modal.useModal()
+    const {t} = useTranslation()
 
     const formRef = useRef<AutoFormInstance>()
 
@@ -91,6 +99,29 @@ export const LocationInput = ({value, onChange }: AutoTypeInputProps) => {
     const onAddData = (data?: INginxLocation, index?: number)=>{
         isAddRef.current = true
         setEditData({ ...data,id: uniqueKey(20),__index__: index} as never)
+    }
+
+    const moveUp = (data: INginxLocation, index: number) => {
+        if (index == 0){
+            Message.warning(t('location.is_first'))
+            return
+        }
+        const current = locations[index-1]
+        locations[index-1] = data
+        locations[index] = current
+        setLocations([...locations])
+        onChange?.(locations)
+    }
+    const moveDown = (data: INginxLocation,index: number)=>{
+        if (index == locations.length-1){
+            Message.warning(t('location.is_last'))
+            return
+        }
+        const current = locations[index+1]
+        locations[index+1] = data
+        locations[index] = current
+        setLocations([...locations])
+        onChange?.(locations)
     }
 
     const onRemoveData = (data: INginxLocation)=>{
@@ -207,6 +238,8 @@ export const LocationInput = ({value, onChange }: AutoTypeInputProps) => {
     const renderOps = (_: never, data: INginxLocation, index: number) => {
         return (
             <div className="location-btns">
+                <ArrowUpOutlined className='move-btn' onClick={()=>moveUp(data, index)}/>
+                <ArrowDownOutlined className='move-btn' onClick={()=>moveDown(data,index)}/>
                 <Button onClick={() => onRemoveData(data)} type="text" danger icon={<DeleteOutlined/>}/>
                 <Button onClick={() => onEditRow(data)} type="link" icon={<EditOutlined/>}/>
                 <Button onClick={()=>onAddData(data, index)} type="link" icon={<CopyOutlined/>}/>
@@ -249,7 +282,7 @@ export const LocationInput = ({value, onChange }: AutoTypeInputProps) => {
         {
             title: '操作',
             render: renderOps as never,
-            width: 180,
+            width: 200,
             fixed: 'right'
         }
     ]
